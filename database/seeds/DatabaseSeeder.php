@@ -238,21 +238,21 @@ class DatabaseSeeder extends Seeder {
         ]);
 
         // TENANTS_COMPANY TABLE
-        DB::table('tenants_companies')->insert([    
+        DB::table('company_tenant')->insert([    
             'company_id' => '1',
             'tenant_id' => '1',
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
         ]);
 
-        DB::table('tenants_companies')->insert([    
+        DB::table('company_tenant')->insert([    
             'company_id' => '1',
             'tenant_id' => '2',
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
         ]);
 
-        DB::table('tenants_companies')->insert([    
+        DB::table('company_tenant')->insert([    
             'company_id' => '2',
             'tenant_id' => '3',
             'created_at' => Carbon::now(),

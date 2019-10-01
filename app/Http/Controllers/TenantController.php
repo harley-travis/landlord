@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use Auth;
 use App\User;
+use App\Company;
 use App\Property;
 use App\Tenant;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 
 class TenantController extends Controller {
@@ -16,12 +18,14 @@ class TenantController extends Controller {
      */
     public function index() {
 
-        $tenants = User::join('tenants', 'users.id', '=', 'tenants.user_id')
-                            ->where('users.company_id', '=', '1')
-                            ->where('tenants.active', '=', '1')
-                            ->get();
+        // $tenants = User::join('tenants', 'users.id', '=', 'tenants.user_id')
+        //                     ->where('users.company_id', '=', '1')
+        //                     ->where('tenants.active', '=', '1')
+        //                     ->get();
 
-        return view('tenants.index', ['tenants' => $tenants]);
+        $data = Company::with('tenants')->where('id', '=',  Auth::user()->company_id)->get();
+
+        return view('tenants.index', ['data' => $data]);
     }
 
     /**
@@ -43,12 +47,23 @@ class TenantController extends Controller {
     public function store(Request $request) {
         
         $user = Auth::user();
+        
+        // create a user
+        /**
+         * at the moment it's not creating a new user and giving null for hte tenant user.id
+         */
+        $u = new User([
+            'name' => $request->input('name'),
+            'email' => $request->input('email'),
+            'password' => Hash::make( $request->input('password')),
+            'company_id'=> Auth::user()->company_id,
+            'role' => '0',
+        ]);
+        $u->save();
 
         $tenant = new Tenant([
-            'name' => $request->input('name'),
             'phone' => $request->input('phone'),
             'work_phone' => $request->input('work_phone'),
-            'email' => $request->input('email'),
             'secondary_name' => $request->input('secondary_name'),
             'secondary_phone'=> $request->input('secondary_phone'),
             'secondary_work_phone'=> $request->input('secondary_work_phone'),
@@ -56,10 +71,12 @@ class TenantController extends Controller {
             'number_occupants'=> $request->input('number_occupants'),
             'active'=> '1',
             'property_id'=> $request->input('property_id'),
-            'company_id'=> Auth::user()->company_id,
-            'user_id' => $user->id,
+            'user_id' => $u->id,
         ]);
         $tenant->save();
+
+        // need to update the pivot table as well.
+        $tenant->company()->attach(Auth::user()->company_id);
 
         return redirect()
                 ->route('tenants.index')

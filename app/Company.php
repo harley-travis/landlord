@@ -16,4 +16,8 @@ class Company extends Model {
         return $this->hasMany('App\Maintenance');
     }
 
+    public function tenants() {
+        return $this->belongsToMany('App\Tenant');
+    }
+
 }

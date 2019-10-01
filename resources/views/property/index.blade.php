@@ -17,6 +17,14 @@
                     </div>
                 @endif
 
+                @if($properties->isEmpty())
+                    You don't have any properties added! Let's add one now!
+
+                    <div class="mb-3 text-right">
+                        <a href="{{ route('property.create') }}" class="btn btn-success">Add Property</a>
+                    </div>
+                @else
+
                     <div class="mb-3 text-right">
                         <a href="{{ route('property.create') }}" class="btn btn-success">Add Property</a>
                     </div>
@@ -50,7 +58,7 @@
 
 
                 </div>
-
+                @endif
             </div>
         </div>
     </div>

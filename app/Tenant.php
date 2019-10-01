@@ -29,4 +29,8 @@ class Tenant extends Model {
         return $this->belongsTo('App\User');
     }
 
+    public function company() {
+        return $this->belongsToMany('App\Company');
+    }
+
 }

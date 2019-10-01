@@ -30,6 +30,14 @@ class CreateTenantsTable extends Migration
             $table->foreign('property_id')->references('id')->on('properties');
             $table->foreign('user_id')->references('id')->on('users');
         });
+
+        Schema::create('company_tenant', function (Blueprint $table) {
+            $table->integer('company_id');
+            $table->integer('tenant_id');
+            $table->primary(['company_id', 'tenant_id']);
+            $table->timestamps();
+
+        });
     }
 
     /**
@@ -40,5 +48,6 @@ class CreateTenantsTable extends Migration
     public function down()
     {
         Schema::dropIfExists('tenants');
+        Schema::dropIfExists('company_tenant');
     }
 }

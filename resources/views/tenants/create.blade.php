@@ -21,6 +21,16 @@
                         </div>
 
                         <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" class="form-control" name="email" aria-describedby="email" placeholder="Enter email">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input type="password" class="form-control" name="password" aria-describedby="password" placeholder="Enter password">
+                        </div>
+
+                        <div class="form-group">
                             <label for="phone">Phone</label>
                             <input type="text" class="form-control" name="phone" aria-describedby="phone" placeholder="Enter phone">
                         </div>
@@ -28,11 +38,6 @@
                         <div class="form-group">
                             <label for="work_phone">Work Phone</label>
                             <input type="text" class="form-control" name="work_phone" aria-describedby="work_phone" placeholder="Enter work phone">
-                        </div>
-
-                        <div class="form-group">
-                            <label for="email">Email</label>
-                            <input type="email" class="form-control" name="email" aria-describedby="email" placeholder="Enter email">
                         </div>
 
                         <div class="form-group">

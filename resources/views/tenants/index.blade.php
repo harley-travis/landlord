@@ -31,22 +31,24 @@
                             <th>Property</th>
                             <td>Edit</th>
                         </tr>
-                        @foreach($tenants as $tenant)
-                        <tr>
-                            <td><a href="{{ route('tenants.show', ['id' => $tenant->id ]) }}">{{ $tenant->name }}</a></td>
-                            <td>{{ $tenant->phone }}</td>
-                            <td>{{ $tenant->email }}</td>
-                            <td>{{ $tenant->number_occupants }}</td>
-                            <td>{{ $tenant->property_id }}</td>
-                            <td><a href="{{ route('tenants.edit', ['id' => $tenant->id ]) }}" class="btn btn-info text-white">Edit Tenant</a></td>
-                        </tr>
+
+                        @foreach($data as $tenant)
+                            @foreach($tenant->tenants as $t)
+                       
+                            <tr>
+                                <td><a href="{{ route('tenants.show', ['id' => $t->id ]) }}">{{ $t->user->name }}</a></td>
+                                <td>{{ $t->phone }}</td>
+                                <td>{{ $t->email }}</td>
+                                <td>{{ $t->number_occupants }}</td>
+                                <td>{{ $t->property_id }}</td>
+                                <td><a href="{{ route('tenants.edit', ['id' => $t->id ]) }}" class="btn btn-info text-white">Edit Tenant</a></td>
+                            </tr>
+                         
+                            @endforeach
                         @endforeach
                       
                     </table>
-
-
                 </div>
-
             </div>
         </div>
     </div>
