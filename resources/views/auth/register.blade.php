@@ -40,6 +40,35 @@
                         </div>
 
                         <div class="form-group row">
+                            <div class="col-md-4 col-form-label text-md-right">
+                                <label for="product">Product Type</label>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    
+                                    <select id="product" name="product" class="form-control">
+                                        <option>Select Product</option>
+                                        <option value="0">Home Owner</option>
+                                        <option value="1">Apartment Complex</option>
+                                        <option value="2">HOA Association</option>
+                                    </select>
+                                </div>    
+                            </div>
+                            
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="company_name" class="col-md-4 col-form-label text-md-right">Company Name</label>
+
+                            <div class="col-md-6">
+                                <input id="company_name" type="text" class="form-control" name="company_name" required>
+                                <small id="company_nameHelp" class="form-text text-muted">If you are a home owner, just write in your first and last name as the company name.</small>
+                            </div>
+
+                        </div>
+
+                        <div class="form-group row">
                             <label for="password" class="col-md-4 col-form-label text-md-right">{{ __('Password') }}</label>
 
                             <div class="col-md-6">
