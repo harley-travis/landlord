@@ -57,9 +57,43 @@
 
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
 
+
+                                @if(Auth::user()->role === 0)
+                                <!-- TENANT -->
+                                    <a class="dropdown-item" href="{{ route('maintenance.index') }}">Maintenance</a>
+
+                                @elseif(Auth::user()->role === 1)
+                                <!-- MAINTENANCE WORKER -->
+                                    <a class="dropdown-item" href="{{ route('maintenance.index') }}">Maintenance</a>
+
+                                @elseif(Auth::user()->role === 2)
+                                <!-- OFFICE MANAGER -->
                                     <a class="dropdown-item" href="{{ route('property.index') }}">Properties</a>
                                     <a class="dropdown-item" href="{{ route('tenants.index') }}">Tenants</a>
                                     <a class="dropdown-item" href="{{ route('maintenance.index') }}">Maintenance</a>
+
+                                @elseif(Auth::user()->role === 3)
+                                <!-- ADMIN -->
+                                    <a class="dropdown-item" href="{{ route('property.index') }}">Properties</a>
+                                    <a class="dropdown-item" href="{{ route('tenants.index') }}">Tenants</a>
+                                    <a class="dropdown-item" href="{{ route('maintenance.index') }}">Maintenance</a>
+                                    <a class="dropdown-item" href="{{ route('users.index') }}">User Management</a>
+
+                                @elseif(Auth::user()->role === 4)
+                                <!-- SENRENT INTERNAL -->
+                                    <a class="dropdown-item" href="{{ route('property.index') }}">Properties</a>
+                                    <a class="dropdown-item" href="{{ route('tenants.index') }}">Tenants</a>
+                                    <a class="dropdown-item" href="{{ route('maintenance.index') }}">Maintenance</a>
+                                    <a class="dropdown-item" href="{{ route('users.index') }}">User Management</a>
+
+                                @elseif(Auth::user()->role === 5)
+                                <!-- TRAVIS -->
+                                    <a class="dropdown-item" href="{{ route('property.index') }}">Properties</a>
+                                    <a class="dropdown-item" href="{{ route('tenants.index') }}">Tenants</a>
+                                    <a class="dropdown-item" href="{{ route('maintenance.index') }}">Maintenance</a>
+                                    <a class="dropdown-item" href="{{ route('users.index') }}">User Management</a>
+
+                                @endif                                   
 
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();

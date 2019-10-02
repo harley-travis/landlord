@@ -15,34 +15,34 @@ Route::group(['prefix' => 'property', 'middleware' => ['auth']], function() {
     $c = 'PropertyController';
 
     Route::get('', [
-        'uses' => "$c@index",
-        'as' => 'property.index'
+      'uses' => "$c@index",
+      'as' => 'property.index'
     ]);
 
     Route::get('create', [
-        'uses' => "$c@create",
-        'as' => 'property.create'
+      'uses' => "$c@create",
+      'as' => 'property.create'
     ]);
 
     Route::post('create', [
-        'uses' => "$c@store",
-        'as' => 'property.add'
+      'uses' => "$c@store",
+      'as' => 'property.add'
     ]);
 
     Route::get('edit/{id}', [
-		'uses'	=> "$c@edit",
-		'as'	=> 'property.edit'
-	]);
+      'uses'	=> "$c@edit",
+      'as'	=> 'property.edit'
+    ]);
 
-	Route::post('edit', [
-		'uses'	=> "$c@update",
-		'as'	=> 'property.update'
+	  Route::post('edit', [
+      'uses'	=> "$c@update",
+      'as'	=> 'property.update'
     ]);
     
     Route::get('delete/{id}', [
-		'uses'	=> "$c@destroy",
-		'as'	=> 'property.delete'
-	]);
+      'uses'	=> "$c@destroy",
+      'as'	=> 'property.delete'
+    ]);
 
 });
 
@@ -56,38 +56,38 @@ Route::group(['prefix' => 'tenants', 'middleware' => ['auth']], function() {
     ]);
 
     Route::get('show/{id}', [
-        'uses' => "$c@show",
-        'as' => 'tenants.show'
+      'uses' => "$c@show",
+      'as' => 'tenants.show'
     ]);
 
     Route::get('create', [
-        'uses' => "$c@create",
-        'as' => 'tenants.create'
+      'uses' => "$c@create",
+      'as' => 'tenants.create'
     ]);
 
     Route::post('create', [
-        'uses' => "$c@store",
-        'as' => 'tenants.add'
+      'uses' => "$c@store",
+      'as' => 'tenants.add'
     ]);
 
     Route::get('edit/{id}', [
-		'uses'	=> "$c@edit",
-		'as'	=> 'tenants.edit'
-	]);
+      'uses'	=> "$c@edit",
+      'as'	=> 'tenants.edit'
+    ]);
 
-	Route::post('edit', [
-		'uses'	=> "$c@update",
-		'as'	=> 'tenants.update'
+	  Route::post('edit', [
+      'uses'	=> "$c@update",
+      'as'	=> 'tenants.update'
     ]);
     
     Route::get('archive/{id}', [
-		'uses'	=> "$c@archive",
-		'as'	=> 'tenants.archive'
+      'uses'	=> "$c@archive",
+      'as'	=> 'tenants.archive'
     ]);
     
     Route::get('archived', [
-		'uses'	=> "$c@showArchive",
-		'as'	=> 'tenants.archived'
+      'uses'	=> "$c@showArchive",
+      'as'	=> 'tenants.archived'
 	]);
 
 });
@@ -97,50 +97,95 @@ Route::group(['prefix' => 'maintenance', 'middleware' => ['auth']], function() {
     $c = 'MaintenanceController';
 
     Route::get('', [
-        'uses' => "$c@index",
-        'as' => 'maintenance.index'
+      'uses' => "$c@index",
+      'as' => 'maintenance.index'
     ]);
 
     Route::get('show/{id}', [
-        'uses' => "$c@show",
-        'as' => 'maintenance.show'
+      'uses' => "$c@show",
+      'as' => 'maintenance.show'
     ]);
 
     Route::get('create', [
-        'uses' => "$c@create",
-        'as' => 'maintenance.create'
+      'uses' => "$c@create",
+      'as' => 'maintenance.create'
     ]);
 
     Route::post('create', [
-        'uses' => "$c@store",
-        'as' => 'maintenance.add'
+      'uses' => "$c@store",
+      'as' => 'maintenance.add'
     ]);
 
     Route::get('edit/{id}', [
-		'uses'	=> "$c@edit",
-		'as'	=> 'maintenance.edit'
-	]);
+      'uses'	=> "$c@edit",
+      'as'	=> 'maintenance.edit'
+	  ]);
 
-	Route::post('edit', [
-		'uses'	=> "$c@update",
-		'as'	=> 'maintenance.update'
+	  Route::post('edit', [
+      'uses'	=> "$c@update",
+      'as'	=> 'maintenance.update'
     ]);
     
     Route::get('archive/{id}', [
-		'uses'	=> "$c@archive",
-		'as'	=> 'maintenance.archive'
+      'uses'	=> "$c@archive",
+      'as'	=> 'maintenance.archive'
     ]);
     
     Route::get('archived', [
-		'uses'	=> "$c@showArchive",
-		'as'	=> 'maintenance.archived'
+      'uses'	=> "$c@showArchive",
+      'as'	=> 'maintenance.archived'
     ]);
     
     Route::get('progression/{id}', [
-		'uses'	=> "$c@progression",
-		'as'	=> 'maintenance.progression'
+      'uses'	=> "$c@progression",
+      'as'	=> 'maintenance.progression'
     ]);
     
+});
 
+// USERS
+Route::group(['prefix' => 'users', 'middleware' => ['auth']], function() {
+  $c = 'UserRoleController';
+
+  Route::get('', [
+    'uses' => "$c@index",
+    'as' => 'users.index'
+  ]);
+
+  Route::get('show/{id}', [
+    'uses' => "$c@show",
+    'as' => 'users.show'
+  ]);
+
+  Route::get('create', [
+    'uses' => "$c@create",
+    'as' => 'users.create'
+  ]);
+
+  Route::post('create', [
+    'uses' => "$c@store",
+    'as' => 'users.add'
+  ]);
+
+  Route::get('edit/{id}', [
+    'uses'	=> "$c@edit",
+    'as'	=> 'users.edit' 
+  ]);
+
+  Route::post('edit', [
+    'uses'	=> "$c@update",
+    'as'	=> 'users.update'
+  ]);
+  
+  Route::get('archive/{id}', [
+    'uses'	=> "$c@archive",
+    'as'	=> 'users.archive'
+  ]);
+  
+  Route::get('archived', [
+    'uses'	=> "$c@showArchive",
+    'as'	=> 'users.archived'
+  ]);
+  
 });
 
