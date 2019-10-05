@@ -36,7 +36,6 @@ class CreateTenantsTable extends Migration
             $table->integer('tenant_id');
             $table->primary(['company_id', 'tenant_id']);
             $table->timestamps();
-
         });
     }
 

@@ -18,14 +18,12 @@ class TenantController extends Controller {
      */
     public function index() {
 
-        // $tenants = User::join('tenants', 'users.id', '=', 'tenants.user_id')
-        //                     ->where('users.company_id', '=', '1')
-        //                     ->where('tenants.active', '=', '1')
-        //                     ->get();
+        $tenants = User::join('tenants', 'users.id', '=', 'tenants.user_id')
+                            ->where('users.company_id', '=', Auth::user()->company_id)
+                            ->where('tenants.active', '=', '1')
+                            ->get();
 
-        $data = Company::with('tenants')->where('id', '=',  Auth::user()->company_id)->get();
-
-        return view('tenants.index', ['data' => $data]);
+        return view('tenants.index', ['tenants' => $tenants]);
     }
 
     /**
@@ -96,7 +94,6 @@ class TenantController extends Controller {
                             ->where('tenants.id', '=', $id)
                             ->first();
                             
-
         return view('tenants.show', ['tenant' => $tenant]);
     }
 
@@ -107,10 +104,13 @@ class TenantController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function edit($id) {
+
         $tenant = User::join('tenants', 'users.id', '=', 'tenants.user_id')
                             ->where('tenants.id', '=', $id)
                             ->first();
+
         $properties = Property::where('company_id', '=', Auth::user()->company_id)->get();
+
         return view('tenants.edit', ['tenant' => $tenant, 'tenant_id' => $id, 'properties' => $properties]);
     }
 
@@ -151,6 +151,7 @@ class TenantController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function destroy($id) {
+
         $tenant = User::join('tenants', 'users.id', '=', 'tenants.user_id')
                             ->where('tenants.id', '=', $id)
                             ->first();
@@ -159,17 +160,20 @@ class TenantController extends Controller {
     }
 
     public function showArchive() {
+
         $tenants = User::join('tenants', 'users.id', '=', 'tenants.user_id')
-                            ->where('users.company_id', '=', '1')
+                            ->where('users.company_id', '=', Auth::user()->company_id)
                             ->where('tenants.active', '=', '0')
                             ->get();
         return view('tenants.archive', ['tenants' => $tenants]);
     }
 
     public function archive($id) {
+
         $tenant = Tenant::find($id);
         $tenant->active = 0;
         $tenant->save();
+        
         return redirect()->route('tenants.index')->with('info', 'The tenant was successfully archived');
     }
     

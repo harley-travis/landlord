@@ -6,6 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Property extends Model {
     
+    protected $casts = [
+        'company_id',
+    ];
+
     protected $fillable = [
         'address_1',
         'address_2',
@@ -25,7 +29,7 @@ class Property extends Model {
         'bath_amount',
         'square_footage',
         'description',
-        'company_id',
+        
     ];
 
     public function company() {
