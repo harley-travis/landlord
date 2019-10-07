@@ -29,6 +29,7 @@
                             <th>Edit</th>
                         </tr>
                         @foreach($feedbacks as $feedback)
+
                         <tr>
                             <td>{{ $feedback->subject }}</td>
                             <td>{{ $feedback->description }}</td>

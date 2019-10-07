@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use DB;
 use App\Feedback;
 use Illuminate\Http\Request;
 
@@ -14,10 +15,7 @@ class FeedbackController extends Controller
      */
     public function index() {
         
-        $feedbacks = Feedback::join('users', 'feedback.user_id', '=', 'users.id')
-                        ->where('users.role', '=>', '4')
-                        ->where('status','!=','3')
-                        ->paginate(15);
+        $feedbacks = DB::table('feedback')->paginate(15);
 
         return view('feedback.index', ['feedbacks' => $feedbacks]);
 
@@ -50,9 +48,7 @@ class FeedbackController extends Controller
      */
     public function show($id) {
         
-        $feedback = Feedback::where('company_id', '=', Auth::user()->company_id)
-        ->where('id', '=', $id)
-        ->first();
+        $feedback = Feedback::find($id)->first();
 
         return view('feedback.show', ['feedback' => $feedback]);
 
@@ -95,5 +91,27 @@ class FeedbackController extends Controller
      */
     public function destroy(Feedback $feedback) {
         //
+    }
+
+    public function showArchive() {
+        $requests = Maintenance::where('company_id', '=', Auth::user()->company_id)->where('status','=','3')->paginate(15);
+        return view('maintenance.archive', ['requests' => $requests]);
+    }
+
+    public function archive($id) {
+        $tenant = Tenant::find($id);
+        $tenant->active = 0;
+        $tenant->save();
+        return redirect()->route('tenants.index')->with('info', 'The tenant was successfully archived');
+    }
+
+    public function progression(Request $request, $id) {
+        
+        $feedback = Feedback::find($id);
+        $feedback->status = $request->status + 1;
+        $feedback->save();
+
+        return redirect()->route('feedback.index')->with('info', 'The feedback status was successfully updated!');
+
     }
 }

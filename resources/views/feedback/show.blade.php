@@ -32,30 +32,16 @@
                         @elseif($feedback->status === 3) 
                             Completed
                         @endif
-                    </small> | 
-                    <small> 
-                        @if($feedback->emergency === 0)
-                            Not an emergency
-                        @else 
-                            Emergency!
-                        @endif 
-                    </small> |
-                    <small>
-                        @if($feedback->permission === 0)
-                            Do not enter if the tenant is not home
-                        @else 
-                            Allowed to enter if tenant is not home
-                        @endif 
-                    </small><br>
+                    </small> 
+                    <br>
 
                     <div class="pt-3 pb-3"></div>
 
-                    <h5>{{ $feedback->type }}</h5>
                     <p>{{ $feedback->description }}</p>
 
                     <form action="{{ route('feedback.update') }}" method="post">
                         <div class="form-group">
-                            <label for="status">Property</label>
+                            <label for="status">Status Update</label>
                             <select id="status" name="status" class="form-control">
                                 <option>Select Status Update</option>
                                 <option value="0">Pending</option>
@@ -74,11 +60,11 @@
 
                     <!-- create the next button -->
                     @if($feedback->status === 0)
-                        <a href="{{ route('maintenance.progression', ['id' => $feedback->id ]) }}" class="btn btn-success">Mark as In Review</a>
+                        <a href="{{ route('feedback.progression', ['id' => $feedback->id ]) }}" class="btn btn-success">Mark as In Review</a>
                     @elseif($feedback->status === 1) 
-                        <a href="{{ route('maintenance.progression', ['id' => $feedback->id ]) }}" class="btn btn-success">Mark as In Progress</a>
+                        <a href="{{ route('feedback.progression', ['id' => $feedback->id ]) }}" class="btn btn-success">Mark as In Progress</a>
                     @elseif($feedback->status === 2) 
-                        <a href="{{ route('maintenance.progression', ['id' => $feedback->id ]) }}" class="btn btn-success">Mark as Completed</a>
+                        <a href="{{ route('feedback.progression', ['id' => $feedback->id ]) }}" class="btn btn-success">Mark as Completed</a>
                     @endif
 
 
