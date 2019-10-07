@@ -17,7 +17,7 @@ class MaintenanceController extends Controller
      */
     public function index() {
         
-        $requests = Maintenance::where('company_id', '=', Auth::user()->company_id)->where('status','!=','3')->get();
+        $requests = Maintenance::where('company_id', '=', Auth::user()->company_id)->where('status','!=','3')->paginate(15);
         return view('maintenance.index', ['requests' => $requests]);
 
     }
@@ -113,7 +113,7 @@ class MaintenanceController extends Controller
     }
 
     public function showArchive() {
-        $requests = Maintenance::where('company_id', '=', Auth::user()->company_id)->where('status','=','3')->get();
+        $requests = Maintenance::where('company_id', '=', Auth::user()->company_id)->where('status','=','3')->paginate(15);
         return view('maintenance.archive', ['requests' => $requests]);
     }
 

@@ -21,7 +21,7 @@ class UserRoleController extends Controller
         $users = User::where('company_id', '=',  Auth::user()->company_id)
                         ->where('role', '!=', '0')
                         ->where('role', '!=', '100')
-                        ->get();
+                        ->paginate(15);
 
         return view('users.index', ['users' => $users]);
 
@@ -118,7 +118,7 @@ class UserRoleController extends Controller
 
         $users = User::where('company_id', '=',  Auth::user()->company_id)
         ->where('role', '=', '100')
-        ->get();
+        ->paginate(15);
 
         return view('users.archive', ['users' => $users]);
     }

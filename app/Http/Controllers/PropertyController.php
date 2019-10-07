@@ -18,7 +18,7 @@ class PropertyController extends Controller {
         
         // get all properters werhe user_id equals company_id
 
-        $properties = Property::where('company_id', '=', Auth::user()->company_id)->get();
+        $properties = Property::where('company_id', '=', Auth::user()->company_id)->paginate(15);
         return view('property.index', ['properties' => $properties]);
 
     }

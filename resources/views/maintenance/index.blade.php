@@ -58,7 +58,7 @@
 
                     </table>
 
-
+                    {{ $requests->links() }}
                 </div>
 
             </div>

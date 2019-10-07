@@ -55,7 +55,7 @@
                         </tr>
                         @endforeach
                     </table>
-
+                    {{ $properties->links() }}
 
                 </div>
                 @endif

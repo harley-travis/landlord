@@ -49,6 +49,7 @@
                     </table>
 
                     @endif
+                    {{ $tenants->links() }}
                 </div>
 
             </div>

@@ -24,7 +24,7 @@ class TenantController extends Controller {
                             ->where('properties.company_id', '=', Auth::user()->company_id)
                             ->where('users.company_id', '=', Auth::user()->company_id)
                             ->where('tenants.active', '=', '1')
-                            ->get();
+                            ->paginate(15);
         
         return view('tenants.index', ['tenants' => $tenants]);
     }
@@ -167,7 +167,8 @@ class TenantController extends Controller {
         $tenants = User::join('tenants', 'users.id', '=', 'tenants.user_id')
                             ->where('users.company_id', '=', Auth::user()->company_id)
                             ->where('tenants.active', '=', '0')
-                            ->get();
+                            ->paginate(15);
+                            
         return view('tenants.archive', ['tenants' => $tenants]);
     }
 

@@ -41,7 +41,8 @@
                             </tr>  
                             @endforeach
 
-                    </table>
+                    </table> 
+                    {{ $tenants->links() }}
                 </div>
             </div>
         </div>

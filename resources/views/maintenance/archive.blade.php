@@ -48,7 +48,7 @@
                         @endforeach
 
                     </table>
-
+                    {{ $requests->links() }}
 
                 </div>
             @endif
