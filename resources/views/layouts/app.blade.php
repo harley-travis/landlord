@@ -85,9 +85,11 @@
                                     <a class="dropdown-item" href="{{ route('tenants.index') }}">Tenants</a>
                                     <a class="dropdown-item" href="{{ route('maintenance.index') }}">Maintenance</a>
                                     <a class="dropdown-item" href="{{ route('users.index') }}">User Management</a>
+                                    <a class="dropdown-item" href="{{ route('feedback.index') }}">Customer Feedback</a>
 
-                                @elseif(Auth::user()->role === 5)
+                                @elseif(Auth::user()->role === 10)
                                 <!-- TRAVIS -->
+                                    <a class="dropdown-item" href="{{ route('feedback.index') }}">Customer Feedback</a>
                                     <a class="dropdown-item" href="{{ route('property.index') }}">Properties</a>
                                     <a class="dropdown-item" href="{{ route('tenants.index') }}">Tenants</a>
                                     <a class="dropdown-item" href="{{ route('maintenance.index') }}">Maintenance</a>

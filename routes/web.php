@@ -189,3 +189,53 @@ Route::group(['prefix' => 'users', 'middleware' => ['auth']], function() {
   
 });
 
+// FEEDBACK
+Route::group(['prefix' => 'feedback', 'middleware' => ['auth']], function() {
+  $c = 'FeedbackController';
+
+  Route::get('', [
+    'uses' => "$c@index",
+    'as' => 'feedback.index'
+  ]);
+
+  Route::get('show/{id}', [
+    'uses' => "$c@show",
+    'as' => 'feedback.show'
+  ]);
+
+  Route::get('create', [
+    'uses' => "$c@create",
+    'as' => 'feedback.create'
+  ]);
+
+  Route::post('create', [
+    'uses' => "$c@store",
+    'as' => 'feedback.add'
+  ]);
+
+  Route::get('edit/{id}', [
+    'uses'	=> "$c@edit",
+    'as'	=> 'feedback.edit'
+  ]);
+
+  Route::post('edit', [
+    'uses'	=> "$c@update",
+    'as'	=> 'feedback.update'
+  ]);
+  
+  Route::get('archive/{id}', [
+    'uses'	=> "$c@archive",
+    'as'	=> 'feedback.archive'
+  ]);
+  
+  Route::get('archived', [
+    'uses'	=> "$c@showArchive",
+    'as'	=> 'feedback.archived'
+  ]);
+  
+  Route::get('progression/{id}', [
+    'uses'	=> "$c@progression",
+    'as'	=> 'feedback.progression'
+  ]);
+  
+});

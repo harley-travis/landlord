@@ -17,6 +17,27 @@ class DatabaseSeeder extends Seeder {
      */
     public function run() {
 
+        // COMPANIES
+        DB::table('companies')->insert([
+            'name' => 'SenRent',
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now(),
+            'product' => '3', // 3 does not exist
+        ]);
+
+        // SENRENT - USERS
+        DB::table('users')->insert([
+            'name' => 'Travis Harley',
+            'email' =>'travis@gmail.com',
+            'email_verified_at' => Carbon::now(),
+            'password' => bcrypt('test'),
+            'company_id' => '1',
+            'role' => '10',
+            'remember_token' => '',
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now(),
+        ]);
+
         $companies = factory(Company::class, 100)->create();
 
         foreach( $companies as $company ) {
@@ -65,13 +86,24 @@ class DatabaseSeeder extends Seeder {
             ]);
 
 
-
-
-        }
-
         
 
 
+
+    }
+
+        
+
+    // FEEDBACK
+    DB::table('feedback')->insert([
+        'subject' => 'Tenant background application checks',
+        'description' => 'It would be cool if I could do tenant background checks through the app',
+        'status' => '0',
+        'company_id' => '1',
+        'user_id' => '15',
+        'created_at' => Carbon::now(),
+        'updated_at' => Carbon::now(),
+    ]);
 
 
 
