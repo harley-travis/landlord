@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Auth;
+use DB;
 use App\User;
 use App\Company;
 use App\Property;
@@ -19,10 +20,12 @@ class TenantController extends Controller {
     public function index() {
 
         $tenants = User::join('tenants', 'users.id', '=', 'tenants.user_id')
+                            ->join('properties', 'tenants.property_id', '=', 'properties.id')
+                            ->where('properties.company_id', '=', Auth::user()->company_id)
                             ->where('users.company_id', '=', Auth::user()->company_id)
                             ->where('tenants.active', '=', '1')
                             ->get();
-
+        
         return view('tenants.index', ['tenants' => $tenants]);
     }
 
@@ -46,10 +49,6 @@ class TenantController extends Controller {
         
         $user = Auth::user();
         
-        // create a user
-        /**
-         * at the moment it's not creating a new user and giving null for hte tenant user.id
-         */
         $u = new User([
             'name' => $request->input('name'),
             'email' => $request->input('email'),
@@ -93,8 +92,12 @@ class TenantController extends Controller {
         $tenant = User::join('tenants', 'users.id', '=', 'tenants.user_id')
                             ->where('tenants.id', '=', $id)
                             ->first();
+
+        $property = Property::join('tenants', 'properties.id', '=', 'tenants.property_id')
+                            ->where('tenants.id', '=', $id)
+                            ->first();
                             
-        return view('tenants.show', ['tenant' => $tenant]);
+        return view('tenants.show', ['tenant' => $tenant, 'property' => $property]);
     }
 
     /**
@@ -173,7 +176,7 @@ class TenantController extends Controller {
         $tenant = Tenant::find($id);
         $tenant->active = 0;
         $tenant->save();
-        
+
         return redirect()->route('tenants.index')->with('info', 'The tenant was successfully archived');
     }
     

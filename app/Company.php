@@ -17,7 +17,7 @@ class Company extends Model {
     }
 
     public function tenants() {
-        return $this->belongsToMany('App\Tenant');
+        return $this->belongsToMany('App\Tenant')->withPivot('tenant_id', 'company_id');
     }
 
 }
