@@ -17,6 +17,21 @@
                     </div>
                 @endif
 
+                @if ( $requests->isEmpty() && Auth::user()->role === 3 )
+                    You have no archived maintenance requests
+
+                @elseif( $requests->isEmpty() && Auth::user()->role === 0 )
+
+                    You do not currently have any open maintenance requests. <br>
+
+                    <div class="pt-3 pb-3"></div>
+
+                    <div class="text-center">
+                        <a href="{{ route('maintenance.create') }}" class="btn btn-success">Add Maintenance Request</a>
+                    </div>
+
+                @else
+
                     <div class="mb-3 text-right">
                         <a href="{{ route('maintenance.archived') }}" class="btn btn-link">View Archived Requests</a>
                         <a href="{{ route('maintenance.create') }}" class="btn btn-success">Add Maintenance Request</a>
@@ -29,7 +44,7 @@
                             <th>Emergency</th>
                             <th>Date Submitted</th>
                             <th>Status</th>
-                            <th>Edit</th>
+                            <th>View</th>
                         </tr>
                         @foreach($requests as $request)
                         <tr>
@@ -62,7 +77,7 @@
 
                     {{ $requests->links() }}
                 </div>
-
+                @endif
             </div>
         </div>
     </div>

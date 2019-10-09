@@ -17,10 +17,22 @@ class MaintenanceController extends Controller
      */
     public function index() {
         
-        $requests = Maintenance::where('company_id', '=', Auth::user()->company_id)
-                            ->where('status','!=','3')
-                            ->orderby('emergency', 'desc')
-                            ->paginate(15);
+        if( Auth::user()->role === 0 ) {
+
+            $requests = Maintenance::where('user_id', '=', Auth::user()->id)
+                ->where('status','!=','3')
+                ->orderby('emergency', 'desc')
+                ->paginate(15);
+
+        }
+        elseif( Auth::user()->role >= 1 ) {
+
+            $requests = Maintenance::where('company_id', '=', Auth::user()->company_id)
+                ->where('status','!=','3')
+                ->orderby('emergency', 'desc')
+                ->paginate(15);
+
+        }
 
         return view('maintenance.index', ['requests' => $requests]);
 
@@ -71,7 +83,7 @@ class MaintenanceController extends Controller
      */
     public function show($id) {
 
-        $request = Maintenance::join('users', 'maintenances.user_id', '=', 'users.id')
+        $request = Maintenance::with('user')
                         ->where('maintenances.id', '=', $id)
                         ->first();
         
@@ -96,7 +108,7 @@ class MaintenanceController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Maintenance $maintenance) {
-        
+       
         $maintenance = Maintenance::find($request->input('id'));
         $maintenance->status = $request->input('status');
         $maintenance->save();
@@ -117,24 +129,34 @@ class MaintenanceController extends Controller
     }
 
     public function showArchive() {
-        $requests = Maintenance::where('company_id', '=', Auth::user()->company_id)->where('status','=','3')->paginate(15);
-        return view('maintenance.archive', ['requests' => $requests]);
-    }
 
-    public function archive($id) {
-        $tenant = Tenant::find($id);
-        $tenant->active = 0;
-        $tenant->save();
-        return redirect()->route('tenants.index')->with('info', 'The tenant was successfully archived');
+        if( Auth::user()->role === 0 ) {
+
+            $requests = Maintenance::where('user_id', '=', Auth::user()->id)
+                                ->where('status','=','3')
+                                ->paginate(15);
+
+        }
+        elseif( Auth::user()->role >= 1 ) {
+
+            $requests = Maintenance::where('company_id', '=', Auth::user()->company_id)
+                                ->where('status','=','3')
+                                ->paginate(15);
+
+        }
+
+       
+        return view('maintenance.archive', ['requests' => $requests]);
     }
 
     public function progression($id) {
         
-        $request = Maintenance::find($id);
-        $request->status = $request->status + 1;
-        $request->save();
+        $maintenance = Maintenance::find($id);
+        $maintenance->status = $maintenance->status + 1;
+        $maintenance->save();
 
-        return redirect()->route('maintenance.index')->with('info', 'The maintenance request was successfully updated!');
+        return redirect()->route('maintenance.index')
+                    ->with('info', 'The maintenance request was successfully updated!');
 
     }
 

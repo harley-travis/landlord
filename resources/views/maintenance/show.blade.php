@@ -6,7 +6,7 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">Maintenance Requests</div>
+                <div class="card-header">Maintenance Request</div>
 
                 <div class="card-body">
 
@@ -19,13 +19,17 @@
 
                     <div class="mb-3 text-right">
 
-                        <!-- create the next progression button -->
-                        @if($request->status === 0)
-                            <a href="{{ route('maintenance.progression', ['id' => $request->id ]) }}" class="btn btn-success">Mark as In Review</a>
-                        @elseif($request->status === 1) 
-                            <a href="{{ route('maintenance.progression', ['id' => $request->id ]) }}" class="btn btn-success">Mark as In Progress</a>
-                        @elseif($request->status === 2) 
-                            <a href="{{ route('maintenance.progression', ['id' => $request->id ]) }}" class="btn btn-success">Mark as Completed</a>
+                        @if ( Auth::user()->role >= 1 )
+                        
+                            <!-- create the next progression button -->
+                            @if($request->status === 0)
+                                <a href="{{ route('maintenance.progression', ['id' => $request->id ]) }}" class="btn btn-success">Mark as In Review</a>
+                            @elseif($request->status === 1) 
+                                <a href="{{ route('maintenance.progression', ['id' => $request->id ]) }}" class="btn btn-success">Mark as In Progress</a>
+                            @elseif($request->status === 2) 
+                                <a href="{{ route('maintenance.progression', ['id' => $request->id ]) }}" class="btn btn-success">Mark as Completed</a>
+                            @endif
+
                         @endif
 
                         <a href="{{ route('maintenance.index') }}" class="btn btn-info text-white">Go Back</a>
@@ -62,11 +66,13 @@
                         <strong>Submitted:</strong> {{ $request->created_at }}
                     </small><br>
 
-                    <div class="pt-3 pb-3"></div>
-                    <h4 class="text-primary">Tenant Contact Information</h4>
+                    @if ( Auth::user()->role >= 1 )
+                        <div class="pt-3 pb-3"></div>
+                        <h4 class="text-primary">Tenant Contact Information</h4>
 
-                    <span>{{ $request->name }}</span><br>
-                    <span><a href="mailto:{{ $request->email }}">{{ $request->email }}</a></span>
+                        <span>{{ $request->name }}</span><br>
+                        <span><a href="mailto:{{ $request->email }}">{{ $request->email }}</a></span>
+                    @endif
 
                     <div class="pt-3 pb-3"></div>
                     <h4 class="text-primary">Maintenance Request</h4>
@@ -76,6 +82,8 @@
                     <p>{{ $request->description }}</p>
 
                     <div class="pt-3 pb-3"></div>
+
+                    @if ( Auth::user()->role >= 1 )
 
                     <form action="{{ route('maintenance.update') }}" method="post">
 
@@ -97,6 +105,8 @@
                         <input type="hidden" name="id" value="{{ $request->id }}">
                         <button type="submit" class="btn btn-primary">Update Maintenance Request</button>
                     </form>
+
+                    @endif
 
                 </div>
             </div>

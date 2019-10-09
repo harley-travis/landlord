@@ -116,13 +116,6 @@ class FeedbackController extends Controller
         return view('feedback.archive', ['feedbacks' => $feedbacks]);
     }
 
-    public function archive($id) {
-        $tenant = Tenant::find($id);
-        $tenant->active = 0;
-        $tenant->save();
-        return redirect()->route('tenants.index')->with('info', 'The tenant was successfully archived');
-    }
-
     public function progression(Request $request, $id) {
         
         $feedback = Feedback::find($id);
