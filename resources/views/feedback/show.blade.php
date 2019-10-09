@@ -58,16 +58,6 @@
                     </form>
 
 
-                    <!-- create the next button -->
-                    @if($feedback->status === 0)
-                        <a href="{{ route('feedback.progression', ['id' => $feedback->id ]) }}" class="btn btn-success">Mark as In Review</a>
-                    @elseif($feedback->status === 1) 
-                        <a href="{{ route('feedback.progression', ['id' => $feedback->id ]) }}" class="btn btn-success">Mark as In Progress</a>
-                    @elseif($feedback->status === 2) 
-                        <a href="{{ route('feedback.progression', ['id' => $feedback->id ]) }}" class="btn btn-success">Mark as Completed</a>
-                    @endif
-
-
                 </div>
 
             </div>

@@ -61,16 +61,19 @@
                                 @if(Auth::user()->role === 0)
                                 <!-- TENANT -->
                                     <a class="dropdown-item" href="{{ route('maintenance.index') }}">Maintenance</a>
+                                    <a class="dropdown-item" href="{{ route('feedback.create') }}">Send Feedback</a>
 
                                 @elseif(Auth::user()->role === 1)
                                 <!-- MAINTENANCE WORKER -->
                                     <a class="dropdown-item" href="{{ route('maintenance.index') }}">Maintenance</a>
+                                    <a class="dropdown-item" href="{{ route('feedback.create') }}">Send Feedback</a>
 
                                 @elseif(Auth::user()->role === 2)
                                 <!-- OFFICE MANAGER -->
                                     <a class="dropdown-item" href="{{ route('property.index') }}">Properties</a>
                                     <a class="dropdown-item" href="{{ route('tenants.index') }}">Tenants</a>
                                     <a class="dropdown-item" href="{{ route('maintenance.index') }}">Maintenance</a>
+                                    <a class="dropdown-item" href="{{ route('feedback.create') }}">Send Feedback</a>
 
                                 @elseif(Auth::user()->role === 3)
                                 <!-- ADMIN -->
@@ -78,6 +81,7 @@
                                     <a class="dropdown-item" href="{{ route('tenants.index') }}">Tenants</a>
                                     <a class="dropdown-item" href="{{ route('maintenance.index') }}">Maintenance</a>
                                     <a class="dropdown-item" href="{{ route('users.index') }}">User Management</a>
+                                    <a class="dropdown-item" href="{{ route('feedback.create') }}">Send Feedback</a>
 
                                 @elseif(Auth::user()->role === 4)
                                 <!-- SENRENT INTERNAL -->

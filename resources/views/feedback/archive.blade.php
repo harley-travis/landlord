@@ -6,7 +6,7 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">Maintenance Requests</div>
+                <div class="card-header">Archived Customer Feedback</div>
 
                 <div class="card-body">
 
@@ -29,18 +29,22 @@
                         <tr>
                             <th>Subject</th>
                             <th>Description</th>
-                            <th>Emergency</th>
-                            <td>Edit</th>
+                            <th>Status</th>
+                            <th>View Feedback</th>
                         </tr>
                         @foreach($feedbacks as $feedback)
                         <tr>
                             <td>{{ $feedback->subject }}</td>
                             <td>{{ $feedback->description }}</td>
                             <td>
-                                @if($feedback->emergency === 0)
-                                    No
-                                @else 
-                                    Yes
+                                @if($feedback->status === 0)
+                                    Pending
+                                @elseif($feedback->status === 1) 
+                                    Under Review
+                                @elseif($feedback->status === 2) 
+                                    In Progress
+                                @elseif($feedback->status === 3) 
+                                    Completed
                                 @endif
                             </td>
                             <td><a href="{{ route('feedback.show', ['id' => $feedback->id ]) }}" class="btn btn-info text-white">View</a></td>

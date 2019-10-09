@@ -15,7 +15,10 @@ class FeedbackController extends Controller
      */
     public function index() {
         
-        $feedbacks = DB::table('feedback')->paginate(15);
+        $feedbacks = Feedback::join('users', 'feedback.user_id', '=', 'users.id')
+                        ->where('feedback.status', '!=', '3')
+                        ->orderBy('feedback.created_at', 'desc')
+                        ->paginate(15);
 
         return view('feedback.index', ['feedbacks' => $feedbacks]);
 
@@ -37,7 +40,18 @@ class FeedbackController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request) {
-        //
+    
+        $feedback = new Feedback([
+            'subject' => $request->input('subject'),
+            'description'=> $request->input('description'),
+            'status'=> 0,
+            'company_id' => $request->input('company_id'),
+            'user_id' => $request->input('user_id'),
+        ]);
+        $feedback->save();
+
+        return redirect()->route('feedback.create')->with('info', 'Thank you for your feedback! We always look at these with great care!');
+
     }
 
     /**
@@ -48,8 +62,7 @@ class FeedbackController extends Controller
      */
     public function show($id) {
         
-        $feedback = Feedback::find($id)->first();
-
+        $feedback = Feedback::where('id', '=', $id)->first();
         return view('feedback.show', ['feedback' => $feedback]);
 
     }
@@ -94,8 +107,13 @@ class FeedbackController extends Controller
     }
 
     public function showArchive() {
-        $requests = Maintenance::where('company_id', '=', Auth::user()->company_id)->where('status','=','3')->paginate(15);
-        return view('maintenance.archive', ['requests' => $requests]);
+        
+        $feedbacks = DB::table('feedback')
+                        ->where('status', '=', '3')
+                        ->latest()
+                        ->paginate(15);
+
+        return view('feedback.archive', ['feedbacks' => $feedbacks]);
     }
 
     public function archive($id) {

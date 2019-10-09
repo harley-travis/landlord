@@ -7,6 +7,13 @@
             <div class="card">
                 <div class="card-header">Send Feedback</div>
 
+                @if(Session::has('info'))
+                    <div class="alert alert-success" role="alert">
+                        <h4 class="alert-heading">Success!</h4>
+                        <p>{{ Session::get('info') }}</p>
+                    </div>
+                @endif
+
                 <div class="card-body">
 
                     <div class="mb-3 text-right">
@@ -26,13 +33,13 @@
 						</div>
 
                         
-                        <input type="hidden" name="user_id" value="" />
-                        <input type="hidden" name="company_id" value="" />
+                        <input type="hidden" name="user_id" value="{{ Auth::user()->id }}" />
+                        <input type="hidden" name="company_id" value="{{ Auth::user()->company_id }}" />
 
 
                         @csrf
 
-                        <button type="submit" class="btn btn-success">Send Request</button>
+                        <button type="submit" class="btn btn-success">Send Feedback</button>
 
                     </form>
 

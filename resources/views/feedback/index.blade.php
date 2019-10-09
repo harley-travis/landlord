@@ -5,10 +5,10 @@
 
     <div class="row justify-content-center">
         <div class="col-md-8">
+         @if(Auth::user()->role >= 4)
             <div class="card">
                 <div class="card-header">Customer Feedback</div>
-
-                <div class="card-body">
+                <div class="card-body">   
 
                 @if(Session::has('info'))
                     <div class="alert alert-success" role="alert">
@@ -23,14 +23,16 @@
 
                     <table class="table table-hover">
                         <tr>
+                            <th>Submitted By</th>
                             <th>Subject</th>
                             <th>Description</th>
                             <th>Status</th>
-                            <th>Edit</th>
+                            <th>View Feedback</th>
                         </tr>
                         @foreach($feedbacks as $feedback)
 
                         <tr>
+                            <td>{{ $feedback->name }}</td>
                             <td>{{ $feedback->subject }}</td>
                             <td>{{ $feedback->description }}</td>
                             <td>
@@ -54,7 +56,17 @@
                 </div>
 
             </div>
+            @else
+            
+                <div class="alert alert-warning text-center" role="alert">
+                    <strong>ATTENTION!</strong> The page you are looking for does not exisit
+                </div>
+                
+            @endif
+
         </div>
     </div>
 </div>
+
+
 @endsection
