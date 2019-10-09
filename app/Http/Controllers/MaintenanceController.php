@@ -17,7 +17,11 @@ class MaintenanceController extends Controller
      */
     public function index() {
         
-        $requests = Maintenance::where('company_id', '=', Auth::user()->company_id)->where('status','!=','3')->paginate(15);
+        $requests = Maintenance::where('company_id', '=', Auth::user()->company_id)
+                            ->where('status','!=','3')
+                            ->orderby('emergency', 'desc')
+                            ->paginate(15);
+
         return view('maintenance.index', ['requests' => $requests]);
 
     }
@@ -66,10 +70,10 @@ class MaintenanceController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show($id) {
-        
-        $request = Maintenance::where('company_id', '=', Auth::user()->company_id)
-                                ->where('id', '=', $id)
-                                ->first();
+
+        $request = Maintenance::join('users', 'maintenances.user_id', '=', 'users.id')
+                        ->where('maintenances.id', '=', $id)
+                        ->first();
         
         return view('maintenance.show', ['request' => $request]);
     }

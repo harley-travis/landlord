@@ -18,26 +18,37 @@
                 @endif
 
                     <div class="mb-3 text-right">
+
+                        <!-- create the next progression button -->
+                        @if($request->status === 0)
+                            <a href="{{ route('maintenance.progression', ['id' => $request->id ]) }}" class="btn btn-success">Mark as In Review</a>
+                        @elseif($request->status === 1) 
+                            <a href="{{ route('maintenance.progression', ['id' => $request->id ]) }}" class="btn btn-success">Mark as In Progress</a>
+                        @elseif($request->status === 2) 
+                            <a href="{{ route('maintenance.progression', ['id' => $request->id ]) }}" class="btn btn-success">Mark as Completed</a>
+                        @endif
+
                         <a href="{{ route('maintenance.index') }}" class="btn btn-info text-white">Go Back</a>
+
                     </div>
 
                     <h3>{{ $request->subject }}</h3>
                     <small>
                         @if($request->status === 0)
-                            Pending
+                            <span class="text-danger">Pending</span>
                         @elseif($request->status === 1) 
-                            Under Review
+                            <span class="text-primary">Under Review</span>
                         @elseif($request->status === 2) 
-                            In Progress
+                            <span class="text-success">In Progress</span>
                         @elseif($request->status === 3) 
-                            Completed
+                            <span class="text-success"><strong>Completed</strong></span>
                         @endif
                     </small> | 
                     <small> 
                         @if($request->emergency === 0)
                             Not an emergency
                         @else 
-                            Emergency!
+                            <span class="text-danger"><strong>Emergency</strong></span>
                         @endif 
                     </small> |
                     <small>
@@ -47,15 +58,29 @@
                             Allowed to enter if tenant is not home
                         @endif 
                     </small><br>
+                    <small>
+                        <strong>Submitted:</strong> {{ $request->created_at }}
+                    </small><br>
+
+                    <div class="pt-3 pb-3"></div>
+                    <h4 class="text-primary">Tenant Contact Information</h4>
+
+                    <span>{{ $request->name }}</span><br>
+                    <span><a href="mailto:{{ $request->email }}">{{ $request->email }}</a></span>
+
+                    <div class="pt-3 pb-3"></div>
+                    <h4 class="text-primary">Maintenance Request</h4>
+
+                    <h5>{{ $request->type }}</h5>
+                    <div class="pt-3 pb-3"></div>
+                    <p>{{ $request->description }}</p>
 
                     <div class="pt-3 pb-3"></div>
 
-                    <h5>{{ $request->type }}</h5>
-                    <p>{{ $request->description }}</p>
-
                     <form action="{{ route('maintenance.update') }}" method="post">
+
                         <div class="form-group">
-                            <label for="status">Property</label>
+                            <label for="status">Update Status</label>
                             <select id="status" name="status" class="form-control">
                                 <option>Select Status Update</option>
                                 <option value="0">Pending</option>
@@ -65,25 +90,15 @@
                             </select>
                         </div>    
 
+                        <div class="pt-3 pb-3"></div>
+
                         @csrf
 
                         <input type="hidden" name="id" value="{{ $request->id }}">
                         <button type="submit" class="btn btn-primary">Update Maintenance Request</button>
                     </form>
 
-
-                    <!-- create the next button -->
-                    @if($request->status === 0)
-                        <a href="{{ route('maintenance.progression', ['id' => $request->id ]) }}" class="btn btn-success">Mark as In Review</a>
-                    @elseif($request->status === 1) 
-                        <a href="{{ route('maintenance.progression', ['id' => $request->id ]) }}" class="btn btn-success">Mark as In Progress</a>
-                    @elseif($request->status === 2) 
-                        <a href="{{ route('maintenance.progression', ['id' => $request->id ]) }}" class="btn btn-success">Mark as Completed</a>
-                    @endif
-
-
                 </div>
-
             </div>
         </div>
     </div>

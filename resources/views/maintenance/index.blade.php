@@ -27,8 +27,9 @@
                             <th>Subject</th>
                             <th>Description</th>
                             <th>Emergency</th>
+                            <th>Date Submitted</th>
                             <th>Status</th>
-                            <td>Edit</th>
+                            <th>Edit</th>
                         </tr>
                         @foreach($requests as $request)
                         <tr>
@@ -38,18 +39,19 @@
                                 @if($request->emergency === 0)
                                     No
                                 @else 
-                                    Yes
+                                    <span class="text-danger"><strong>Yes</strong></span>
                                 @endif
                             </td>
+                            <td>{{ $request->created_at }}</td>
                             <td>
                                 @if($request->status === 0)
-                                    Pending
+                                    <span class="text-danger">Pending</span>
                                 @elseif($request->status === 1) 
-                                    Under Review
+                                    <span class="text-primary">Under Review</span>
                                 @elseif($request->status === 2) 
-                                    In Progress
+                                    <span class="text-success">In Progress</span>
                                 @elseif($request->status === 3) 
-                                    Completed
+                                    <span class="text-success"><strong>Completed</strong></span>
                                 @endif
                             </td>
                             <td><a href="{{ route('maintenance.show', ['id' => $request->id ]) }}" class="btn btn-info text-white">View</a></td>
