@@ -16,7 +16,7 @@ class CreatePropertiesTable extends Migration
         Schema::create('properties', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('company_id');
-            $table->timestamps();
+            $table->unsignedBigInteger('hoa_community')->nullable();
             $table->string('address_1');
             $table->string('address_2')->nullable();
             $table->string('address_3')->nullable();
@@ -35,8 +35,12 @@ class CreatePropertiesTable extends Migration
             $table->integer('bath_amount')->nullable();
             $table->integer('square_footage')->nullable();
             $table->text('description')->nullable();
+            $table->text('account_number')->nullable();
+            $table->integer('hoa_amount')->nullable();
+            $table->timestamps();
 
             $table->foreign('company_id')->references('id')->on('companies');
+            $table->foreign('hoa_community')->references('id')->on('communities');
         });
     }
 

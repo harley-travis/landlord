@@ -2,12 +2,12 @@
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
-use App\Company;
 use App\Model;
+use App\Community;
 use Faker\Generator as Faker;
 
-$factory->define(Company::class, function (Faker $faker) {
+$factory->define(Community::class, function (Faker $faker) {
     return [
-        'name' => $faker->name,
+        'hoa_community' => $faker->name,
     ];
 });

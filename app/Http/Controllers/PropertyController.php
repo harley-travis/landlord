@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Auth;
 use App\Property;
+use App\Company;
 use Illuminate\Http\Request;
 use Illuminate\Session\Store;
 
@@ -19,7 +20,8 @@ class PropertyController extends Controller {
         // get all properters werhe user_id equals company_id
 
         $properties = Property::where('company_id', '=', Auth::user()->company_id)->paginate(15);
-        return view('property.index', ['properties' => $properties]);
+        $company = Company::where('id', '=', Auth::user()->company_id)->first();
+        return view('property.index', ['properties' => $properties, 'company' => $company,]);
 
     }
 

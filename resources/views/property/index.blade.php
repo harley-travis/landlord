@@ -18,11 +18,21 @@
                 @endif
 
                 @if($properties->isEmpty())
-                    You don't have any properties added! Let's add one now!
 
-                    <div class="mb-3 text-right">
+                    @if($company->product == 2)
+                        <p>Before you create a property, be sure to add a community before so you can assign the community to the property</p>
+                        <div class="pb-5 text-left">
+                            <a href="{{ route('community.create') }}" class="btn btn-primary">Add Community</a>
+                        </div>
+                    @endif
+
+                    <p>You don't have any properties added! Let's add one now!</p>
+
+                    <div class="mb-3 text-left">
                         <a href="{{ route('property.create') }}" class="btn btn-success">Add Property</a>
                     </div>
+
+                    
                 @else
 
                     <div class="mb-3 text-right">

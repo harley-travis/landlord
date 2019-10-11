@@ -9,7 +9,6 @@ class Company extends Model {
     
     protected $fillable = [
         'name', 
-        'product',
     ];
 
     public function maintenances() {

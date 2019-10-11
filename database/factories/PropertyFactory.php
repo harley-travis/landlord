@@ -26,5 +26,9 @@ $factory->define(Property::class, function (Faker $faker) {
         'bath_amount' => $faker->numberBetween(1, 5),
         'square_footage' => $faker->numberBetween(1000, 5000),
         'description' => $faker->sentence(12),
+        'account_number' => null,
+        'hoa_amount' => null,
+        'hoa_community' => null,
+        
     ];
 });

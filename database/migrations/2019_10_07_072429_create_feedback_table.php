@@ -17,10 +17,10 @@ class CreateFeedbackTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('user_id')->nullable();
             $table->unsignedBigInteger('company_id')->nullable();
-            $table->timestamps();
             $table->string('subject');
             $table->longText('description');
             $table->integer('status')->comment('0=>pending 1=>review 2=>in progress 3=>completed');
+            $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('company_id')->references('id')->on('companies');

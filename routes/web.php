@@ -239,3 +239,39 @@ Route::group(['prefix' => 'feedback', 'middleware' => ['auth']], function() {
   ]);
   
 });
+
+// COMMUNITIES
+Route::group(['prefix' => 'community', 'middleware' => ['auth']], function() {
+  $c = 'CommunityController';
+
+  Route::get('', [
+    'uses' => "$c@index",
+    'as' => 'community.index'
+  ]);
+
+  Route::get('create', [
+    'uses' => "$c@create",
+    'as' => 'community.create'
+  ]);
+
+  Route::post('create', [
+    'uses' => "$c@store",
+    'as' => 'community.add'
+  ]);
+
+  Route::get('edit/{id}', [
+    'uses'	=> "$c@edit",
+    'as'	=> 'community.edit'
+  ]);
+
+  Route::post('edit', [
+    'uses'	=> "$c@update",
+    'as'	=> 'community.update'
+  ]);
+  
+  Route::get('delete/{id}', [
+    'uses'	=> "$c@destroy",
+    'as'	=> 'community.delete'
+  ]);
+
+});

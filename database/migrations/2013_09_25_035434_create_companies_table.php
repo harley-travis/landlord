@@ -17,7 +17,6 @@ class CreateCompaniesTable extends Migration
             $table->bigIncrements('id');
             $table->string('name');
             $table->timestamps();
-            $table->integer('product')->comment('0=home owners 1=apt 2=hoa');
         });
     }
 

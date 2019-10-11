@@ -54,6 +54,7 @@ class RegisterController extends Controller
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
             'role' => [],
+            'product' => [],
             'company_id' => [],
         ]);
     }
@@ -67,8 +68,7 @@ class RegisterController extends Controller
     protected function create(array $data) {
 
         $c = Company::create([
-            'name' => $data['company_name'],
-            'product' => $data['product'],
+            'name' => $data['company_name'],   
         ]);
 
         return User::create([
@@ -76,6 +76,7 @@ class RegisterController extends Controller
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
             'company_id' => $c->id,
+            'product' => $data['product'],
             'role' => '3',
         ]);
     }
