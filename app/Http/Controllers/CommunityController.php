@@ -2,19 +2,24 @@
 
 namespace App\Http\Controllers;
 
+use Auth;
 use App\Community;
+use App\Company;
 use Illuminate\Http\Request;
 
-class CommunityController extends Controller
-{
+class CommunityController extends Controller {
+    
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
-        //
+    public function index() {
+
+        $communities = Community::where('company_id', '=', Auth::user()->company_id)->paginate(15);
+        $company = Company::where('id', '=', Auth::user()->company_id)->first();
+
+        return view('community.index', ['communities' => $communities, 'company' => $company,]);
     }
 
     /**
@@ -22,9 +27,8 @@ class CommunityController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
-        //
+    public function create() {
+        return view('community.create');
     }
 
     /**
@@ -33,21 +37,22 @@ class CommunityController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
-        //
+    public function store(Request $request)  {
+        
+        $user = Auth::user();
+
+        $community = new Community([
+            'hoa_community' => $request->input('hoa_community'),
+            'company_id' => $user->company_id,
+        ]);
+        $community->save();
+
+        return redirect()
+                ->route('community.index')
+                ->with('info', 'Good job! Your community was saved successfully!');
+
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Community  $community
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Community $community)
-    {
-        //
-    }
 
     /**
      * Show the form for editing the specified resource.
@@ -55,9 +60,11 @@ class CommunityController extends Controller
      * @param  \App\Community  $community
      * @return \Illuminate\Http\Response
      */
-    public function edit(Community $community)
-    {
-        //
+    public function edit($id) {
+
+        $community = Community::find($id);
+        return view('community.edit', ['community' => $community, 'id' => $id]);
+
     }
 
     /**
@@ -67,19 +74,15 @@ class CommunityController extends Controller
      * @param  \App\Community  $community
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Community $community)
-    {
-        //
+    public function update(Request $request, Community $community) {
+        
+        $community = Community::find($request->input('id'));
+        $community->hoa_community = $request->input('hoa_community');
+        $community->save();
+
+        return redirect()
+                ->route('community.index')
+                ->with('info', 'Good job! Your community was updated successfully!');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Community  $community
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Community $community)
-    {
-        //
-    }
 }

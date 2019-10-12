@@ -70,6 +70,9 @@
 
                                 @elseif(Auth::user()->role === 2)
                                 <!-- OFFICE MANAGER -->
+                                    @if( Auth::user()->product === 3 )
+                                    <a class="dropdown-item" href="{{ route('community.index') }}">Communities</a>
+                                    @endif
                                     <a class="dropdown-item" href="{{ route('property.index') }}">Properties</a>
                                     <a class="dropdown-item" href="{{ route('tenants.index') }}">Tenants</a>
                                     <a class="dropdown-item" href="{{ route('maintenance.index') }}">Maintenance</a>
@@ -77,6 +80,9 @@
 
                                 @elseif(Auth::user()->role === 3)
                                 <!-- ADMIN -->
+                                    @if( Auth::user()->product === 3 )
+                                    <a class="dropdown-item" href="{{ route('community.index') }}">Communities</a>
+                                    @endif
                                     <a class="dropdown-item" href="{{ route('property.index') }}">Properties</a>
                                     <a class="dropdown-item" href="{{ route('tenants.index') }}">Tenants</a>
                                     <a class="dropdown-item" href="{{ route('maintenance.index') }}">Maintenance</a>
@@ -85,6 +91,7 @@
 
                                 @elseif(Auth::user()->role === 4)
                                 <!-- SENRENT INTERNAL -->
+                                    <a class="dropdown-item" href="{{ route('community.index') }}">Communities</a>
                                     <a class="dropdown-item" href="{{ route('property.index') }}">Properties</a>
                                     <a class="dropdown-item" href="{{ route('tenants.index') }}">Tenants</a>
                                     <a class="dropdown-item" href="{{ route('maintenance.index') }}">Maintenance</a>
@@ -93,7 +100,7 @@
 
                                 @elseif(Auth::user()->role === 10)
                                 <!-- TRAVIS -->
-                                    <a class="dropdown-item" href="{{ route('feedback.index') }}">Customer Feedback</a>
+                                    <a class="dropdown-item" href="{{ route('community.index') }}">Communities</a>
                                     <a class="dropdown-item" href="{{ route('property.index') }}">Properties</a>
                                     <a class="dropdown-item" href="{{ route('tenants.index') }}">Tenants</a>
                                     <a class="dropdown-item" href="{{ route('maintenance.index') }}">Maintenance</a>

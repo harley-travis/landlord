@@ -33,7 +33,7 @@ class DatabaseSeeder extends Seeder {
             'password' => bcrypt('test'),
             'company_id' => '1',
             'role' => '10',
-            'product' => '2', 
+            'product' => '3', 
             'remember_token' => '',
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
@@ -49,21 +49,21 @@ class DatabaseSeeder extends Seeder {
             // create a maintenace worker
             factory(User::class)->create([
                 'role' => '1',
-                'product' => '0', 
+                'product' => '1', 
                 'company_id' => $ho_company_id
             ]);
 
             // create an office manager
             factory(User::class)->create([
                 'role' => '2',
-                'product' => '0', 
+                'product' => '1', 
                 'company_id' => $ho_company_id
             ]);
 
             // create the property owner
             factory(User::class)->create([
                 'role' => '3',
-                'product' => '0', 
+                'product' => '1', 
                 'company_id' => $ho_company_id
             ]);
 
@@ -78,7 +78,7 @@ class DatabaseSeeder extends Seeder {
                     'property_id' => $ho_property->id,
                     'user_id' => factory(User::class)->create([
                         'role' => 0,
-                        'product' => 3,
+                        'product' => 0,
                         'company_id' => $ho_company_id,
                     ])
                 ]);    
@@ -104,21 +104,21 @@ class DatabaseSeeder extends Seeder {
             // create a maintenace worker
             factory(User::class)->create([
                 'role' => '1',
-                'product' => '1', 
+                'product' => '2', 
                 'company_id' => $a_company_id
             ]);
 
             // create an office manager
             factory(User::class)->create([
                 'role' => '2',
-                'product' => '1', 
+                'product' => '2', 
                 'company_id' => $a_company_id
             ]);
 
             // create the property owner
             factory(User::class)->create([
                 'role' => '3',
-                'product' => '1', 
+                'product' => '2', 
                 'company_id' => $ho_company_id
             ]);
 
@@ -133,7 +133,7 @@ class DatabaseSeeder extends Seeder {
                     'property_id' => $a_property->id,
                     'user_id' => factory(User::class)->create([
                         'role' => 0,
-                        'product' => 3,
+                        'product' => 0,
                         'company_id' => $a_company_id,
                     ])
                 ]);    
@@ -158,21 +158,21 @@ class DatabaseSeeder extends Seeder {
             // create a maintenace worker
             factory(User::class)->create([
                 'role' => '1',
-                'product' => '2', 
+                'product' => '3', 
                 'company_id' => $hoa_company_id
             ]);
 
             // create an office manager
             factory(User::class)->create([
                 'role' => '2',
-                'product' => '2', 
+                'product' => '3', 
                 'company_id' => $hoa_company_id
             ]);
 
             // create the property owner
             factory(User::class)->create([
                 'role' => '3',
-                'product' => '2', 
+                'product' => '3', 
                 'company_id' => $ho_company_id
             ]);
 
@@ -197,7 +197,7 @@ class DatabaseSeeder extends Seeder {
                         'property_id' => $hoa_property->id,
                         'user_id' => factory(User::class)->create([
                             'role' => 0,
-                            'product' => 3,
+                            'product' => 0,
                             'company_id' => $hoa_company_id,
                         ])
                     ]);    

@@ -19,7 +19,7 @@
 
                 @if($properties->isEmpty())
 
-                    @if($company->product == 2)
+                    @if($company->product == 3)
                         <p>Before you create a property, be sure to add a community before so you can assign the community to the property</p>
                         <div class="pb-5 text-left">
                             <a href="{{ route('community.create') }}" class="btn btn-primary">Add Community</a>
