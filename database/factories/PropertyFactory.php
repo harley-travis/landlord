@@ -28,7 +28,7 @@ $factory->define(Property::class, function (Faker $faker) {
         'description' => $faker->sentence(12),
         'account_number' => null,
         'hoa_amount' => null,
-        'hoa_community' => null,
+        'community_id' => null,
         
     ];
 });

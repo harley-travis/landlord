@@ -55,6 +55,8 @@
                             <input type="text" class="form-control" name="lease_length" aria-describedby="lease_length" placeholder="Enter length of lease">
                         </div>
 
+                        @if( Auth::user()->product === 1 ||  Auth::user()->product === 2 || Auth::user()->product === 10 )
+
                         <div class="form-group">
                             <label for="rent_amount">Lease Amount</label>
                             <input type="text" class="form-control" name="rent_amount" aria-describedby="rent_amount" placeholder="Enter amount of lease">
@@ -99,6 +101,34 @@
                             <input type="text" class="form-control" name="pet_deposit_amount" aria-describedby="pet_deposit_amount" placeholder="Enter pet deposit amount">
                         </div>
 
+                        @endif
+
+                        <!-- HOA USERS -->
+                        @if( Auth::user()->product === 3 || Auth::user()->product === 10 )
+                        <div class="form-group">
+                            <label for="account_number">HOA Account Number</label>
+                            <input type="text" class="form-control" name="account_number" aria-describedby="account_number" placeholder="Enter HOA account number">
+                            <small id="emailHelp" class="form-text text-muted">Only needed if you already have account numbers assigned to tenants.</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="hoa_amount">Monthly HOA Fees</label>
+                            <input type="text" class="form-control" name="hoa_amount" aria-describedby="hoa_amount" placeholder="Enter monthly HOA fee">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="community_id">Community</label>
+                            <select id="community_id" name="community_id" class="form-control">
+                                <option value="">Select Community</option>
+                                @foreach($communities as $community)
+                                <option value="{{ $community->id }}">{{ $community->hoa_community }}</option>
+                                @endforeach
+                            </select>
+                        </div>   
+
+                        @endif
+
+                        @if( Auth::user()->product === 1 ||  Auth::user()->product === 2 || Auth::user()->product === 10 )
                         <div class="p-0 mb-3">
                         
                             <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#moreOptions" aria-expanded="false" aria-controls="moreOptions">
@@ -132,10 +162,10 @@
                             </div>
 
                         </div>
-
+                        @endif
 
                         @csrf
-
+                        
                         <button type="submit" class="btn btn-success">Save Property</button>
 
                     </form>

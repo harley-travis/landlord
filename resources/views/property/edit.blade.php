@@ -55,6 +55,8 @@
                             <input type="text" class="form-control" name="lease_length" aria-describedby="lease_length" value="{{ $property->lease_length }}">
                         </div>
 
+                        @if( Auth::user()->product === 1 ||  Auth::user()->product === 2 || Auth::user()->product === 10 )
+
                         <div class="form-group">
                             <label for="rent_amount">Lease Amount</label>
                             <input type="text" class="form-control" name="rent_amount" aria-describedby="rent_amount" value="{{ $property->rent_amount }}">
@@ -135,6 +137,35 @@
                             <label for="pet_deposit_amount">Pet Deposit Amount</label>
                             <input type="text" class="form-control" name="pet_deposit_amount" aria-describedby="pet_deposit_amount" value="{{ $property->pet_deposit_amount }}">
                         </div>
+
+                        @endif
+                        
+                        <!-- HOA USERS -->
+                        @if( Auth::user()->product === 3 || Auth::user()->product === 10 )
+                        <div class="form-group">
+                            <label for="account_number">HOA Account Number</label>
+                            <input type="text" class="form-control" name="account_number" aria-describedby="account_number" value="{{ $property->account_number }}">
+                            <small id="emailHelp" class="form-text text-muted">Only needed if you already have account numbers assigned to tenants.</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="hoa_amount">Monthly HOA Fees</label>
+                            <input type="text" class="form-control" name="hoa_amount" aria-describedby="hoa_amount" value="{{ $property->hoa_amount }}">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="community_id">Community</label>
+                            <select id="community_id" name="community_id" class="form-control">
+                            <option value="">No Property</option>
+                            @foreach($communities as $community)
+                            <option {{ $property->community_id == $community->id ? 'selected':'' }}  value='{{ $community->id }}'> 
+                                {{ $community->hoa_community }}
+                            </option>
+                            @endforeach
+                            </select>
+                        </div>    
+
+                        @endif
 
 
                         <div class="p-0 mb-3">

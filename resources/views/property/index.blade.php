@@ -10,12 +10,12 @@
 
                 <div class="card-body">
 
-                @if(Session::has('info'))
-                    <div class="alert alert-success" role="alert">
-                        <h4 class="alert-heading">Success!</h4>
-                        <p>{{ Session::get('info') }}</p>
-                    </div>
-                @endif
+                    @if(Session::has('info'))
+                        <div class="alert alert-success" role="alert">
+                            <h4 class="alert-heading">Success!</h4>
+                            <p>{{ Session::get('info') }}</p>
+                        </div>
+                    @endif
 
                 @if($properties->isEmpty())
 
@@ -39,6 +39,8 @@
                         <a href="{{ route('property.create') }}" class="btn btn-success">Add Property</a>
                     </div>
 
+                @if( Auth::user()->product === 1 || Auth::user()->product === 10 )
+
                     <table class="table table-hover">
                         <tr>
                             <th>Address</th>
@@ -46,7 +48,7 @@
                             <th>Rent Amount</th>
                             <th>Lease Length</th>
                             <th>Tenant</th>
-                            <td>Edit</th>
+                            <th>Edit</th>
                         </tr>
                         @foreach($properties as $property)
                         <tr>
@@ -58,7 +60,7 @@
                                     No
                                 @endif
                             </td>
-                            <td>${{ $property->rent_amount }}</td>
+                            <td>{{ $property->rent_amount }}</td>
                             <td>{{ $property->lease_length }} months</td>
                             <td>TO DO</td>
                             <td><a href="{{ route('property.edit', ['id' => $property->id ]) }}" class="btn btn-info text-white">Edit Property</a></td>
@@ -67,7 +69,30 @@
                     </table>
                     {{ $properties->links() }}
 
-                </div>
+                @endif
+
+                @if( Auth::user()->product === 3 || Auth::user()->product === 10 )
+
+                    <table class="table table-hover">
+                        <tr>
+                            <th>Community Name</th>
+                            <th>Address</th>
+                            <th>Monthly HOA</th>
+                            <th>Edit</th>
+                        </tr>
+                        @foreach($communities as $community)
+                        <tr>
+                            <td>{{ $community->hoa_community }}</td>
+                            <td>{{ $community->address_1 }} {{ $community->address_2 }} {{ $community->address_3 }}</td>
+                            <td>${{ $community->hoa_amount }}</td>
+                            <td><a href="{{ route('property.edit', ['id' => $community->id ]) }}" class="btn btn-info text-white">Edit Property</a></td>
+                        </tr>
+                        @endforeach
+                    </table>
+                    {{ $properties->links() }}
+
+                @endif
+                </div><!-- card-body -->
                 @endif
             </div>
         </div>

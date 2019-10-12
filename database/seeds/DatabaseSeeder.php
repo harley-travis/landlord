@@ -33,32 +33,18 @@ class DatabaseSeeder extends Seeder {
             'password' => bcrypt('test'),
             'company_id' => '1',
             'role' => '10',
-            'product' => '3', 
+            'product' => '10', 
             'remember_token' => '',
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
         ]);
 
         // create 100 Home Owners
-        $homeOwners = factory(Company::class, 100)->create(); 
+        $homeOwners = factory(Company::class, 10)->create(); 
 
         foreach( $homeOwners as $homeOwner ) {
             
             $ho_company_id = $homeOwner->id;
-
-            // create a maintenace worker
-            factory(User::class)->create([
-                'role' => '1',
-                'product' => '1', 
-                'company_id' => $ho_company_id
-            ]);
-
-            // create an office manager
-            factory(User::class)->create([
-                'role' => '2',
-                'product' => '1', 
-                'company_id' => $ho_company_id
-            ]);
 
             // create the property owner
             factory(User::class)->create([
@@ -95,7 +81,7 @@ class DatabaseSeeder extends Seeder {
         }
         
         // create 100 Apartment Complexes
-        $apartment_companies = factory(Company::class, 100)->create(); 
+        $apartment_companies = factory(Company::class, 10)->create(); 
 
         foreach( $apartment_companies as $apartment_company ) {
             
@@ -123,7 +109,7 @@ class DatabaseSeeder extends Seeder {
             ]);
 
             // create tenants                 
-            $a_properties = factory(Property::class, 30)->create([
+            $a_properties = factory(Property::class, 15)->create([
                 'company_id' => $a_company_id,
             ]);
 
@@ -149,7 +135,7 @@ class DatabaseSeeder extends Seeder {
         }
 
         // create 100 Home Owner Associations 
-        $hoa_companies = factory(Company::class, 100)->create(); 
+        $hoa_companies = factory(Company::class, 10)->create(); 
 
         foreach( $hoa_companies as $hoa_company ) {
             
@@ -184,11 +170,11 @@ class DatabaseSeeder extends Seeder {
             foreach( $communities as $community ) {
 
                 // create tenants         
-                $hoa_properties = factory(Property::class, 100)->create([
+                $hoa_properties = factory(Property::class, 10)->create([
                     'company_id' => $hoa_company_id,
                     'account_number' => $roleDecider = rand(12344, 25345),
                     'hoa_amount' => rand(1, 200),
-                    'hoa_community' => $community->id,
+                    'community_id' => $community->id,
                 ]);
 
                 foreach( $hoa_properties as $hoa_property ){

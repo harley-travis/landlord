@@ -29,7 +29,10 @@ class Property extends Model {
         'bath_amount',
         'square_footage',
         'description',
-        
+        'community_id',
+        'hoa_amount',
+        'account_number',
+        'company_id',
     ];
 
     public function company() {

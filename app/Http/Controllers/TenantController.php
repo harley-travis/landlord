@@ -35,7 +35,7 @@ class TenantController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function create() {
-        $properties = Property::where('company_id', '=', Auth::user()->company_id)->paginate(15);
+        $properties = Property::where('company_id', '=', Auth::user()->company_id)->get();
         return view('tenants.create', ['properties' => $properties]);
     }
 
@@ -46,8 +46,6 @@ class TenantController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request) {
-        
-        $user = Auth::user();
         
         $u = new User([
             'name' => $request->input('name'),

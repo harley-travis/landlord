@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Auth;
 use App\Property;
 use App\Company;
+use App\Community;
 use Illuminate\Http\Request;
 use Illuminate\Session\Store;
 
@@ -18,9 +19,22 @@ class PropertyController extends Controller {
     public function index() {
 
         $properties = Property::where('company_id', '=', Auth::user()->company_id)->paginate(15);
+
+        $communities = Community::join('properties', 'communities.id', '=', 'properties.community_id')
+        ->where('communities.company_id', '=', Auth::user()->company_id)
+        ->paginate(15);
+
+        // $communities = Property::join('communities', 'properties.community_id', '=', 'communities.id')
+        //                     ->where('properties.company_id', '=', Auth::user()->company_id)
+        //                     ->paginate(15);
+        
         $company = Company::where('id', '=', Auth::user()->company_id)->first();
         
-        return view('property.index', ['properties' => $properties, 'company' => $company,]);
+        return view('property.index', [
+            'properties' => $properties, 
+            'communities' => $communities, 
+            'company' => $company,
+        ]);
 
     }
 
@@ -30,7 +44,10 @@ class PropertyController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function create() {
-        return view('property.create');
+
+        $communities = Community::where('company_id', '=', Auth::user()->company_id)->get();
+        return view('property.create', ['communities' => $communities]);
+
     }
 
     /**
@@ -40,8 +57,6 @@ class PropertyController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request) {
-        
-        $user = Auth::user();
 
         $property = new Property([
             'address_1' => $request->input('address_1'),
@@ -62,7 +77,10 @@ class PropertyController extends Controller {
             'bath_amount'=> $request->input('bath_amount'),
             'square_footage'=> $request->input('square_footage'),
             'description'=> $request->input('description'),
-            'company_id' => $user->company_id,
+            'account_number'=> $request->input('account_number'),
+            'hoa_amount'=> $request->input('hoa_amount'),
+            'community_id'=> $request->input('community_id'),
+            'company_id' => Auth::user()->company_id,
         ]);
         $property->save();
 
@@ -89,8 +107,16 @@ class PropertyController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function edit($id) {
-        $property = Property::find($id);
-        return view('property.edit', ['property' => $property, 'property_id' => $id]);
+
+        $property = Property::where('company_id', '=', Auth::user()->company_id)->first();
+        $communities = Community::where('company_id', '=', Auth::user()->company_id)->get();
+
+        return view('property.edit', [
+            'property' => $property, 
+            'property_id' => $id,
+            'communities' => $communities
+        ]);
+
     }
 
     /**
@@ -120,7 +146,10 @@ class PropertyController extends Controller {
         $property->bath_amount = $request->input('bath_amount');
         $property->square_footage = $request->input('square_footage');
         $property->description = $request->input('description');
-
+        $property->account_number = $request->input('account_number');
+        $property->hoa_amount = $request->input('hoa_amount');
+        $property->community_id = $request->input('community_id');
+        
         $property->save();
 
         return redirect()
