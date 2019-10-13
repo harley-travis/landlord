@@ -60,7 +60,8 @@
 
                                 @if(Auth::user()->role === 0)
                                 <!-- TENANT -->
-                                    <a class="dropdown-item" href="{{ route('maintenance.index') }}">Maintenance</a>
+                                    <a class="dropdown-item" href="{{ route('maintenance.create') }}">Create Maintenance</a>
+                                    <a class="dropdown-item" href="{{ route('maintenance.index') }}">My Maintenance Reqeusts</a>
                                     <a class="dropdown-item" href="{{ route('feedback.create') }}">Send Feedback</a>
 
                                 @elseif(Auth::user()->role === 1)

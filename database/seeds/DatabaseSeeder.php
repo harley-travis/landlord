@@ -40,7 +40,7 @@ class DatabaseSeeder extends Seeder {
         ]);
 
         // create 100 Home Owners
-        $homeOwners = factory(Company::class, 10)->create(); 
+        $homeOwners = factory(Company::class, 1)->create(); 
 
         foreach( $homeOwners as $homeOwner ) {
             
@@ -81,7 +81,7 @@ class DatabaseSeeder extends Seeder {
         }
         
         // create 100 Apartment Complexes
-        $apartment_companies = factory(Company::class, 10)->create(); 
+        $apartment_companies = factory(Company::class, 1)->create(); 
 
         foreach( $apartment_companies as $apartment_company ) {
             
@@ -105,7 +105,7 @@ class DatabaseSeeder extends Seeder {
             factory(User::class)->create([
                 'role' => '3',
                 'product' => '2', 
-                'company_id' => $ho_company_id
+                'company_id' => $a_company_id
             ]);
 
             // create tenants                 
@@ -135,7 +135,7 @@ class DatabaseSeeder extends Seeder {
         }
 
         // create 100 Home Owner Associations 
-        $hoa_companies = factory(Company::class, 10)->create(); 
+        $hoa_companies = factory(Company::class, 1)->create(); 
 
         foreach( $hoa_companies as $hoa_company ) {
             
@@ -159,7 +159,7 @@ class DatabaseSeeder extends Seeder {
             factory(User::class)->create([
                 'role' => '3',
                 'product' => '3', 
-                'company_id' => $ho_company_id
+                'company_id' => $hoa_company_id
             ]);
 
             // create the communities
@@ -173,7 +173,7 @@ class DatabaseSeeder extends Seeder {
                 $hoa_properties = factory(Property::class, 10)->create([
                     'company_id' => $hoa_company_id,
                     'account_number' => $roleDecider = rand(12344, 25345),
-                    'hoa_amount' => rand(1, 200),
+                    'hoa_amount' => rand(120, 200),
                     'community_id' => $community->id,
                 ]);
 

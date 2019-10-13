@@ -24,10 +24,10 @@ class CreatePropertiesTable extends Migration
             $table->string('state');
             $table->string('zip');
             $table->string('country');
-            $table->integer('occupied')->comment('0 = no 1 = yes');
+            $table->integer('occupied')->nullable()->comment('0 = no 1 = yes');
             $table->string('lease_length')->nullable();
             $table->integer('rent_amount')->nullable();
-            $table->integer('pet')->comment('0 = no 1 = yes');
+            $table->integer('pet')->nullable()->comment('0 = no 1 = yes');
             $table->integer('deposit_amount')->nullable();
             $table->integer('pet_deposit_amount')->nullable();
             $table->integer('amount_refundable')->nullable();
