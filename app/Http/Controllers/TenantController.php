@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use Mail;
 use App\Mail\TenantCreated;
+use App\Mail\RentReminder;
 
 class TenantController extends Controller {
     /**
@@ -81,6 +82,10 @@ class TenantController extends Controller {
         // find the tenant and user
         $findTenant = Tenant::findOrFail($tenant->id);
         $findUser = User::findOrFail($u->id);
+        /**
+         * this property is used for other email testing
+         */
+        // $findProperty = Property::findOrFail($tenant->property_id);
 
         $e = 'travis.harley@senrent.com';
 
@@ -88,6 +93,13 @@ class TenantController extends Controller {
         * testing version
         */
         Mail::to($e)->send(new TenantCreated($findTenant, $findUser));
+
+        /**
+         * this function is to send rent reminder
+         */
+
+        //Mail::to($e)->send(new RentReminder($findTenant, $findUser, $findProperty));
+
 
         /**
          * This should be the live version
