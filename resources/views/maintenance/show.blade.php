@@ -98,6 +98,12 @@
                             </select>
                         </div>    
 
+                        <div class="form-group">
+							<label for="notes">Add Notes</label><br>
+                            <small>last updated: {{ $request->updated_at }}</small>
+							<textarea class="form-control" name="notes" rows="8">{{ $request->notes }}</textarea>
+						</div>
+
                         <div class="pt-3 pb-3"></div>
 
                         @csrf

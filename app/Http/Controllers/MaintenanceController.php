@@ -130,30 +130,25 @@ class MaintenanceController extends Controller
        
         $maintenance = Maintenance::find($request->input('id'));
         $maintenance->status = $request->input('status');
+        $maintenance->notes = $request->input('notes');
         $maintenance->save();
 
         // find tenant information to send to mailable
-        $findTenant = Tenant::findOrFail($maintenance->user_id);
         $findUser = User::findOrFail($maintenance->user_id); 
 
         $e = 'travis.harley@senrent.com'; // testing
         $email = $findUser->email; // live
 
-        // review
-        if( $request->input('status') == 1 ) {
-
-            Mail::to($e)->send(new MaintenanceReview($findTenant, $findUser));
-
-        // progress
-        } elseif ( $request->input('status') == 2 ) {
-
-            Mail::to($e)->send(new MaintenanceProgress($findTenant, $findUser));
-
-        // completed
-        } elseif ( $request->input('status') == 3 ) {
-
-            Mail::to($e)->send(new MaintenanceCompletd($findTenant, $findUser));
-
+        switch ( $request->input('status') ) {
+            case "1":
+                Mail::to($e)->send(new MaintenanceReview($findUser));
+                break;
+            case "2":
+                Mail::to($e)->send(new MaintenanceProgress($findUser));
+                break;
+            case "3":
+                Mail::to($e)->send(new MaintenanceCompleted($findUser));
+                break;
         }
 
         return redirect()

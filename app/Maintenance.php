@@ -13,6 +13,7 @@ class Maintenance extends Model {
         'emergency', 
         'permission', 
         'status',
+        'notes',
         'company_id',
         'user_id',
     ];

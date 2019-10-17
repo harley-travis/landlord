@@ -54,6 +54,7 @@ class CreateMaintenancesTable extends Migration
             $table->integer('emergency')->comment('0=>no 1=>yes');
             $table->integer('permission')->comment('0=>no 1=>yes');
             $table->integer('status')->comment('0=>pending 1=>review 2=>in progress 3=>completed');
+            $table->longText('notes')->nullable();
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users');

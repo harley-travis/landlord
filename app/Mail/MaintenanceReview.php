@@ -3,17 +3,15 @@
 namespace App\Mail;
 
 use App\User;
-use App\Tenant;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class MaintenanceCreated extends Mailable {
+class MaintenanceReview extends Mailable {
 
     use Queueable, SerializesModels;
 
-    public $tenant;
     public $user;
 
     /**
@@ -21,9 +19,8 @@ class MaintenanceCreated extends Mailable {
      *
      * @return void
      */
-    public function __construct(Tenant $tenant, User $user)  {
+    public function __construct(User $user)  {
 
-        $this->tenant = $tenant;
         $this->user = $user;
         
     }
@@ -36,7 +33,7 @@ class MaintenanceCreated extends Mailable {
     public function build() {
 
         return $this->from('noreply@senrent.com')
-                        ->subject('Maintenance request submitted successfully')
+                        ->subject('Maintenance request is under review')
                         ->markdown('emails.maintenance.review');
 
     }
