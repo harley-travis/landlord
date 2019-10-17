@@ -10,6 +10,8 @@ use App\Property;
 use App\Tenant;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
+use Mail;
+use App\Mail\TenantCreated;
 
 class TenantController extends Controller {
     /**
@@ -46,13 +48,16 @@ class TenantController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request) {
+
+        $email = $request->input('email');
         
         $u = new User([
             'name' => $request->input('name'),
-            'email' => $request->input('email'),
+            'email' => $email,
             'password' => Hash::make( $request->input('password')),
             'company_id'=> Auth::user()->company_id,
             'role' => '0',
+            'product' => 0,
         ]);
         $u->save();
 
@@ -64,7 +69,7 @@ class TenantController extends Controller {
             'secondary_work_phone'=> $request->input('secondary_work_phone'),
             'secondary_email'=> $request->input('secondary_email'),
             'number_occupants'=> $request->input('number_occupants'),
-            'active'=> '1',
+            'active' => '1',
             'property_id'=> $request->input('property_id'),
             'user_id' => $u->id,
         ]);
@@ -72,6 +77,22 @@ class TenantController extends Controller {
 
         // need to update the pivot table as well.
         $tenant->company()->attach(Auth::user()->company_id);
+
+        // find the tenant and user
+        $findTenant = Tenant::findOrFail($tenant->id);
+        $findUser = User::findOrFail($u->id);
+
+        $e = 'travis.harley@senrent.com';
+
+       /**
+        * testing version
+        */
+        Mail::to($e)->send(new TenantCreated($findTenant, $findUser));
+
+        /**
+         * This should be the live version
+         */
+        //Mail::to($email)->send(new TenantCreated($tenant));
 
         return redirect()
                 ->route('tenants.index')

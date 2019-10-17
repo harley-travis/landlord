@@ -13,6 +13,8 @@
                         <a href="{{ route('tenants.index') }}" class="btn btn-info text-white">Go Back</a>
                     </div>
                     
+                    <p>When you create a tenant, they will get an email with their login credentials</p>
+
                     <form action="{{ route('tenants.add') }}" method="post">
 
                         <div class="form-group">
