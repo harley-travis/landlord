@@ -1,12 +1,7 @@
 @component('mail::message')
-# Introduction
+# Hi {{ $user->name }},
 
-The body of your message.
+One of our maintenance workers is fixing your request. We should be finished shortly.
 
-@component('mail::button', ['url' => ''])
-Button Text
-@endcomponent
-
-Thanks,<br>
-{{ config('app.name') }}
+Thank you for your patience<br>
 @endcomponent

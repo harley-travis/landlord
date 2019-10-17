@@ -2,11 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use Mail;
 use Auth;
 use App\Company;
 use App\Property;
 use App\Maintenance;
+use App\Tenant;
+use App\User;
 use Illuminate\Http\Request;
+use App\Mail\MaintenanceReview;
+use App\Mail\MaintenanceCreated;
+use App\Mail\MaintenanceProgress;
+use App\Mail\MaintenanceCompleted;
 
 class MaintenanceController extends Controller
 {
@@ -69,6 +76,18 @@ class MaintenanceController extends Controller
         ]);
         $maintenance->save();
 
+        // locate tenant information
+        $tenant = Tenant::where('user_id', '=', $user->id)->first();
+
+        // find tenant information to send to mailable
+        $findTenant = Tenant::findOrFail($tenant->id);
+        $findUser = User::findOrFail($tenant->user_id); 
+
+        $e = 'travis.harley@senrent.com'; // testing
+        $email = $user->email; // live
+
+        Mail::to($e)->send(new MaintenanceCreated($findTenant, $findUser));
+
         return redirect()
                 ->route('maintenance.index')
                 ->with('info', 'Good job! Your request was saved sent! We will contact you shortly.');
@@ -112,6 +131,30 @@ class MaintenanceController extends Controller
         $maintenance = Maintenance::find($request->input('id'));
         $maintenance->status = $request->input('status');
         $maintenance->save();
+
+        // find tenant information to send to mailable
+        $findTenant = Tenant::findOrFail($maintenance->user_id);
+        $findUser = User::findOrFail($maintenance->user_id); 
+
+        $e = 'travis.harley@senrent.com'; // testing
+        $email = $findUser->email; // live
+
+        // review
+        if( $request->input('status') == 1 ) {
+
+            Mail::to($e)->send(new MaintenanceReview($findTenant, $findUser));
+
+        // progress
+        } elseif ( $request->input('status') == 2 ) {
+
+            Mail::to($e)->send(new MaintenanceProgress($findTenant, $findUser));
+
+        // completed
+        } elseif ( $request->input('status') == 3 ) {
+
+            Mail::to($e)->send(new MaintenanceCompletd($findTenant, $findUser));
+
+        }
 
         return redirect()
                 ->route('maintenance.index')

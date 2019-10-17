@@ -1,12 +1,7 @@
 @component('mail::message')
-# Introduction
+# Hi {{ $user->name }},
 
-The body of your message.
+Your maintenance request is completed. If you have any questions, please contact your property manager.
 
-@component('mail::button', ['url' => ''])
-Button Text
-@endcomponent
-
-Thanks,<br>
-{{ config('app.name') }}
+Thank you<br>
 @endcomponent

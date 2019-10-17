@@ -37,7 +37,7 @@ class MaintenanceCreated extends Mailable {
 
         return $this->from('noreply@senrent.com')
                         ->subject('Maintenance request submitted successfully')
-                        ->markdown('emails.maintenance.created');
+                        ->markdown('emails.maintenance.review');
 
     }
 }
