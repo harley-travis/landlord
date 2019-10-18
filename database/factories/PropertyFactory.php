@@ -16,18 +16,11 @@ $factory->define(Property::class, function (Faker $faker) {
         'zip' => $faker->postcode,
         'country' => $faker->country,
         'occupied' => $faker->numberBetween(0,1),
-        'lease_length' => $faker->numberBetween(1,24),
-        'rent_amount' => $faker->numberBetween(900, 5000),
         'pet' => $faker->numberBetween(0,1),
-        'deposit_amount' => $faker->numberBetween(100, 500),
-        'pet_deposit_amount' => $faker->numberBetween(100, 500),
-        'amount_refundable' => $faker->numberBetween(100, 500),
         'bed_amount' => $faker->numberBetween(1, 7),
         'bath_amount' => $faker->numberBetween(1, 5),
         'square_footage' => $faker->numberBetween(1000, 5000),
         'description' => $faker->sentence(12),
-        'account_number' => null,
-        'hoa_amount' => null,
         'community_id' => null,
         
     ];

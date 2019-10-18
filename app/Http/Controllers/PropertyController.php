@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Auth;
 use App\Property;
+use App\Rent;
 use App\Company;
 use App\Community;
 use Illuminate\Http\Request;
@@ -67,22 +68,29 @@ class PropertyController extends Controller {
             'zip'=> $request->input('zip'),
             'country'=> $request->input('country'),
             'occupied'=> $request->input('occupied'),
-            'lease_length'=> $request->input('lease_length'),
-            'rent_amount'=> $request->input('rent_amount'),
             'pet'=> $request->input('pet'),
-            'deposit_amount'=> $request->input('deposit_amount'),
-            'pet_deposit_amount'=> $request->input('pet_deposit_amount'),
-            'amount_refundable'=> $request->input('amount_refundable'),
             'bed_amount'=> $request->input('bed_amount'),
             'bath_amount'=> $request->input('bath_amount'),
             'square_footage'=> $request->input('square_footage'),
             'description'=> $request->input('description'),
-            'account_number'=> $request->input('account_number'),
-            'hoa_amount'=> $request->input('hoa_amount'),
             'community_id'=> $request->input('community_id'),
             'company_id' => Auth::user()->company_id,
         ]);
         $property->save();
+
+        $rent = new Rent([
+            'lease_length'=> $request->input('lease_length'),
+            'rent_amount'=> $request->input('rent_amount'),
+            'deposit_amount'=> $request->input('deposit_amount'),
+            'pet_deposit_amount'=> $request->input('pet_deposit_amount'),
+            'amount_refundable'=> $request->input('amount_refundable'),
+            'late_date'=> $request->input('late_date'),
+            'late_fee'=> $request->input('late_fee'),
+            'account_number'=> $request->input('account_number'),
+            'hoa_amount'=> $request->input('hoa_amount'),
+            'property_id' => $property->id,
+        ]);
+        $rent->save();
 
         return redirect()
                 ->route('property.index')

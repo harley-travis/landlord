@@ -4,6 +4,7 @@ use App\User;
 use App\Company;
 use App\Community;
 use App\Property;
+use App\Rent;
 use App\Tenant;
 use App\Maintenance;
 use Carbon\Carbon;
@@ -67,7 +68,13 @@ class DatabaseSeeder extends Seeder {
                         'product' => 0,
                         'company_id' => $ho_company_id,
                     ])
-                ]);    
+                ]);   
+                
+                $ho_rent = factory(Rent::class)->create([
+                    'property_id' => $ho_property->id,
+                    'account_number' => null,
+                    'hoa_amount' => null,
+                ]);
 
                 DB::table('company_tenant')->insertGetId([
                     'company_id' => $ho_company_id,
@@ -122,7 +129,13 @@ class DatabaseSeeder extends Seeder {
                         'product' => 0,
                         'company_id' => $a_company_id,
                     ])
-                ]);    
+                ]);
+                
+                $a_rent = factory(Rent::class)->create([
+                    'property_id' => $a_property->id,
+                    'account_number' => null,
+                    'hoa_amount' => null,
+                ]);
 
                 DB::table('company_tenant')->insertGetId([
                     'company_id' => $a_company_id,
@@ -172,8 +185,6 @@ class DatabaseSeeder extends Seeder {
                 // create tenants         
                 $hoa_properties = factory(Property::class, 10)->create([
                     'company_id' => $hoa_company_id,
-                    'account_number' => $roleDecider = rand(12344, 25345),
-                    'hoa_amount' => rand(120, 200),
                     'community_id' => $community->id,
                 ]);
 
@@ -187,6 +198,14 @@ class DatabaseSeeder extends Seeder {
                             'company_id' => $hoa_company_id,
                         ])
                     ]);    
+
+                    $hoa_rent = factory(Rent::class)->create([
+                        'property_id' => $hoa_property->id,
+                        'rent_amount' => null,
+                        'deposit_amount' => null,
+                        'pet_deposit_amount' => null,
+                        'amount_refundable' => null,
+                    ]);
 
                     DB::table('company_tenant')->insertGetId([
                         'company_id' => $hoa_company_id,

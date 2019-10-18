@@ -25,18 +25,11 @@ class CreatePropertiesTable extends Migration
             $table->string('zip');
             $table->string('country');
             $table->integer('occupied')->nullable()->comment('0 = no 1 = yes');
-            $table->string('lease_length')->nullable();
-            $table->integer('rent_amount')->nullable();
-            $table->integer('pet')->nullable()->comment('0 = no 1 = yes');
-            $table->integer('deposit_amount')->nullable();
-            $table->integer('pet_deposit_amount')->nullable();
-            $table->integer('amount_refundable')->nullable();
+            $table->integer('pet')->nullable()->comment('0 = no 1 = yes');     
             $table->integer('bed_amount')->nullable();
             $table->integer('bath_amount')->nullable();
             $table->integer('square_footage')->nullable();
             $table->text('description')->nullable();
-            $table->text('account_number')->nullable();
-            $table->integer('hoa_amount')->nullable();
             $table->timestamps();
 
             $table->foreign('company_id')->references('id')->on('companies');
