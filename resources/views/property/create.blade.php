@@ -104,8 +104,6 @@
                                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
                                     <div class="card-body">
                                   
-
-
                                         <div class="form-group">
                                             <label for="lease_length">Lease Length</label>
                                             <input type="text" class="form-control" name="lease_length" aria-describedby="lease_length" placeholder="Enter length of lease">

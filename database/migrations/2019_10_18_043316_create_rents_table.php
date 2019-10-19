@@ -33,7 +33,7 @@ class CreateRentsTable extends Migration
             $table->integer('hoa_amount')->nullable();
             $table->timestamps();
 
-            $table->foreign('property_id')->references('id')->on('properties');
+            $table->foreign('property_id')->references('id')->on('properties')->onDelete('cascade');
         });
     }
 

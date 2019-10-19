@@ -19,16 +19,13 @@ class PropertyController extends Controller {
      */
     public function index() {
 
-        $properties = Property::where('company_id', '=', Auth::user()->company_id)->paginate(15);
+        $properties = Property::join('rents', 'rents.property_id', '=', 'properties.id')
+                                    ->where('company_id', '=', Auth::user()->company_id)->paginate(15);
 
         $communities = Community::join('properties', 'communities.id', '=', 'properties.community_id')
-        ->where('communities.company_id', '=', Auth::user()->company_id)
-        ->paginate(15);
+                                    ->where('communities.company_id', '=', Auth::user()->company_id)
+                                    ->paginate(15);
 
-        // $communities = Property::join('communities', 'properties.community_id', '=', 'communities.id')
-        //                     ->where('properties.company_id', '=', Auth::user()->company_id)
-        //                     ->paginate(15);
-        
         $company = Company::where('id', '=', Auth::user()->company_id)->first();
         
         return view('property.index', [
@@ -117,10 +114,12 @@ class PropertyController extends Controller {
     public function edit($id) {
 
         $property = Property::where('company_id', '=', Auth::user()->company_id)->first();
+        $rent = Rent::where('property_id', '=', $id)->first();
         $communities = Community::where('company_id', '=', Auth::user()->company_id)->get();
 
         return view('property.edit', [
             'property' => $property, 
+            'rent' => $rent, 
             'property_id' => $id,
             'communities' => $communities
         ]);
@@ -136,7 +135,7 @@ class PropertyController extends Controller {
      */
     public function update(Request $request, Property $property) {
           
-        $property = Property::find($request->input('id'));
+        $property = Property::find($request->input('property_id'));
         $property->address_1 = $request->input('address_1');
         $property->address_2 = $request->input('address_2');
         $property->city = $request->input('city');
@@ -144,21 +143,25 @@ class PropertyController extends Controller {
         $property->zip = $request->input('zip');
         $property->country = $request->input('country');
         $property->occupied = $request->input('occupied');
-        $property->lease_length = $request->input('lease_length');
-        $property->rent_amount = $request->input('rent_amount');
         $property->pet = $request->input('pet');
-        $property->deposit_amount = $request->input('deposit_amount');
-        $property->pet_deposit_amount = $request->input('pet_deposit_amount');
-        $property->amount_refundable = $request->input('amount_refundable');
         $property->bed_amount = $request->input('bed_amount');
         $property->bath_amount = $request->input('bath_amount');
         $property->square_footage = $request->input('square_footage');
         $property->description = $request->input('description');
-        $property->account_number = $request->input('account_number');
-        $property->hoa_amount = $request->input('hoa_amount');
         $property->community_id = $request->input('community_id');
-        
         $property->save();
+
+        $rent = Rent::find($request->input('rent_id'));
+        $rent->rent_amount = $request->input('rent_amount');
+        $rent->deposit_amount = $request->input('deposit_amount');
+        $rent->pet_deposit_amount = $request->input('pet_deposit_amount');
+        $rent->amount_refundable = $request->input('amount_refundable');
+        $rent->lease_length = $request->input('lease_length');
+        $rent->account_number = $request->input('late_date');
+        $rent->account_number = $request->input('late_fee');
+        $rent->account_number = $request->input('account_number');
+        $rent->hoa_amount = $request->input('hoa_amount');
+        $rent->save();
 
         return redirect()
                 ->route('property.index')
@@ -175,6 +178,7 @@ class PropertyController extends Controller {
 
         $property = Property::find($id);
         $property->delete();
+
         return redirect()
             ->route('property.index')
             ->with('info', 'Your property was successfully deleted');

@@ -47,7 +47,6 @@
                             <th>Occupied</th>
                             <th>Rent Amount</th>
                             <th>Lease Length</th>
-                            <th>Tenant</th>
                             <th>Edit</th>
                         </tr>
                         @foreach($properties as $property)
@@ -60,9 +59,8 @@
                                     No
                                 @endif
                             </td>
-                            <td>{{ $property->rent_amount }}</td>
+                            <td>${{ $property->rent_amount }}</td>
                             <td>{{ $property->lease_length }} months</td>
-                            <td>TO DO</td>
                             <td><a href="{{ route('property.edit', ['id' => $property->id ]) }}" class="btn btn-info text-white">Edit Property</a></td>
                         </tr>
                         @endforeach
