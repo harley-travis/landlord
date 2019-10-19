@@ -90,7 +90,17 @@
                         <div class="form-group">
                             <label for="status">Update Status</label>
                             <select id="status" name="status" class="form-control">
-                                <option>Select Status Update</option>
+                                                                    
+                                @if( $request->status === 0 )
+                                <option class="bg-success text-white" value="0">Pending</option>
+                                @elseif( $request->status === 1 )
+                                <option class="bg-success text-white" value="1">In Review</option>
+                                @elseif( $request->status === 2 )
+                                <option class="bg-success text-white" value="2">In Progress</option>
+                                @elseif( $request->status === 3 )
+                                <option class="bg-success text-white" value="3">Completed</option>
+                                @endif
+
                                 <option value="0">Pending</option>
                                 <option value="1">In Review</option>
                                 <option value="2">In Progress</option>
