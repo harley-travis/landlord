@@ -61,6 +61,11 @@ class MaintenanceController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request) {
+
+        $request->validate([
+            'subject' => 'required',
+            'description' => 'required',
+        ]);
         
         $user = Auth::user();
 

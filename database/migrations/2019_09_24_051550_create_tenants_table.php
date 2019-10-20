@@ -23,7 +23,7 @@ class CreateTenantsTable extends Migration
             $table->string('secondary_phone')->nullable();
             $table->string('secondary_work_phone')->nullable();
             $table->string('secondary_email')->nullable();
-            $table->integer('number_occupants');
+            $table->integer('number_occupants')->nullable();
             $table->integer('active')->comment('0 = not active 1 = actives');
             $table->timestamps();
 

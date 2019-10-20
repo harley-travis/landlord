@@ -50,6 +50,13 @@ class TenantController extends Controller {
      */
     public function store(Request $request) {
 
+        $request->validate([
+            'name' => 'required',
+            'email' => 'required|email',
+            'password' => 'required|min:8',
+            'phone' => 'required',
+        ]);
+
         $email = $request->input('email');
         
         $u = new User([
@@ -156,6 +163,12 @@ class TenantController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Tenant $tenant) {
+
+        $request->validate([
+            'name' => 'required',
+            'email' => 'required|email',
+            'phone' => 'required',
+        ]);
 
         $user = User::find($request->input('user_id'));
         $user->name = $request->input('name');

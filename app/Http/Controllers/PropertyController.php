@@ -56,6 +56,15 @@ class PropertyController extends Controller {
      */
     public function store(Request $request) {
 
+        $request->validate([
+            'address_1' => 'required',
+            'city' => 'required',
+            'zip' => 'required',
+            'state' => 'required',
+            'country' => 'required',
+            'city' => 'required',
+        ]);
+
         $property = new Property([
             'address_1' => $request->input('address_1'),
             'address_2' => $request->input('address_2'),
@@ -134,6 +143,15 @@ class PropertyController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Property $property) {
+
+        $request->validate([
+            'address_1' => 'required',
+            'city' => 'required',
+            'zip' => 'required',
+            'state' => 'required',
+            'country' => 'required',
+            'city' => 'required',
+        ]);
           
         $property = Property::find($request->input('property_id'));
         $property->address_1 = $request->input('address_1');

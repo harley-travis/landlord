@@ -16,18 +16,24 @@
                     <form action="{{ route('users.update') }}" method="post">
 
                         <div class="form-group">
-                            <label for="name">Name</label>
-                            <input type="text" class="form-control" name="name" aria-describedby="name" value="{{ $user->name }}">
+                            <label for="name">Name <small class="text-danger pl-2">required</small></label>
+                            <input type="text" class="form-control {{ $errors->has('name') ? 'is-invalid' : '' }}" name="name" aria-describedby="name" value="{{ $user->name }}">
+                            @error('name')
+                            <span class='invalid-feedback'>{{ $message }}</span>
+                            @enderror
                         </div>
 
                         <div class="form-group">
-                            <label for="email">Email</label>
-                            <input type="email" class="form-control" name="email" aria-describedby="email" value="{{ $user->email }}">
+                            <label for="email">Email <small class="text-danger pl-2">required</small></label>
+                            <input type="email" class="form-control {{ $errors->has('email') ? 'is-invalid' : '' }}" name="email" aria-describedby="email" value="{{ $user->email }}">
+                            @error('email')
+                            <span class='invalid-feedback'>{{ $message }}</span>
+                            @enderror
                         </div>
 
                         <div class="form-group">
-                            <label for="role">User Role</label>
-                            <select id="role" name="role" class="form-control">
+                            <label for="role">User Role <small class="text-danger pl-2">required</small></label>
+                            <select id="role" name="role" class="form-control {{ $errors->has('role') ? 'is-invalid' : '' }}">
                                 <option {{ $user->role == $user->id ? 'selected':'' }} value='{{$user->role}}'> 
                                     @if($user->role == 1)
                                         Maintenance Worker
@@ -42,6 +48,9 @@
                                 <option value="2">Office Manager</option>
                                 <option value="3">Admin</option>
                             </select>
+                            @error('role')
+                            <span class='invalid-feedback'>{{ $message }}</span>
+                            @enderror
                         </div>
 
                         <input type="hidden" name="id" value="{{ $user->id }}">     

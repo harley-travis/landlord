@@ -47,11 +47,10 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     
-                                    <select id="product" name="product" class="form-control">
-                                        <option>Select Product</option>
-                                        <option value="0">Home Owner</option>
-                                        <option value="1">Apartment Complex</option>
-                                        <option value="2">HOA Association</option>
+                                    <select id="product" name="product" class="form-control" required>
+                                        <option value="1">Home Owner</option>
+                                        <option value="2">Apartment Complex</option>
+                                        <option value="3">HOA Association</option>
                                     </select>
                                 </div>    
                             </div>

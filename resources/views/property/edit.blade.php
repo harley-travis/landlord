@@ -28,8 +28,11 @@
                                     <div class="card-body">
 
                                         <div class="form-group">
-                                            <label for="address_1">Address 1</label>
-                                            <input type="text" class="form-control" name="address_1" aria-describedby="address_1" value="{{ $property->address_1 }}">
+                                            <label for="address_1">Address 1 <small class="text-danger pl-2">required</small></label>
+                                            <input type="text" class="form-control {{ $errors->has('address_1') ? 'is-invalid' : '' }}" name="address_1" aria-describedby="address_1" value="{{ $property->address_1 }}">
+                                            @error('address_1')
+                                            <span class='invalid-feedback'>{{ $message }}</span>
+                                            @enderror
                                         </div>
 
                                         <div class="form-group">
@@ -43,23 +46,35 @@
                                         </div>
 
                                         <div class="form-group">
-                                            <label for="city">City</label>
-                                            <input type="text" class="form-control" name="city" aria-describedby="city" value="{{ $property->city }}">
+                                            <label for="city">City <small class="text-danger pl-2">required</small></label>
+                                            <input type="text" class="form-control {{ $errors->has('address_1') ? 'is-invalid' : '' }}" name="city" aria-describedby="city" value="{{ $property->city }}">
+                                            @error('city')
+                                            <span class='invalid-feedback'>{{ $message }}</span>
+                                            @enderror
                                         </div>
 
                                         <div class="form-group">
-                                            <label for="state">State</label>
-                                            <input type="text" class="form-control" name="state" aria-describedby="state" value="{{ $property->state }}">
+                                            <label for="state">State <small class="text-danger pl-2">required</small></label>
+                                            <input type="text" class="form-control {{ $errors->has('address_1') ? 'is-invalid' : '' }}" name="state" aria-describedby="state" value="{{ $property->state }}">
+                                            @error('state')
+                                            <span class='invalid-feedback'>{{ $message }}</span>
+                                            @enderror
                                         </div>
 
                                         <div class="form-group">
-                                            <label for="zip">Zip</label>
-                                            <input type="text" class="form-control" name="zip" aria-describedby="zip" value="{{ $property->zip }}">
+                                            <label for="zip">Zip <small class="text-danger pl-2">required</small></label>
+                                            <input type="text" class="form-control {{ $errors->has('address_1') ? 'is-invalid' : '' }}" name="zip" aria-describedby="zip" value="{{ $property->zip }}">
+                                            @error('zip')
+                                            <span class='invalid-feedback'>{{ $message }}</span>
+                                            @enderror
                                         </div>
 
                                         <div class="form-group">
-                                            <label for="country">Country</label>
-                                            <input type="text" class="form-control" name="country" aria-describedby="country" value="{{ $property->country }}">
+                                            <label for="country">Country <small class="text-danger pl-2">required</small></label>
+                                            <input type="text" class="form-control {{ $errors->has('address_1') ? 'is-invalid' : '' }}" name="country" aria-describedby="country" value="{{ $property->country }}">
+                                            @error('country')
+                                            <span class='invalid-feedback'>{{ $message }}</span>
+                                            @enderror
                                         </div>
 
                                         @if( Auth::user()->product === 1 ||  Auth::user()->product === 2 || Auth::user()->product === 10 )

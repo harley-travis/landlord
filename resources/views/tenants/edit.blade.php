@@ -16,23 +16,32 @@
                     <form action="{{ route('tenants.update') }}" method="post">
 
                         <div class="form-group">
-                            <label for="name">Name</label>
-                            <input type="text" class="form-control" name="name" aria-describedby="name" value="{{ $tenant->name }}">
+                            <label for="name">Name <small class="text-danger pl-2">required</small></label>
+                            <input type="text" class="form-control {{ $errors->has('name') ? 'is-invalid' : '' }}" name="name" aria-describedby="name" value="{{ $tenant->name }}">
+                            @error('name')
+                            <span class='invalid-feedback'>{{ $message }}</span>
+                            @enderror
                         </div>
 
                         <div class="form-group">
-                            <label for="phone">Phone</label>
-                            <input type="text" class="form-control" name="phone" aria-describedby="phone" value="{{ $tenant->phone }}">
+                            <label for="email">Email <small class="text-danger pl-2">required</small></label>
+                            <input type="email" class="form-control {{ $errors->has('name') ? 'is-invalid' : '' }}" name="email" aria-describedby="email" value="{{ $tenant->email }}">
+                            @error('name')
+                            <span class='invalid-feedback'>{{ $message }}</span>
+                            @enderror
+                        </div>
+
+                        <div class="form-group">
+                            <label for="phone">Phone <small class="text-danger pl-2">required</small></label>
+                            <input type="text" class="form-control {{ $errors->has('name') ? 'is-invalid' : '' }}" name="phone" aria-describedby="phone" value="{{ $tenant->phone }}">
+                            @error('name')
+                            <span class='invalid-feedback'>{{ $message }}</span>
+                            @enderror
                         </div>
 
                         <div class="form-group">
                             <label for="work_phone">Work Phone</label>
                             <input type="text" class="form-control" name="work_phone" aria-describedby="work_phone" value="{{ $tenant->work_phone }}">
-                        </div>
-
-                        <div class="form-group">
-                            <label for="email">Email</label>
-                            <input type="email" class="form-control" name="email" aria-describedby="email" value="{{ $tenant->email }}">
                         </div>
 
                         <div class="form-group">

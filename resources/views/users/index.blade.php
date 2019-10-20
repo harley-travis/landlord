@@ -43,6 +43,10 @@
                                         Office Manager
                                     @elseif($user->role == 3)
                                         Admin
+                                    @elseif($user->role == 4)
+                                        Super Admin
+                                    @elseif($user->role == 10)
+                                        The Master
                                     @endif
                                 
                                 </td>

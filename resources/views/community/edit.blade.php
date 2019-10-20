@@ -16,8 +16,11 @@
                     <form action="{{ route('community.update') }}" method="post">
 
                         <div class="form-group">
-                            <label for="hoa_community">Community Name</label>
-                            <input type="text" class="form-control" name="hoa_community" aria-describedby="hoa_community" value="{{ $community->hoa_community }}">
+                            <label for="hoa_community">Community Name <small class="text-danger pl-2">required</small></label>
+                            <input type="text" class="form-control {{ $errors->has('hoa_community') ? 'is-invalid' : '' }}" name="hoa_community" aria-describedby="hoa_community" value="{{ $community->hoa_community }}">
+                            @error('hoa_community')
+                            <span class='invalid-feedback'>{{ $message }}</span>
+                            @enderror
                         </div>
 
                         @csrf

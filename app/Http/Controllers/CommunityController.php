@@ -38,6 +38,10 @@ class CommunityController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)  {
+
+        $request->validate([
+            'hoa_community' => 'required',
+        ]);
         
         $user = Auth::user();
 
@@ -76,6 +80,10 @@ class CommunityController extends Controller {
      */
     public function update(Request $request, Community $community) {
         
+        $request->validate([
+            'hoa_community' => 'required',
+        ]);
+
         $community = Community::find($request->input('id'));
         $community->hoa_community = $request->input('hoa_community');
         $community->save();

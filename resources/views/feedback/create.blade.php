@@ -23,14 +23,20 @@
                     <form action="{{ route('feedback.add') }}" method="post">
 
                         <div class="form-group">
-                            <label for="subject">Subject</label>
-                            <input type="text" class="form-control" name="subject" aria-describedby="subject" placeholder="Enter subject line">
+                            <label for="subject">Subject <small class="text-danger pl-2">required</small></label>
+                            <input type="text" class="form-control {{ $errors->has('subject') ? 'is-invalid' : '' }}" name="subject" aria-describedby="subject" placeholder="Enter subject line" value="{{ old('subject') }}">
+                            @error('subject')
+                            <span class='invalid-feedback'>{{ $message }}</span>
+                            @enderror
                         </div>
 
                         <div class="form-group">
-							<label for="description">Description</label>
-							<textarea class="form-control" name="description" rows="8"></textarea>
-						</div>
+							<label for="description">Description <small class="text-danger pl-2">required</small></label>
+							<textarea class="form-control {{ $errors->has('description') ? 'is-invalid' : '' }}" name="description" rows="8">{{ old('description') }}</textarea>
+                            @error('description')
+                            <span class='invalid-feedback'>{{ $message }}</span>
+                            @enderror
+                        </div>
 
                         
                         <input type="hidden" name="user_id" value="{{ Auth::user()->id }}" />

@@ -43,6 +43,13 @@ class UserRoleController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request) {
+
+        $request->validate([
+            'name' => 'required',
+            'email' => 'required|email',
+            'password' => 'required|min:8',
+            'role' => 'required',
+        ]);
         
         $u = new User([
             'name' => $request->input('name'),
@@ -50,6 +57,7 @@ class UserRoleController extends Controller
             'password' => Hash::make( $request->input('password')),
             'company_id'=> Auth::user()->company_id,
             'role' => $request->input('role'),
+            'product'=> Auth::user()->product,
         ]);
         $u->save();
 
@@ -90,6 +98,13 @@ class UserRoleController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request) {
+
+        $request->validate([
+            'name' => 'required',
+            'email' => 'required|email',
+            'password' => 'required|min:8',
+            'role' => 'required',
+        ]);
         
         $u = User::find($request->input('id'));
         $u->name = $request->input('name');

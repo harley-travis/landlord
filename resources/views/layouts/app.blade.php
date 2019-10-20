@@ -106,7 +106,7 @@
                                     <a class="dropdown-item" href="{{ route('tenants.index') }}">Tenants</a>
                                     <a class="dropdown-item" href="{{ route('maintenance.index') }}">Maintenance</a>
                                     <a class="dropdown-item" href="{{ route('users.index') }}">User Management</a>
-
+                                    <a class="dropdown-item" href="{{ route('feedback.index') }}">Customer Feedback</a>
                                 @endif                                   
 
                                     <a class="dropdown-item" href="{{ route('logout') }}"

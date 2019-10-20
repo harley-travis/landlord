@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use DB;
+use App\User;
 use App\Feedback;
 use Illuminate\Http\Request;
 
@@ -15,7 +16,7 @@ class FeedbackController extends Controller
      */
     public function index() {
         
-        $feedbacks = Feedback::join('users', 'feedback.user_id', '=', 'users.id')
+        $feedbacks = User::join('feedback', 'feedback.user_id', '=', 'users.id')
                         ->where('feedback.status', '!=', '3')
                         ->orderBy('feedback.created_at', 'desc')
                         ->paginate(15);
@@ -40,6 +41,11 @@ class FeedbackController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request) {
+
+        $request->validate([
+            'subject' => 'required',
+            'description' => 'required',
+        ]);
     
         $feedback = new Feedback([
             'subject' => $request->input('subject'),
@@ -50,7 +56,9 @@ class FeedbackController extends Controller
         ]);
         $feedback->save();
 
-        return redirect()->route('feedback.create')->with('info', 'Thank you for your feedback! We always look at these with great care!');
+        return redirect()
+                ->route('feedback.create')
+                ->with('info', 'Thank you for your feedback! We always look at these with great care!');
 
     }
 
@@ -65,17 +73,6 @@ class FeedbackController extends Controller
         $feedback = Feedback::where('id', '=', $id)->first();
         return view('feedback.show', ['feedback' => $feedback]);
 
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Feedback  $feedback
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Feedback $feedback)
-    {
-        //
     }
 
     /**
@@ -94,16 +91,6 @@ class FeedbackController extends Controller
         return redirect()
                 ->route('feedback.index')
                 ->with('info', 'Good job! You successfully updated your feedback status!');
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Feedback  $feedback
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Feedback $feedback) {
-        //
     }
 
     public function showArchive() {

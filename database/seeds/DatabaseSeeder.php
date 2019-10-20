@@ -233,8 +233,8 @@ class DatabaseSeeder extends Seeder {
             'subject' => 'Tenant background application checks',
             'description' => 'It would be cool if I could do tenant background checks through the app',
             'status' => '0',
-            'company_id' => '1',
-            'user_id' => '15',
+            'company_id' => '2',
+            'user_id' => '2',
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
         ]);
