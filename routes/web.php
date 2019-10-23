@@ -274,3 +274,40 @@ Route::group(['prefix' => 'community', 'middleware' => ['auth']], function() {
   ]);
 
 });
+
+// BILLING
+Route::group(['prefix' => 'settings/billing', 'middleware' => ['auth']], function() {
+  $c = 'BillingController';
+
+  Route::get('', [
+    'uses' => "$c@index",
+    'as' => 'settings.billing.index'
+  ]);
+
+  Route::get('create', [
+    'uses' => "$c@create",
+    'as' => 'settings.billing.create'
+  ]);
+
+  Route::post('create', [
+    'uses' => "$c@store",
+    'as' => 'settings.billing.add'
+  ]);
+
+  Route::get('edit/{id}', [
+    'uses'	=> "$c@edit",
+    'as'	=> 'settings.billing.edit'
+  ]);
+
+  Route::post('edit', [
+    'uses'	=> "$c@update",
+    'as'	=> 'settings.billing.update'
+  ]);
+  
+  Route::get('delete/{id}', [
+    'uses'	=> "$c@destroy",
+    'as'	=> 'settings.billing.delete'
+  ]);
+
+});
+

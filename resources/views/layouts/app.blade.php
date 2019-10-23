@@ -62,6 +62,7 @@
                                 <!-- TENANT -->
                                     <a class="dropdown-item" href="{{ route('maintenance.create') }}">Create Maintenance</a>
                                     <a class="dropdown-item" href="{{ route('maintenance.index') }}">My Maintenance Reqeusts</a>
+                                    <a class="dropdown-item" href="{{ route('settings.billing.index') }}">Billing</a>
                                     <a class="dropdown-item" href="{{ route('feedback.create') }}">Send Feedback</a>
 
                                 @elseif(Auth::user()->role === 1)
@@ -77,6 +78,7 @@
                                     <a class="dropdown-item" href="{{ route('property.index') }}">Properties</a>
                                     <a class="dropdown-item" href="{{ route('tenants.index') }}">Tenants</a>
                                     <a class="dropdown-item" href="{{ route('maintenance.index') }}">Maintenance</a>
+                                    <a class="dropdown-item" href="{{ route('settings.billing.index') }}">Billing</a>
                                     <a class="dropdown-item" href="{{ route('feedback.create') }}">Send Feedback</a>
 
                                 @elseif(Auth::user()->role === 3)
@@ -87,6 +89,7 @@
                                     <a class="dropdown-item" href="{{ route('property.index') }}">Properties</a>
                                     <a class="dropdown-item" href="{{ route('tenants.index') }}">Tenants</a>
                                     <a class="dropdown-item" href="{{ route('maintenance.index') }}">Maintenance</a>
+                                    <a class="dropdown-item" href="{{ route('settings.billing.index') }}">Billing</a>
                                     <a class="dropdown-item" href="{{ route('users.index') }}">User Management</a>
                                     <a class="dropdown-item" href="{{ route('feedback.create') }}">Send Feedback</a>
 
@@ -96,6 +99,7 @@
                                     <a class="dropdown-item" href="{{ route('property.index') }}">Properties</a>
                                     <a class="dropdown-item" href="{{ route('tenants.index') }}">Tenants</a>
                                     <a class="dropdown-item" href="{{ route('maintenance.index') }}">Maintenance</a>
+                                    <a class="dropdown-item" href="{{ route('settings.billing.index') }}">Billing</a>
                                     <a class="dropdown-item" href="{{ route('users.index') }}">User Management</a>
                                     <a class="dropdown-item" href="{{ route('feedback.index') }}">Customer Feedback</a>
 
@@ -105,6 +109,7 @@
                                     <a class="dropdown-item" href="{{ route('property.index') }}">Properties</a>
                                     <a class="dropdown-item" href="{{ route('tenants.index') }}">Tenants</a>
                                     <a class="dropdown-item" href="{{ route('maintenance.index') }}">Maintenance</a>
+                                    <a class="dropdown-item" href="{{ route('settings.billing.index') }}">Billing</a>
                                     <a class="dropdown-item" href="{{ route('users.index') }}">User Management</a>
                                     <a class="dropdown-item" href="{{ route('feedback.index') }}">Customer Feedback</a>
                                 @endif                                   
