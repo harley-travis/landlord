@@ -14,7 +14,9 @@ use Mail;
 use App\Mail\TenantCreated;
 use App\Mail\RentReminder;
 
+
 class TenantController extends Controller {
+
     /**
      * Display a listing of the resource.
      *
@@ -89,6 +91,12 @@ class TenantController extends Controller {
         // find the tenant and user
         $findTenant = Tenant::findOrFail($tenant->id);
         $findUser = User::findOrFail($u->id);
+
+        // create tenant as a stripe customner
+        $u->createAsStripeCustomer();
+        
+
+
         /**
          * this property is used for other email testing
          */
