@@ -31,17 +31,13 @@
     </div>
 </div>
 
-
-<script src="https://js.stripe.com/v3/"></script>
-
 <script>
-    const stripe = Stripe('stripe-public-key');
+    const stripe = Stripe('{{ config('services.stripe.key') }}');
 
     const elements = stripe.elements();
     const cardElement = elements.create('card');
 
     cardElement.mount('#card-element');
-
 
     const cardHolderName = document.getElementById('card-holder-name');
     const cardButton = document.getElementById('card-button');
