@@ -14,7 +14,7 @@
                         </div>
                     @endif
 
-                    <small>At this time, we only support ACH accounts in the United States.</small>
+                    <small>At this time, we only support ACH accounts in the United States.</small><br>
                     <span>NOTE: You must verify your ACH account before you can use it. Follow the instructions below:</span>
                     <ul>
                         <li>2 small deposits will be deposited into your account in 1-2 business days. The statement will say AMTS.</li>
@@ -22,36 +22,38 @@
                         <li>There is a limit of 10 attempts.</li>
                     </ul>
 					
-					<form action="{{ route('billing.createACH') }}" method="post" id="payment-form">
+					<form action="{{ route('settings.billing.createACH') }}" method="post" id="payment-form">
 
-						<div class="form-row">
-							<div class="col">
+						<div class="">
+							<div class="form-group">
+								<label for="account_holder_name">Name on Account</label>
 								<input type="text" class="form-control" placeholder="name on account" name="account_holder_name">
 							</div>
-							<div class="col">
+							<div class="form-group">
+								<label for="routing_number">Routing Number</label>
 								<input type="password" class="form-control" placeholder="routing number" name="routing_number">
 							</div>
-							<div class="col">
+							<div class="form-group">
+								<label for="">Account Number</label>
 								<input type="password" class="form-control" placeholder="account number">
 							</div>
-							<div class="col">
+							<div class="form-group">
+								<label for="account_number">Confirm Account Number</label>
 								<input type="password" class="form-control" placeholder="confirm account number" name="account_number">
 							</div>
-							<div class="col">
+							<div class="form-group">
+								<label for="account_holder_type">Account Holder Type</label>
 								<input type="text" class="form-control" placeholder="account holder type: IE: company" name="account_holder_type">
 							</div>
 						</div>
 
-						<div class="form-row">
-							<div class="form-group form-check">
-								<input type="checkbox" class="form-check-input" id="exampleCheck1">
-								<label class="form-check-label" for="exampleCheck1">I authorize White July to electronically debit my account and, if necessary, electronically credit my account to correct erroneous debits.</label>
-							</div>
-						</div>
 
 						@csrf
 
-                        <div class="mt-5">
+						<br>
+						<p>By clicking 'Add ACH' you authorize SenRent to charge you for your monthly payment</p>
+
+                        <div class="mt-3">
 						    <button class="btn btn-primary">Add ACH</button>
                         </div>
 					</form>

@@ -3,29 +3,17 @@
 @section('content')
 <div class="container">
 
-    <div class="row justify-content-center pb-5">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">Billing Management</div>
-
-                <div class="card-body">
-                    @if (session('status'))
-                        <div class="alert alert-success" role="alert">
-                            {{ session('status') }}
-                        </div>
-                    @endif
-
-                    <a href="{{ route('settings.billing.create') }}" class="btn btn-primary">Add Payment Method</a>
-                </div>
-            </div>
+    @if (session('status'))
+        <div class="alert alert-success" role="alert">
+            {{ session('status') }}
         </div>
-    </div>
+    @endif
 
     <div class="row justify-content-center pb-5">
         <div class="col-md-8">
 
             <div class="card">
-                <div class="card-header">Invoices</div>
+                <div class="card-header">Billing History</div>
                 <div class="card-body">
 
                     <table class="table table-borderless">
@@ -47,7 +35,7 @@
         </div>
     </div>
 
-    <div class="row justify-content-center pb-5">
+    <!-- <div class="row justify-content-center pb-5">
         <div class="col-md-8">
             <div class="card">
                 <div class="card-header">Credit Cards</div>
@@ -58,14 +46,14 @@
 						
 					</ul>
 
-
-    
-
+                    <div class="mt-3">
+                        <a href="{{ route('settings.billing.create') }}" class="btn btn-primary">Add Payment Method</a>
+                    </div>
                 </div>
             </div>
 
         </div>
-    </div>
+    </div> -->
 
     <div class="row justify-content-center pb-5">
         <div class="col-md-8">
@@ -76,9 +64,26 @@
                 <div class="card-body">
 
                     <ul class="list-group">
-					
+					    @foreach( $bank_accounts as $bank_account )
+						<li class="list-group-item">
+							<span class="col-6">
+							<i class="fas fa-university"></i> {{ $bank_account->bank_name }}
+								<span class="pl-3">**** {{ $bank_account->last4 }} </span>
+							</span>
+							@if($bank_account->id == $customer->default_source)
+								<span class="badge badge-primary">Default</span>
+							@endif
+							<span class="col-6 float-right text-right">
+								<a href="#" class="text-primary">Set Default</a>
+								<a href="#" class="text-danger"><i class="far fa-trash-alt"></i></a>
+							</span>
+						</li>
+						@endforeach 
 					</ul>
                     
+                    <div class="mt-3">
+                        <a href="{{ route('settings.billing.createACH') }}" class="btn btn-primary">Add ACH Account</a>
+                    </div>
 
                 </div>
             </div>

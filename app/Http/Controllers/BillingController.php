@@ -11,49 +11,30 @@ class BillingController extends Controller {
     
     public function index() {
 
-        /**
-         * Retrieve the biling history for the user
-         * billing methods
-         */
+        \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
 
         $user = User::find(Auth::user()->id);
         $paymentMethods = $user->paymentMethods();
 
+        $customer = \Stripe\Customer::retrieve($user->stripe_id);
+
+        $bank_accounts = \Stripe\Customer::allSources(
+            $user->stripe_id,
+            [
+              'limit' => 3,
+              'object' => 'bank_account',
+            ]
+          );
+
         return view('settings.billing.index', [
             'paymentMethods' => $paymentMethods,
+            'bank_accounts' => $bank_accounts, 
+            'customer' => $customer, 
         ]);
 
     }
 
     public function create() {
-
-        /**
-         * In order to add payment method, you need to declare your intent for security purposes. 
-         * This goes for adding and modifying any payment information
-         * 
-         * https://laravel.com/docs/5.8/billing "Payment Methods for Subscriptions"
-         * 
-         */
-
-         /**
-         * 
-         * 
-         * NOTE!!!!! THIS IS WHERE I LEFT OFF   
-         * 
-         * Look at the instructions by laravel. it looks like their process is correct
-         * and stripe gives you the "what to do on success"
-         * the fuction to store the card via their api
-         * 
-         * https://stripe.com/docs/payments/cards/saving-cards-without-payment
-         * 
-         * step 5. custopmer::create or attach a paymentmethod
-         * 
-         * after you do that, then you want to pass the intent to the $user->addPaymentMethod($paymentMethod);
-         * 
-         * https://laravel.com/docs/5.8/billing#adding-payment-methods
-         * 
-         * i think this works for both ACH and cc. but I could be wrong. it's probably just for cards
-         */
 
         $user = User::find(Auth::user()->id);
 
@@ -68,26 +49,20 @@ class BillingController extends Controller {
         \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
 
         $user = User::find(Auth::user()->id);
-        $intent = $request->input('ds');
 
-        if( $user->stripe_id === null || $user->stripe_id === '' ) {
+        // $payment_method = \Stripe\PaymentMethod::retrieve($intent->payment_method);
+        // $payment_method->attach(['customer' => $user->stripe_id]);
 
-            // new customer
-            \Stripe\Customer::create([
-                'payment_method' => $intent,
-            ]);
+        $card = \Stripe\Customer::createSource(
+            $user->stripe_id,
+            [
+              'source' => 'tok_amex',
+              'object' => 'card',
 
-            $user->addPaymentMethod($paymentMethod);
+            ]
+          );
 
-        } else {
-
-            // existing customer
-            $payment_method = \Stripe\PaymentMethod::retrieve($intent);
-            $payment_method->attach(['customer' => $user->stripe_id]);
-
-            $user->addPaymentMethod($paymentMethod);
-
-        }
+        //$user->addPaymentMethod($card);
 
         $paymentMethods = $user->paymentMethods();
 
@@ -97,38 +72,6 @@ class BillingController extends Controller {
 
     }
 
-    public function edit() {
-
-        /**
-         * In order to add payment method, you need to declare your intent for security purposes. 
-         * This goes for adding and modifying any payment information
-         * 
-         * https://laravel.com/docs/5.8/billing "Payment Methods for Subscriptions"
-         * 
-         */
-
-        $user = User::find(Auth::user()->id);
-
-        return view('settings.billing.create', [
-            'intent' => $user->createSetupIntent()
-        ]);
-        
-
-    }
-
-    public function update() {
-
-        $user = User::find(Auth::user()->id);
-
-        $user->updateDefaultPaymentMethod($paymentMethod);
-
-    }
-
-    public function destory() {
-
-        $paymentMethod->delete();
-
-    }
 
     /**
      * Property owners monthly payment fee to SenRent
@@ -259,74 +202,84 @@ class BillingController extends Controller {
          */
         return 20;
     }
-
-    /**
-     * BILLING CODE PROVIDED BY WHITE JULY
-     * 
-     * 
-     * NOTE!!!!! THIS IS WHERE I LEFT OFF   
-     * 
-     * Look at the instructions by laravel. it looks like their process is correct
-     * and stripe gives you the "what to do on success"
-     * the fuction to store the card via their api
-     * 
-     * https://stripe.com/docs/payments/cards/saving-cards-without-payment
-     * 
-     * step 5. custopmer::create or attach a paymentmethod
-     * 
-     * after you do that, then you want to pass the intent to the $user->addPaymentMethod($paymentMethod);
-     * 
-     * https://laravel.com/docs/5.8/billing#adding-payment-methods
-     * 
-     * i think this works for both ACH and cc. but I could be wrong. it's probably just for cards
-     */
     
-    public function createCard() {
-        return view('settings.billing.createCard');
+    public function createACH() {
+        return view('settings.billing.createACH');
     }
 
-    public function storeCard(Request $request) {
+    public function storeACH(Request $request) {
 
         $user = User::find(Auth::user()->id);
         \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
 
-        $card = \Stripe\Customer::createSource(
+        $token = $request->request->get('stripeToken');
+
+        $bank_account = \Stripe\Customer::createSource(
+            $user->stripe_id,
+          [
+            'bank_account' => [
+                'account_holder_name' => $request->input('account_holder_name'),
+                'routing_number' => $request->input('routing_number'),
+                'account_number' => $request->input('account_number'),
+                'account_holder_type' => $request->input('account_holder_type'),
+                'country' => 'US',
+                'currency' => 'usd',     
+            ],
+          ]
+        );
+
+        $customer = \Stripe\Customer::retrieve($user->stripe_id);
+
+         $bank_accounts = \Stripe\Customer::allSources(
             $user->stripe_id,
             [
-                'card' => [
-                    'number' => $request->input('number'),
-                    'exp_month' => $request->input('month'),
-                    'exp_year' => $request->input('year'),
-                    'cvc' => $request->input('cvc'),
-                ],
+              'limit' => 3,
+              'object' => 'bank_account',
             ]
-        );
+          );
 
-        $cards = \Stripe\Customer::allSources(
-            $user->stripe_id,
-            [
-                'object' => 'card',
-            ]
-        );
+          /**
+           * need to return a view that says 'verify account'
+           */
 
-        $invoices = \Stripe\Invoice::all(
-            [
-                "limit" => 15,
-                "customer" => $user->stripe_id,
-            ]
-        );
-
-        $subscriptions = \Stripe\Subscription::all([
-            "customer" => $user->stripe_id,
-
+        return view('settings.billing.index', [
+            'paymentMethods' => $paymentMethods,
+            'bank_accounts' => $bank_accounts, 
+            'customer' => $customer, 
         ]);
 
-        return redirect()
-            ->route('settings.billing.index', [
-            'cards' => $cards, 
-            'invoices' => $invoices,
-        ])->with('info', 'Your card was added successfully!');                   
+    }
 
+    public function verifyACH() {
+
+        $user = User::find(Auth::user()->id);
+        \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
+
+        // get the existing bank account
+        $bank_account = \Stripe\Customer::retrieveSource(
+            $user->stripe_id,
+            'ba_17SHwa2eZvKYlo2CUx7nphbZ'
+        );
+        
+        // verify the account
+        $bank_account->verify([
+            'amounts' => [
+                32, 
+                45
+            ]]);
+
+    }
+
+    public function chargeACH() {
+        
+        $user = User::find(Auth::user()->id);
+        \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
+
+        $charge = \Stripe\Charge::create([
+            'amount' => 1500,
+            'currency' => 'usd',
+            'customer' => $user->stripe_id,
+        ]);   
     }
 
 }

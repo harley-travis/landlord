@@ -15,15 +15,13 @@
                     @endif
 
 
-                <form action="" method="post">
+                <form action="{{ route('settings.billing.add') }}" method="post" id="payment-form">
 
                     <label>Card holder name</label>
                     <input id="card-holder-name" class="form-control" type="text">
 
                     <!-- Stripe Elements Placeholder -->
                     <div id="card-element"></div>
-
-                    <input type="hidden" name="ds" value="{{ $intent->client_secret }}">
 
                     <button id="card-button" class="btn btn-primary" data-secret="{{ $intent->client_secret }}">
                         Add Credit Card
@@ -42,33 +40,75 @@
 <script>
     const stripe = Stripe('{{ config('services.stripe.key') }}');
 
-    const elements = stripe.elements();
-    const cardElement = elements.create('card');
+    // Create an instance of Elements.
+    var elements = stripe.elements();
 
-    cardElement.mount('#card-element');
+    // Custom styling can be passed to options when creating an Element.
+    // (Note that this demo uses a wider set of styles than the guide below.)
+    var style = {
+    base: {
+        color: '#32325d',
+        fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
+        fontSmoothing: 'antialiased',
+        fontSize: '16px',
+        '::placeholder': {
+        color: '#aab7c4'
+        }
+    },
+    invalid: {
+        color: '#fa755a',
+        iconColor: '#fa755a'
+    }
+    };
 
-    const cardHolderName = document.getElementById('card-holder-name');
-    const cardButton = document.getElementById('card-button');
-    const clientSecret = cardButton.dataset.secret;
+    // Create an instance of the card Element.
+    var card = elements.create('card', {style: style});
 
-    cardButton.addEventListener('click', async (e) => {
-        const { setupIntent, error } = await stripe.handleCardSetup(
-            clientSecret, cardElement, {
-                payment_method_data: {
-                    billing_details: { name: cardHolderName.value }
-                }
-            }
-        );
+    // Add an instance of the card Element into the `card-element` <div>.
+    card.mount('#card-element');
 
-        if (error) {
-            // Display "error.message" to the user...
-            console.log(error);
+    // Handle real-time validation errors from the card Element.
+    card.addEventListener('change', function(event) {
+        var displayError = document.getElementById('card-errors');
+        if (event.error) {
+            displayError.textContent = event.error.message;
         } else {
-            // The card has been verified successfully...
-            console.log('it worked!');
+            displayError.textContent = '';
         }
     });
 
+    // Handle form submission.
+    var form = document.getElementById('payment-form');
+    form.addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    stripe.createToken(card).then(function(result) {
+        if (result.error) {
+            // Inform the user if there was an error.
+            var errorElement = document.getElementById('card-errors');
+            errorElement.textContent = result.error.message;
+            } else {
+            // Send the token to your server.
+            stripeTokenHandler(result.token);
+            }
+        });
+    });
+
+    // Submit the form with the token ID.
+    function stripeTokenHandler(token) {
+
+        // Insert the token ID into the form so it gets submitted to the server
+        var form = document.getElementById('payment-form');
+        var hiddenInput = document.createElement('input');
+        hiddenInput.setAttribute('type', 'hidden');
+        hiddenInput.setAttribute('name', 'stripeToken');
+        hiddenInput.setAttribute('value', token.id);
+        form.appendChild(hiddenInput);
+
+        // Submit the form
+        form.submit();
+
+    }
 
 </script>
 
