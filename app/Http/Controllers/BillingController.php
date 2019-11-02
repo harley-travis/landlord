@@ -65,7 +65,7 @@ class BillingController extends Controller {
 
     public function store(Request $request) {
 
-        \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
+        \Stripe\Stripe::setApiKey(config('services.stripe.key'));
 
         $user = User::find(Auth::user()->id);
         $intent = $request->input('ds');
