@@ -63,39 +63,41 @@ class BillingController extends Controller {
 
     }
 
-    public function store() {
+    public function store(Request $request) {
 
         $user = User::find(Auth::user()->id);
 
-        dd($user);
+        dd('oh hi mark');
+
+        // dd($user);
 
 
-        if( $user->stripe_id === null || $user->stripe_id === '' ) {
+        // if( $user->stripe_id === null || $user->stripe_id === '' ) {
 
-            // new customer
-            \Stripe\Customer::create([
-                'payment_method' => $intent->payment_method,
-            ]);
+        //     // new customer
+        //     \Stripe\Customer::create([
+        //         'payment_method' => $intent->payment_method,
+        //     ]);
 
-            $user->addPaymentMethod($paymentMethod);
+        //     $user->addPaymentMethod($paymentMethod);
 
-        } else {
+        // } else {
 
-            dd($intent->payment_method);
+        //     dd($intent->payment_method);
 
-            // existing customer
-            $payment_method = \Stripe\PaymentMethod::retrieve($intent->payment_method);
-            $payment_method->attach(['customer' => $user->stripe_id]);
+        //     // existing customer
+        //     $payment_method = \Stripe\PaymentMethod::retrieve($intent->payment_method);
+        //     $payment_method->attach(['customer' => $user->stripe_id]);
 
-            $user->addPaymentMethod($paymentMethod);
+        //     $user->addPaymentMethod($paymentMethod);
 
-        }
+        // }
 
-        $paymentMethods = $user->paymentMethods();
+        // $paymentMethods = $user->paymentMethods();
 
-        return view('settings.billing.index', [
-            'paymentMethods' => $paymentMethods,
-        ]);     
+        // return view('settings.billing.index', [
+        //     'paymentMethods' => $paymentMethods,
+        // ]);     
 
     }
 
