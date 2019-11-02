@@ -294,6 +294,16 @@ Route::group(['prefix' => 'settings/billing', 'middleware' => ['auth']], functio
     'as' => 'settings.billing.add'
   ]);
 
+  Route::get('createCard', [
+    'uses' => "$c@createCard",
+    'as' => 'settings.billing.createCard'
+  ]);
+
+  Route::post('createCard', [
+    'uses' => "$c@storeCard",
+    'as' => 'settings.billing.addCard'
+  ]);
+
   Route::get('edit/{id}', [
     'uses'	=> "$c@edit",
     'as'	=> 'settings.billing.edit'

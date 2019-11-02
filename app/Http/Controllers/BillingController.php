@@ -17,10 +17,11 @@ class BillingController extends Controller {
          */
 
         $user = User::find(Auth::user()->id);
-
         $paymentMethods = $user->paymentMethods();
 
-        return view('settings.billing.index', ['paymentMethods' => $paymentMethods]);
+        return view('settings.billing.index', [
+            'paymentMethods' => $paymentMethods,
+        ]);
 
     }
 
@@ -32,6 +33,26 @@ class BillingController extends Controller {
          * 
          * https://laravel.com/docs/5.8/billing "Payment Methods for Subscriptions"
          * 
+         */
+
+         /**
+         * 
+         * 
+         * NOTE!!!!! THIS IS WHERE I LEFT OFF   
+         * 
+         * Look at the instructions by laravel. it looks like their process is correct
+         * and stripe gives you the "what to do on success"
+         * the fuction to store the card via their api
+         * 
+         * https://stripe.com/docs/payments/cards/saving-cards-without-payment
+         * 
+         * step 5. custopmer::create or attach a paymentmethod
+         * 
+         * after you do that, then you want to pass the intent to the $user->addPaymentMethod($paymentMethod);
+         * 
+         * https://laravel.com/docs/5.8/billing#adding-payment-methods
+         * 
+         * i think this works for both ACH and cc. but I could be wrong. it's probably just for cards
          */
 
         $user = User::find(Auth::user()->id);
@@ -46,7 +67,31 @@ class BillingController extends Controller {
 
         $user = User::find(Auth::user()->id);
 
-        $user->addPaymentMethod($paymentMethod);
+
+        if( $user->stripe_id === null || $user->stripe_id === '' ) {
+
+            // new customer
+            \Stripe\Customer::create([
+                'payment_method' => $intent->payment_method,
+            ]);
+
+            $user->addPaymentMethod($paymentMethod);
+
+        } else {
+
+            // existing customer
+            $payment_method = \Stripe\PaymentMethod::retrieve($intent->payment_method);
+            $payment_method->attach(['customer' => $user->stripe_id]);
+
+            $user->addPaymentMethod($paymentMethod);
+
+        }
+
+        $paymentMethods = $user->paymentMethods();
+
+        return view('settings.billing.index', [
+            'paymentMethods' => $paymentMethods,
+        ]);     
 
     }
 
@@ -211,6 +256,75 @@ class BillingController extends Controller {
          * This function can only work on subscriptions 
          */
         return 20;
+    }
+
+    /**
+     * BILLING CODE PROVIDED BY WHITE JULY
+     * 
+     * 
+     * NOTE!!!!! THIS IS WHERE I LEFT OFF   
+     * 
+     * Look at the instructions by laravel. it looks like their process is correct
+     * and stripe gives you the "what to do on success"
+     * the fuction to store the card via their api
+     * 
+     * https://stripe.com/docs/payments/cards/saving-cards-without-payment
+     * 
+     * step 5. custopmer::create or attach a paymentmethod
+     * 
+     * after you do that, then you want to pass the intent to the $user->addPaymentMethod($paymentMethod);
+     * 
+     * https://laravel.com/docs/5.8/billing#adding-payment-methods
+     * 
+     * i think this works for both ACH and cc. but I could be wrong. it's probably just for cards
+     */
+    
+    public function createCard() {
+        return view('settings.billing.createCard');
+    }
+
+    public function storeCard(Request $request) {
+
+        $user = User::find(Auth::user()->id);
+        \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
+
+        $card = \Stripe\Customer::createSource(
+            $user->stripe_id,
+            [
+                'card' => [
+                    'number' => $request->input('number'),
+                    'exp_month' => $request->input('month'),
+                    'exp_year' => $request->input('year'),
+                    'cvc' => $request->input('cvc'),
+                ],
+            ]
+        );
+
+        $cards = \Stripe\Customer::allSources(
+            $user->stripe_id,
+            [
+                'object' => 'card',
+            ]
+        );
+
+        $invoices = \Stripe\Invoice::all(
+            [
+                "limit" => 15,
+                "customer" => $user->stripe_id,
+            ]
+        );
+
+        $subscriptions = \Stripe\Subscription::all([
+            "customer" => $user->stripe_id,
+
+        ]);
+
+        return redirect()
+            ->route('settings.billing.index', [
+            'cards' => $cards, 
+            'invoices' => $invoices,
+        ])->with('info', 'Your card was added successfully!');                   
+
     }
 
 }

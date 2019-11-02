@@ -14,15 +14,14 @@
                         </div>
                     @endif
 
-                    Add a payment method!
-
-                    <input id="card-holder-name" type="text">
+                    <label>Card holder name</label>
+                    <input id="card-holder-name" class="form-control" type="text">
 
                     <!-- Stripe Elements Placeholder -->
                     <div id="card-element"></div>
 
-                    <button id="card-button" data-secret="{{ $intent->client_secret }}">
-                        Update Payment Method
+                    <button id="card-button" class="btn btn-primary" data-secret="{{ $intent->client_secret }}">
+                        Add Credit Card
                     </button>
 
                 </div>
@@ -54,8 +53,10 @@
 
         if (error) {
             // Display "error.message" to the user...
+            console.log(error);
         } else {
             // The card has been verified successfully...
+            console.log('it worked!');
         }
     });
 
