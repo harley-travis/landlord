@@ -67,23 +67,23 @@ class BillingController extends Controller {
 
         $user = User::find(Auth::user()->id);
 
+        $intent = $request->input('ds');
+
         dd($request);
 
         if( $user->stripe_id === null || $user->stripe_id === '' ) {
 
             // new customer
             \Stripe\Customer::create([
-                'payment_method' => $intent->payment_method,
+                'payment_method' => $intent,
             ]);
 
             $user->addPaymentMethod($paymentMethod);
 
         } else {
 
-            dd($intent->payment_method);
-
             // existing customer
-            $payment_method = \Stripe\PaymentMethod::retrieve($intent->payment_method);
+            $payment_method = \Stripe\PaymentMethod::retrieve($intent);
             $payment_method->attach(['customer' => $user->stripe_id]);
 
             $user->addPaymentMethod($paymentMethod);
