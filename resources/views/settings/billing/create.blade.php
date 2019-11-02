@@ -14,6 +14,9 @@
                         </div>
                     @endif
 
+
+                <form action="{{ route('settings.billing.add') }}" method="post">
+
                     <label>Card holder name</label>
                     <input id="card-holder-name" class="form-control" type="text">
 
@@ -23,6 +26,8 @@
                     <button id="card-button" class="btn btn-primary" data-secret="{{ $intent->client_secret }}">
                         Add Credit Card
                     </button>
+
+                </form>
 
                 </div>
             </div>
