@@ -15,7 +15,7 @@
                     @endif
 
 
-                <form action="{{ route('settings.billing.add') }}" method="post">
+                <form action="" method="post">
 
                     <label>Card holder name</label>
                     <input id="card-holder-name" class="form-control" type="text">
