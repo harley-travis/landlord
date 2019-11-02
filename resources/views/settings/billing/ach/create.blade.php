@@ -22,7 +22,7 @@
                         <li>There is a limit of 10 attempts.</li>
                     </ul>
 					
-					<form action="{{ route('settings.billing.createACH') }}" method="post" id="payment-form">
+					<form action="{{ route('settings.billing.ach.create') }}" method="post" id="payment-form">
 
 						<div class="">
 							<div class="form-group">

@@ -294,24 +294,29 @@ Route::group(['prefix' => 'settings/billing', 'middleware' => ['auth']], functio
     'as' => 'settings.billing.add'
   ]);
 
-  Route::get('createCard', [
-    'uses' => "$c@createCard",
-    'as' => 'settings.billing.createCard'
-  ]);
-
-  Route::post('createCard', [
-    'uses' => "$c@storeCard",
-    'as' => 'settings.billing.addCard'
-  ]);
-
-  Route::get('createACH', [
+  Route::get('ach/create', [
     'uses' => "$c@createACH",
-    'as' => 'settings.billing.createACH'
+    'as' => 'settings.billing.ach.create'
   ]);
 
-  Route::post('createACH', [
+  Route::post('ach/create', [
     'uses' => "$c@storeACH",
-    'as' => 'settings.billing.addACH'
+    'as' => 'settings.billing.ach.add'
+  ]);
+
+  Route::get('ach/verify/{id}', [
+    'uses' => "$c@verifyACH",
+    'as' => 'settings.billing.ach.verify'
+  ]);
+
+  Route::post('ach/verify', [
+    'uses' => "$c@storeVerifyACH",
+    'as' => 'settings.billing.ach.verifyCheck'
+  ]);
+
+  Route::get('ach/delete/{id}', [
+    'uses'	=> "$c@destroyACH",
+    'as'	=> 'settings.billing.ach.delete'
   ]);
 
   Route::get('edit/{id}', [

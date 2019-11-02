@@ -14,7 +14,6 @@ class BillingController extends Controller {
         \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
 
         $user = User::find(Auth::user()->id);
-        $paymentMethods = $user->paymentMethods();
 
         $customer = \Stripe\Customer::retrieve($user->stripe_id);
 
@@ -27,7 +26,6 @@ class BillingController extends Controller {
           );
 
         return view('settings.billing.index', [
-            'paymentMethods' => $paymentMethods,
             'bank_accounts' => $bank_accounts, 
             'customer' => $customer, 
         ]);
@@ -62,12 +60,9 @@ class BillingController extends Controller {
             ]
           );
 
-        //$user->addPaymentMethod($card);
-
-        $paymentMethods = $user->paymentMethods();
 
         return view('settings.billing.index', [
-            'paymentMethods' => $paymentMethods,
+
         ]);     
 
     }
@@ -204,11 +199,29 @@ class BillingController extends Controller {
     }
     
     public function createACH() {
-        return view('settings.billing.createACH');
+        return view('settings.billing.ach.create');
     }
 
     public function storeACH(Request $request) {
 
+        /**
+         * NEED TO SETUP LOGIC TO SEE IF THEY HAVE A STRIPE ACCOUNT
+         * IF NOT BUILD ONE. 
+         * DON'T WANT TO HANDLE THAT AT THE REGISTER PAGE
+         * 
+         * WAIT WHAT ABOUT THE TWO WEEK TRIAL???
+         * THEN I MIGHT HAVE TO HANDLE THAT AT THE REGISTRATION 
+         * 
+         * OR CREATE A FORM THAT WHEN THEY CREATE THEIR ACCOUNT, IMMEIDALTY THEY HAVE
+         * TO ADD THEIR BILLING INFORMATION?
+         * 
+         * OR A FORM THAT JUST CREATES A TRIAL PERIOD. IT WOULD CREATE A CUSTOMER IN STIRPE
+         * THEY WOULDN'T HAVE TO PUT IN ANY INFOMRATION
+         * 
+         * AND IT WOULD CANCEL AT 2 WEEK OR PRESENT THEM WITH A FORM TO ADD THEIR BILLING 
+         * INFORMATION
+         */
+ 
         $user = User::find(Auth::user()->id);
         \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
 
@@ -242,31 +255,96 @@ class BillingController extends Controller {
            * need to return a view that says 'verify account'
            */
 
-        return view('settings.billing.index', [
-            'paymentMethods' => $paymentMethods,
-            'bank_accounts' => $bank_accounts, 
-            'customer' => $customer, 
-        ]);
+        return redirect()
+            ->route('settings.billing.index', [
+                'bank_accounts' => $bank_accounts, 
+                'customer' => $customer, 
+            ])->with('info', 'Your account was successfully added. Check your account in 1-2 business days to see 2 small deposits. Verify you account by entering in those deposit amounts. Deposits take 1-3 business days.');
 
     }
 
-    public function verifyACH() {
+    public function verifyACH($id) {
+        return view('settings.billing.ach.verify', ['id' => $id]);
+    }
+
+    public function storeVerifyACH(Request $request) {
 
         $user = User::find(Auth::user()->id);
         \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
 
+        $customer = \Stripe\Customer::retrieve($user->stripe_id);
+
         // get the existing bank account
         $bank_account = \Stripe\Customer::retrieveSource(
             $user->stripe_id,
-            'ba_17SHwa2eZvKYlo2CUx7nphbZ'
+            $request->input('id')
         );
-        
-        // verify the account
-        $bank_account->verify([
-            'amounts' => [
-                32, 
-                45
-            ]]);
+
+        if( $bank_account->status === "verified" ) {
+
+            return redirect()
+                    ->back()
+                    ->with('info', 'This account has already been verified.');
+
+        } else {
+             
+            // verify the account
+            $bank_account->verify([
+                'amounts' => [
+                    $request->input('value1') * 100, 
+                    $request->input('value2') * 100,
+                ]
+            ]);
+       
+            $bank_accounts = \Stripe\Customer::allSources(
+                $user->stripe_id,
+                [
+                    'limit' => 3,
+                    'object' => 'bank_account',
+                ]
+            );
+
+            return redirect()
+                ->route('settings.billing.index', [
+                    'bank_accounts' => $bank_accounts, 
+                    'customer' => $customer, 
+                ])->with('info', 'Your account was successfully verified.');
+
+        }
+            
+    }
+
+    public function destroyACH($id) {
+
+        $user = User::find(Auth::user()->id);
+        \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
+
+        /**
+         * IMPORTANT
+         * 
+         * SETUP LOGIC THAT WILL REFUSE TO DELETE IF THE USER HAS NO OTHER PAYMENT METHOD ADDED
+         */
+
+        \Stripe\Customer::deleteSource(
+            $user->stripe_id,
+            $id
+        );
+
+        $customer = \Stripe\Customer::retrieve($user->stripe_id);
+
+        $bank_accounts = \Stripe\Customer::allSources(
+            $user->stripe_id,
+            [
+                'limit' => 3,
+                'object' => 'bank_account',
+            ]
+        );
+
+        return redirect()
+            ->route('settings.billing.index', [
+                'bank_accounts' => $bank_accounts, 
+                'customer' => $customer, 
+            ])->with('info', 'Your account was successfully deleted.');
 
     }
 
