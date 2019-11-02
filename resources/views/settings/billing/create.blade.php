@@ -40,7 +40,7 @@
 </div>
 
 <script>
-    const stripe = Stripe('{{ config('services.stripe.key') }}');
+    const stripe = Stripe('{{ config('services.stripe.secret') }}');
 
     const elements = stripe.elements();
     const cardElement = elements.create('card');
