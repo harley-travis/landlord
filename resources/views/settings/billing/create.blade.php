@@ -23,7 +23,7 @@
                     <!-- Stripe Elements Placeholder -->
                     <div id="card-element"></div>
 
-                    <input type="hidden" name="ds" valiue="{{ $intent->client_secret }}">
+                    <input type="hidden" name="ds" value="{{ $intent->client_secret }}">
 
                     <button id="card-button" class="btn btn-primary" data-secret="{{ $intent->client_secret }}">
                         Add Credit Card
