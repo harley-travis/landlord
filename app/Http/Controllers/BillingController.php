@@ -67,6 +67,8 @@ class BillingController extends Controller {
 
         $user = User::find(Auth::user()->id);
 
+        dd($request);
+
         if( $user->stripe_id === null || $user->stripe_id === '' ) {
 
             // new customer
