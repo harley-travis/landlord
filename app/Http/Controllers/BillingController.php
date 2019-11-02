@@ -79,6 +79,8 @@ class BillingController extends Controller {
 
         } else {
 
+            dd($intent->payment_method);
+
             // existing customer
             $payment_method = \Stripe\PaymentMethod::retrieve($intent->payment_method);
             $payment_method->attach(['customer' => $user->stripe_id]);
