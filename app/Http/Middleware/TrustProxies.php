@@ -16,6 +16,7 @@ class TrustProxies extends Middleware
 
    protected $proxies = [
         '173.236.170.86',
+        'sundance.dreamhost.com'
     ];
 
 
