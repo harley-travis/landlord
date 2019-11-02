@@ -18,14 +18,16 @@
                 <form action="{{ route('settings.billing.add') }}" method="post">
 
                     <label>Card holder name</label>
-                    <input id="card-holder-name" class="form-control" type="text">
+                    <input id="card-holder-name" class="form-control" name="card-holder-name" type="text">
 
                     <!-- Stripe Elements Placeholder -->
-                    <div id="card-element"></div>
+                    <!-- <div id="card-element"></div>
 
                     <button id="card-button" class="btn btn-primary" data-secret="{{ $intent->client_secret }}">
                         Add Credit Card
-                    </button>
+                    </button> -->
+
+                    <button type="submit">Save</button>
 
                 </form>
 

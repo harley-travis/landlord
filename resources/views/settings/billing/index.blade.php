@@ -59,7 +59,7 @@
 					</ul>
 
 
-                    <a href="{{ route('settings.billing.createCard') }}" class="btn btn-primary">Add Payment Method</a>
+    
 
                 </div>
             </div>
@@ -79,7 +79,7 @@
 					
 					</ul>
                     
-                    <a href="{{ route('settings.billing.create') }}" class="btn btn-primary">Add Payment Method</a>
+
                 </div>
             </div>
 
