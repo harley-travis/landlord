@@ -66,10 +66,7 @@ class BillingController extends Controller {
     public function store(Request $request) {
 
         $user = User::find(Auth::user()->id);
-
         $intent = $request->input('ds');
-
-        dd($request);
 
         if( $user->stripe_id === null || $user->stripe_id === '' ) {
 
