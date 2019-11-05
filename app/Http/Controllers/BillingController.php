@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\User;
 use Auth;
 use DB;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class BillingController extends Controller {
@@ -176,15 +177,6 @@ class BillingController extends Controller {
     }
 
     /**
-     * allow the home owner to enroll in autopay
-     * be sure to clairfy that the payment will auto increase
-     * if they add a new proprty
-     */
-    public function createOwnerSubscription() {
-
-    }
-
-    /**
      * allow the tenant to enroll in autopay
      */
     public function createTenantSubscription() {
@@ -243,17 +235,24 @@ class BillingController extends Controller {
 
         $customer = \Stripe\Customer::retrieve($user->stripe_id);
 
-         $bank_accounts = \Stripe\Customer::allSources(
+        $bank_accounts = \Stripe\Customer::allSources(
             $user->stripe_id,
             [
-              'limit' => 3,
-              'object' => 'bank_account',
+                'limit' => 3,
+                'object' => 'bank_account',
             ]
-          );
+        );
 
-          /**
-           * need to return a view that says 'verify account'
-           */
+        
+        if( $user->product > 1 ) { 
+
+            $this->createOwnerSubscription();
+
+        } else {
+
+            createTenantSubscription();
+
+        }
 
         return redirect()
             ->route('settings.billing.index', [
@@ -319,17 +318,6 @@ class BillingController extends Controller {
         $user = User::find(Auth::user()->id);
         \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
 
-        /**
-         * IMPORTANT
-         * 
-         * SETUP LOGIC THAT WILL REFUSE TO DELETE IF THE USER HAS NO OTHER PAYMENT METHOD ADDED
-         */
-
-        \Stripe\Customer::deleteSource(
-            $user->stripe_id,
-            $id
-        );
-
         $customer = \Stripe\Customer::retrieve($user->stripe_id);
 
         $bank_accounts = \Stripe\Customer::allSources(
@@ -340,24 +328,93 @@ class BillingController extends Controller {
             ]
         );
 
-        return redirect()
+        if( count($bank_accounts->data) <= 1 ) { 
+
+            return redirect()
+            ->route('settings.billing.index', [
+                'bank_accounts' => $bank_accounts, 
+                'customer' => $customer, 
+            ])->with('danger', 'You are not able to remove an ACH account if there is no other account on file. Please add an ACH account then remove this account after. If you have any problems, please contact support for help');
+
+        } else {
+
+            \Stripe\Customer::deleteSource(
+                $user->stripe_id,
+                $id
+            );
+
+            return redirect()
             ->route('settings.billing.index', [
                 'bank_accounts' => $bank_accounts, 
                 'customer' => $customer, 
             ])->with('info', 'Your account was successfully deleted.');
 
+        }
+
     }
 
-    public function chargeACH() {
-        
+    /**
+     * allow the home owner to enroll in autopay
+     * be sure to clairfy that the payment will auto increase
+     * if they add a new proprty
+     */
+    public function createOwnerSubscription() {
+
+        /**
+         * every time i delete or add a new account
+         * it creates another subscription for me. 
+         * need to figure out how to prevent adding more subscriptions 
+         * so the user isn't charged mulitple times
+         */
+
         $user = User::find(Auth::user()->id);
         \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
 
-        $charge = \Stripe\Charge::create([
-            'amount' => 1500,
-            'currency' => 'usd',
-            'customer' => $user->stripe_id,
-        ]);   
+        $base = 1500;
+        $additionalProperties = 200;
+        $freeUnits = 5;
+        $usage = $this->calculateUsage();
+        $amount = '';
+
+        if( $usage <= $freeUnits ) {
+            $amount = $base;
+        } else {
+            $amount = ( $usage - $freeUnits ) * $additionalProperties + $base;
+        }
+
+        $product = \Stripe\Product::create([
+            'name' => 'Monthly Home Owner Service',
+            'type' => 'service',
+        ]);
+
+        $plan = \Stripe\Plan::create([
+            "nickname" => "Home Owner Metered Monthly",
+            "product" => $product->id,
+            "amount" => $amount,
+            "currency" => "usd",
+            "interval" => "month",
+            "usage_type" => "metered",
+            "trial_period_days" => 14,
+        ]);
+
+        $subscription = \Stripe\Subscription::create([
+            "customer" => $user->stripe_id,
+            "items" => [
+                [
+                    "plan" => $plan->id,
+                ],
+            ],
+        ]);
+
+    }
+
+    public function calculateUsage() {
+
+        $user = User::find(Auth::user()->id);
+        $amount = DB::table('company_tenant')->where('company_id', '=', $user->company_id)->count();
+
+        return $amount;
+
     }
 
 }

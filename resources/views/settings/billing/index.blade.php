@@ -9,6 +9,12 @@
         </div>
     @endif
 
+    @if (session('danger'))
+        <div class="alert alert-danger" role="alert">
+            {{ session('danger') }}
+        </div>
+    @endif
+
     <div class="row justify-content-center pb-5">
         <div class="col-md-8">
 
@@ -47,41 +53,44 @@
 					    @foreach( $bank_accounts as $bank_account )
 						<li class="list-group-item">
 							<span class="col-6">
-							<i class="fas fa-university"></i> {{ $bank_account->bank_name }}
-								<span class="pl-3">**** {{ $bank_account->last4 }} </span>
-							</span>
-							@if($bank_account->id == $customer->default_source)
-								<span class="badge badge-primary">Default</span>
-							@endif
-							<span class="col-6 float-right text-right">
-								<!-- <a href="#" class="text-primary">Set Default</a> -->
-								<a href="#" class="btn btn-outline-danger" data-toggle="modal" data-target="#deleteACH">Delete Account</a>
+                                <i class="fas fa-university"></i> {{ $bank_account->bank_name }}
+                                <span class="pl-3">******** {{ $bank_account->last4 }} </span>
+                            
+                                @if($bank_account->id == $customer->default_source)
+                                    <span class="badge badge-primary">Default</span>
+                                @endif
+                            </span>
 
-                                <!-- Delete ACH Modal -->
-                                <div class="modal fade" id="deleteACH" tabindex="-1" role="dialog" aria-labelledby="deleteACHLabel" aria-hidden="true">
-                                    <div class="modal-dialog" role="document">
-                                        <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="deleteACHLabel">Are you sure you want to delete this ACH account?</h5>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                        <div class="modal-body">
-                                            If you delete your ACH account, it will remove all information regarding this account. If you would like to continue using this account, click cancel.
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-success" data-dismiss="modal">GO BACK</button>
-                                            <a href="{{ route('settings.billing.ach.delete', ['id' => $bank_account->id ]) }}" class="btn btn-outline-danger">YES, DELETE ACCOUNT</a>
-                                        </div>
+							<span class="col-6">
+                                <div class="float-right">
+                                    <!-- <a href="#" class="text-primary">Set Default</a> -->
+                                    <a href="#" class="btn btn-outline-danger" data-toggle="modal" data-target="#deleteACH">Delete Account</a>
+
+                                    <!-- Delete ACH Modal -->
+                                    <div class="modal fade" id="deleteACH" tabindex="-1" role="dialog" aria-labelledby="deleteACHLabel" aria-hidden="true">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="deleteACHLabel">Are you sure you want to delete this ACH account?</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                If you delete your ACH account, it will remove all information regarding this account. If you would like to continue using this account, click cancel.
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-success" data-dismiss="modal">GO BACK</button>
+                                                <a href="{{ route('settings.billing.ach.delete', ['id' => $bank_account->id ]) }}" class="btn btn-outline-danger">YES, DELETE ACCOUNT</a>
+                                            </div>
+                                            </div>
                                         </div>
                                     </div>
+
+                                    @if($bank_account->status != "verified")
+                                    <a href="{{ route('settings.billing.ach.verify', ['id' => $bank_account->id ]) }}" class="btn btn-success">Verify ACH Account</a>
+                                    @endif
                                 </div>
-
-                                @if($bank_account->status != "verified")
-                                <a href="{{ route('settings.billing.ach.verify', ['id' => $bank_account->id ]) }}" class="btn btn-success">Verify ACH Account</a>
-                                @endif
-
 							</span>
 						</li>
 						@endforeach 

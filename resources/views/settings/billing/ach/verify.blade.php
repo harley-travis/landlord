@@ -14,6 +14,24 @@
                         </div>
                     @endif
 
+
+                    <div class="alert alert-warning" role="alert">
+                        <b>NOTE</b> This information is just for testing purposes. Will remove this when we go live. <br><br>
+						<h5>Bank Account Information </h5>
+						<small>Provided by Stripe for Testing</small><br><br>
+
+						<h6>For success added</h6>
+						<ul>
+							<li>Value 1: 0.32</li>
+							<li>Value 2: 0.45</li>
+						</ul>
+
+						<h6>For failure upon use</h6>
+						<ul>
+							<li>any other combo</li>
+						</ul>
+					</div>
+
                     <p>Enter the two values deposited into your account to verify your bank account.</p>
                     <p>Deposits can take 2-3 business days. If you do not see the deposit amount, please contact our <a href="mailto:support@senrent.com">support team.</a></p>
                    

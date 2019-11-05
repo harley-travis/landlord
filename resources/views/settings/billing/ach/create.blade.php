@@ -14,6 +14,49 @@
                         </div>
                     @endif
 
+					@if (session('danger'))
+                        <div class="alert alert-danger" role="alert">
+                            {{ session('danger') }}
+                        </div>
+                    @endif
+
+					<div class="alert alert-warning" role="alert">
+                        <b>NOTE</b> This information is just for testing purposes. Will remove this when we go live. <br><br>
+						<h5>Bank Account Information </h5>
+						<small>Provided by Stripe for Testing</small><br><br>
+
+						<h6>For success added</h6>
+						<ul>
+							<li>Routing Number: 110000000</li>
+							<li>Account number: 000123456789</li>
+						</ul>
+
+						<h6>For failure upon use</h6>
+						<ul>
+							<li>Routing Number: 110000000</li>
+							<li>Account number: 000111111116</li>
+						</ul>
+
+						<h6>For account closed</h6>
+						<ul>
+							<li>Routing Number: 110000000</li>
+							<li>Account number: 000111111113</li>
+						</ul>
+
+						<h6>For NSF/insufficent funds</h6>
+						<ul>
+							<li>Routing Number: 110000000</li>
+							<li>Account number: 000222222227 </li>
+						</ul>
+
+						<h6>For debit not authorized</h6>
+						<ul>
+							<li>Routing Number: 110000000</li>
+							<li>Account number: 000333333335</li>
+						</ul>
+					</div>
+
+
                     <small>At this time, we only support ACH accounts in the United States.</small><br>
                     <span>NOTE: You must verify your ACH account before you can use it. Follow the instructions below:</span>
                     <ul>
