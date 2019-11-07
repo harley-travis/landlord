@@ -33,6 +33,10 @@ class BillingController extends Controller {
 
     }
 
+    public function getTrialView() {
+        return view('settings.billing.trial.end');
+    }
+
     public function create() {
 
         $user = User::find(Auth::user()->id);
@@ -243,15 +247,11 @@ class BillingController extends Controller {
             ]
         );
 
-        
+        // if the user is not a tenant create a subscription
         if( $user->product > 1 ) { 
-
             $this->createOwnerSubscription();
-
         } else {
-
             createTenantSubscription();
-
         }
 
         return redirect()
@@ -367,6 +367,21 @@ class BillingController extends Controller {
          * so the user isn't charged mulitple times
          */
 
+        /**
+         * DO I NEED TO CREATE A SINGLE PRODUCT AND ATTACH PLANS TO THAT?
+         * NAME THE PLAN'S AFTER THE CUSTOMERS NAME
+         */
+
+        /**
+         * need to figure out how metered works. does it check every pay period? and then 
+         * charge? 
+         * does it charge based on unit price?
+         */
+        
+        /**
+         * Does the trial period work, and does it apply every month?
+         */
+
         $user = User::find(Auth::user()->id);
         \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
 
@@ -382,14 +397,14 @@ class BillingController extends Controller {
             $amount = ( $usage - $freeUnits ) * $additionalProperties + $base;
         }
 
-        $product = \Stripe\Product::create([
-            'name' => 'Monthly Home Owner Service',
-            'type' => 'service',
-        ]);
+        // $product = \Stripe\Product::create([
+        //     'name' => 'Monthly Home Owner Service',
+        //     'type' => 'service',
+        // ]);
 
         $plan = \Stripe\Plan::create([
-            "nickname" => "Home Owner Metered Monthly",
-            "product" => $product->id,
+            "nickname" => $user->name ." Home Owner Metered Monthly",
+            "product" => "prod_G7cAszLu1IUcgA", // hard coded. i think i just need one of these
             "amount" => $amount,
             "currency" => "usd",
             "interval" => "month",

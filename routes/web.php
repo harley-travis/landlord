@@ -9,8 +9,18 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 
 
+Route::get('/dashboard', function () {
+	
+	if( Auth::user()->stripe_id === null) {
+		return view('settings.billing.trial.end');
+	} else {
+		return view('home');
+	}
+    
+});
+
 // PROPERTIES
-Route::group(['prefix' => 'property', 'middleware' => ['auth']], function() {
+Route::group(['prefix' => 'property', 'middleware' => ['auth', 'trial']], function() {
     $c = 'PropertyController';
 
     Route::get('', [
@@ -46,7 +56,7 @@ Route::group(['prefix' => 'property', 'middleware' => ['auth']], function() {
 });
 
 // TENANTS
-Route::group(['prefix' => 'tenants', 'middleware' => ['auth']], function() {
+Route::group(['prefix' => 'tenants', 'middleware' => ['auth', 'trial']], function() {
     $c = 'TenantController';
 
     Route::get('', [
@@ -92,7 +102,7 @@ Route::group(['prefix' => 'tenants', 'middleware' => ['auth']], function() {
 });
 
 // MAINTENANCE
-Route::group(['prefix' => 'maintenance', 'middleware' => ['auth']], function() {
+Route::group(['prefix' => 'maintenance', 'middleware' => ['auth', 'trial']], function() {
     $c = 'MaintenanceController';
 
     Route::get('', [
@@ -143,7 +153,7 @@ Route::group(['prefix' => 'maintenance', 'middleware' => ['auth']], function() {
 });
 
 // USERS
-Route::group(['prefix' => 'users', 'middleware' => ['auth']], function() {
+Route::group(['prefix' => 'users', 'middleware' => ['auth', 'trial']], function() {
   $c = 'UserRoleController';
 
   Route::get('', [
@@ -189,7 +199,7 @@ Route::group(['prefix' => 'users', 'middleware' => ['auth']], function() {
 });
 
 // FEEDBACK
-Route::group(['prefix' => 'feedback', 'middleware' => ['auth']], function() {
+Route::group(['prefix' => 'feedback', 'middleware' => ['auth', 'trial']], function() {
   $c = 'FeedbackController';
 
   Route::get('', [
@@ -240,7 +250,7 @@ Route::group(['prefix' => 'feedback', 'middleware' => ['auth']], function() {
 });
 
 // COMMUNITIES
-Route::group(['prefix' => 'community', 'middleware' => ['auth']], function() {
+Route::group(['prefix' => 'community', 'middleware' => ['auth', 'trial']], function() {
   $c = 'CommunityController';
 
   Route::get('', [
@@ -332,6 +342,11 @@ Route::group(['prefix' => 'settings/billing', 'middleware' => ['auth']], functio
   Route::get('delete/{id}', [
     'uses'	=> "$c@destroy",
     'as'	=> 'settings.billing.delete'
+  ]);
+
+  Route::get('trial/end', [
+    'uses'	=> "$c@getTrialView",
+    'as'	=> 'settings.billing..trial.end'
   ]);
 
 });
