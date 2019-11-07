@@ -2,7 +2,6 @@
 
 namespace App\Http\Middleware;
 
-use Carbon\Carbon;
 use Auth;
 use App\User;
 use Closure;
@@ -21,7 +20,7 @@ class CheckTrial
         // if the user doesn't not have a stripe account
         // enforce the user to enable their free 14 day trial
         if ( Auth::user()->stripe_id === null ) {
-            return redirect('settings/billing/trial/end');
+            return redirect('settings/billing/trial/begin');
         }
 
         /**
@@ -41,7 +40,7 @@ class CheckTrial
          */
 
         // if the users trial is expired redirect them to add billing information
-        if ( Auth::user()->stripe_id === null ) {
+        if ( ! Auth::user()->onTrial() ) {
             return redirect('settings/billing/trial/end');
         }
 

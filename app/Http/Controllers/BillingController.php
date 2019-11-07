@@ -33,7 +33,11 @@ class BillingController extends Controller {
 
     }
 
-    public function getTrialView() {
+    public function getTrialBeginView() {
+        return view('settings.billing.trial.begin');
+    }
+
+    public function getTrialEndView() {
         return view('settings.billing.trial.end');
     }
 
@@ -353,6 +357,30 @@ class BillingController extends Controller {
 
     }
 
+    public function activateTrial() {
+        
+        $user = User::find(Auth::user()->id);
+        \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
+
+        $user->createAsStripeCustomer();
+        $user->trial_ends_at = now()->addDays(14);
+        $user->save();
+
+        $plan = \Stripe\Plan::create([
+            "nickname" => $user->name ." Home Owner Metered Monthly",
+            "product" => "prod_G7cAszLu1IUcgA", // hard coded. i think i just need one of these
+            "amount" => 0,
+            "currency" => "usd",
+            "interval" => "month",
+            "usage_type" => "metered",
+            "trial_period_days" => 14,
+        ]);
+
+        return redirect()
+            ->route('home')
+            ->with('info', 'Your account was successfully deleted.');
+    }
+
     /**
      * allow the home owner to enroll in autopay
      * be sure to clairfy that the payment will auto increase
@@ -411,6 +439,12 @@ class BillingController extends Controller {
             "usage_type" => "metered",
             "trial_period_days" => 14,
         ]);
+
+        /**
+         * this came from laravael docs might be useful to use
+         * https://laravel.com/docs/5.8/billing#without-payment-method-up-front
+         */
+        //$user->newSubscription('main', 'monthly')->create($paymentMethod);
 
         $subscription = \Stripe\Subscription::create([
             "customer" => $user->stripe_id,

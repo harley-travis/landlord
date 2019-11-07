@@ -6,7 +6,7 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/home', 'HomeController@index')->name('home')->middleware('auth', 'trial');
 
 
 Route::get('/dashboard', function () {
@@ -344,9 +344,19 @@ Route::group(['prefix' => 'settings/billing', 'middleware' => ['auth']], functio
     'as'	=> 'settings.billing.delete'
   ]);
 
+  Route::get('trial/begin', [
+    'uses'	=> "$c@getTrialBeginView",
+    'as'	=> 'settings.billing.trial.begin'
+  ]);
+
   Route::get('trial/end', [
-    'uses'	=> "$c@getTrialView",
-    'as'	=> 'settings.billing..trial.end'
+    'uses'	=> "$c@getTrialEndView",
+    'as'	=> 'settings.billing.trial.end'
+  ]);
+
+  Route::post('trial/activate', [
+    'uses'	=> "$c@activateTrial",
+    'as'	=> 'settings.billing.trial.activate'
   ]);
 
 });
