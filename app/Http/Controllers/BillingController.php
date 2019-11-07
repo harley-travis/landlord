@@ -255,8 +255,11 @@ class BillingController extends Controller {
         if( $user->product > 1 ) { 
             $this->createOwnerSubscription();
         } else {
-            createTenantSubscription();
+            $this->createTenantSubscription();
         }
+
+        $user->trial_ends_at = null;
+        $user->save();
 
         return redirect()
             ->route('settings.billing.index', [
