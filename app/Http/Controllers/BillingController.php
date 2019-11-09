@@ -241,12 +241,16 @@ class BillingController extends Controller {
             ]
         );
 
+/**
+ * MOVED THIS TO IT'S OWN FUNCTION
+ */
+
         // if the user is not a tenant create a subscription
-        if( $user->product > 1 ) { 
-            $this->createOwnerSubscription();
-        } else {
-            $this->createTenantSubscription();
-        }
+        // if( $user->product > 1 ) { 
+        //     $this->createOwnerSubscription();
+        // } else {
+        //     $this->createTenantSubscription();
+        // }
 
         // delete the trial period in the database
         // should setup logic to make sure that all the bank information is added.

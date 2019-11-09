@@ -5,13 +5,13 @@
 
     @if (session('info'))
         <div class="alert alert-success" role="alert">
-            {{ session('info') }}
+            <i class="fas fa-info-circle pr-2"></i>{{ session('info') }}
         </div>
     @endif
 
     @if (session('danger'))
         <div class="alert alert-danger" role="alert">
-            {{ session('danger') }}
+            <i class="fas fa-exclamation-circle pr-2"></i>{{ session('danger') }}
         </div>
     @endif
 
@@ -38,7 +38,7 @@
 							<span class="col-6">
                                 <div class="float-right">
                                     <!-- <a href="#" class="text-primary">Set Default</a> -->
-                                    <a href="#" class="btn btn-outline-danger" data-toggle="modal" data-target="#deleteACH">Delete Account</a>
+                                    <a href="#" class="btn btn-outline-danger" data-toggle="modal" data-target="#deleteACH"><i class="far fa-trash-alt pr-2"></i> Delete Account</a>
 
                                     <!-- Delete ACH Modal -->
                                     <div class="modal fade" id="deleteACH" tabindex="-1" role="dialog" aria-labelledby="deleteACHLabel" aria-hidden="true">
@@ -54,19 +54,19 @@
                                                 If you delete your ACH account, it will remove all information regarding this account. If you would like to continue using this account, click cancel.
                                             </div>
                                             <div class="modal-footer">
-                                                <button type="button" class="btn btn-success" data-dismiss="modal">GO BACK</button>
-                                                <a href="{{ route('settings.billing.ach.delete', ['id' => $bank_account->id ]) }}" class="btn btn-outline-danger">YES, DELETE ACCOUNT</a>
+                                                <button type="button" class="btn btn-success" data-dismiss="modal">Go Back</button>
+                                                <a href="{{ route('settings.billing.ach.delete', ['id' => $bank_account->id ]) }}" class="btn btn-outline-danger"><i class="far fa-trash-alt pr-2"></i> YES, DELETE ACCOUNT</a>
                                             </div>
                                             </div>
                                         </div>
                                     </div>
 
                                     @if($bank_account->status != "verified")
-                                    <a href="{{ route('settings.billing.ach.verify', ['id' => $bank_account->id ]) }}" class="btn btn-success">Verify ACH Account</a>
+                                    <a href="{{ route('settings.billing.ach.verify', ['id' => $bank_account->id ]) }}" class="btn btn-success"><i class="fas fa-user-check pr-2"></i> Verify ACH Account</a>
                                     @endif
 
-                                    @if($bank_account->status != "pending")
-                                    <a href="#" class="btn btn-success" data-toggle="modal" data-target="#authorizeACH">Authorize Payment</a>
+                                    @if($bank_account->status === "pending")
+                                    <a href="#" class="btn btn-success" data-toggle="modal" data-target="#authorizeACH"><i class="fas fa-check pr-2"></i> Authorize Payment</a>
 
                                     <!-- Authorize ACH Modal -->
                                     <div class="modal fade" id="authorizeACH" tabindex="-1" role="dialog" aria-labelledby="authorizeACHLabel" aria-hidden="true">
@@ -85,7 +85,7 @@
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Cancel</button>
-                                                <a href="{{ route('settings.billing.ach.authorize', ['id' => $bank_account->id ]) }}" class="btn btn-success">Authorize Payment</a>
+                                                <a href="{{ route('settings.billing.ach.authorize', ['id' => $bank_account->id ]) }}" class="btn btn-success"><i class="fas fa-check pr-2"></i> Authorize Payment</a>
                                             </div>
                                             </div>
                                         </div>
@@ -100,7 +100,7 @@
 					</ul>
                     
                     <div class="mt-3">
-                        <a href="{{ route('settings.billing.ach.create') }}" class="btn btn-primary">Add ACH Account</a>
+                        <a href="{{ route('settings.billing.ach.create') }}" class="btn btn-outline-success"><i class="fas fa-plus-circle pr-2"></i>Add ACH Account</a>
                     </div>
 
                 </div>
@@ -116,7 +116,7 @@
                 <div class="card-header">Billing History</div>
                 <div class="card-body">
 
-                    <table class="table table-borderless">
+                    <table class="table table-borderless table-hover">
 						<thead>
 							<tr>
 								<th scope="col">Date</th>
@@ -135,12 +135,12 @@
 								<td>${{ $invoice->amount_paid / 100 }}</td>
 								<td>
 									@if($invoice->attempted == 1)
-										<span class="text-success">Success</span>
+										<span class="text-success"><i class="fas fa-check pr-2"></i> Success</span>
 									@else
-										<span class="text-danger">Failed</span>
+										<span class="text-danger"><i class="fas fa-times pr-2"></i> Failed</span>
 									@endif
 								</td>
-								<td><a href="{{ $invoice->invoice_pdf }}">Download Invoice PDF</a></td>
+								<td><a href="{{ $invoice->invoice_pdf }}"><i class="fas fa-download pr-2"></i> Download Invoice</a></td>
 							</tr>
 							@endforeach
 
