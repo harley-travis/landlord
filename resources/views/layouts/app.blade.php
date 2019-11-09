@@ -134,18 +134,17 @@
 
         <main class="py-4">
             @yield('content')
+        </main>
 
-            <footer class="container-fluid pb-5">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-md-12 text-right">
-                            <span class="">&copy <?php echo date('Y'); ?> SenRent.com | All Rights Reserved.</span>
-                        </div>
+        <footer class="container-fluid pb-5">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12 text-right">
+                        <span class="">&copy <?php echo date('Y'); ?> SenRent.com | All Rights Reserved.</span>
                     </div>
                 </div>
-            </footer>
-
-        </main>
+            </div>
+        </footer>
 
     </div>
     
