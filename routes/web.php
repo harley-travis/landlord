@@ -1,12 +1,12 @@
 <?php
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('home');
+// });
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home')->middleware('auth', 'trial');
+Route::get('/', 'HomeController@index')->name('home')->middleware('auth', 'trial');
 
 
 Route::get('/dashboard', function () {
