@@ -10,13 +10,13 @@
     @endif
     <div class="row justify-content-center">
         <div class="col-md-12">
-            <div class="card">
+            <div class="card shadow">
                 <div class="card-header">{{ $tenant->name }}</div>
 
                 <div class="card-body">
 
                     <div class="mb-3 text-right">
-                        <a href="{{ route('tenants.index') }}" class="btn btn-info text-white">Go Back</a>
+                        <a href="{{ route('tenants.index') }}" class="btn btn-info text-white shadow">Go Back</a>
                     </div>
 
                     <table class="table">
@@ -70,7 +70,7 @@
 
                     @if($tenant->active === 1)
                     <a href="{{ route('tenants.archive', ['id' => $tenant->id ]) }}" class="btn btn-danger">Archive Tenanat</a>
-                    <a href="{{ route('tenants.edit', ['id' => $tenant->id ]) }}" class="btn btn-primary">Edit Tenanat</a>
+                    <a href="{{ route('tenants.edit', ['id' => $tenant->id ]) }}" class="btn btn-primary shadow">Edit Tenanat</a>
                     @endif
 
                 </div>

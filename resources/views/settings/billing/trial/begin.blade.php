@@ -4,7 +4,7 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-12">
-            <div class="card">
+            <div class="card shadow">
                 <div class="card-header bg-success text-white">Begin Your 14 Free Day Trial</div>
 
                 <div class="card-body">
@@ -20,7 +20,7 @@
 
                         @csrf
 
-                        <button type="submit" class="btn btn-success btn-lg text-uppercase">Activate 14 Day Trial</button>
+                        <button type="submit" class="btn btn-success btn-lg text-uppercase shadow">Activate 14 Day Trial</button>
 
                     </form>
                 </div>

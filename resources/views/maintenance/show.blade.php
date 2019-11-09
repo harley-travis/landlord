@@ -5,7 +5,7 @@
 
     <div class="row justify-content-center">
         <div class="col-md-12">
-            <div class="card">
+            <div class="card shadow">
                 <div class="card-header">Maintenance Request</div>
 
                 <div class="card-body">
@@ -119,7 +119,7 @@
                         @csrf
 
                         <input type="hidden" name="id" value="{{ $request->id }}">
-                        <button type="submit" class="btn btn-primary">Update Maintenance Request</button>
+                        <button type="submit" class="btn btn-primary shadow">Update Maintenance Request</button>
                     </form>
 
                     @endif

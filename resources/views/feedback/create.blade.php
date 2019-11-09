@@ -4,7 +4,7 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-12">
-            <div class="card">
+            <div class="card shadow">
                 <div class="card-header">Send Feedback</div>
 
                 @if(Session::has('info'))
@@ -45,7 +45,7 @@
 
                         @csrf
 
-                        <button type="submit" class="btn btn-success">Send Feedback</button>
+                        <button type="submit" class="btn btn-success shadow">Send Feedback</button>
 
                     </form>
 

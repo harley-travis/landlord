@@ -6,7 +6,7 @@
     <div class="row justify-content-center">
         <div class="col-md-12">
          @if(Auth::user()->role >= 4)
-            <div class="card">
+            <div class="card shadow">
                 <div class="card-header">Customer Feedback</div>
                 <div class="card-body">   
 

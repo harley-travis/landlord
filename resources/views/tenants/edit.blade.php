@@ -4,13 +4,13 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-12">
-            <div class="card">
+            <div class="card shadow">
                 <div class="card-header">Edit Tenant</div>
 
                 <div class="card-body">
 
                     <div class="mb-3 text-right">
-                        <a href="{{ route('tenants.index') }}" class="btn btn-info text-white">Go Back</a>
+                        <a href="{{ route('tenants.index') }}" class="btn btn-info text-white shadow">Go Back</a>
                     </div>
                     
                     <form action="{{ route('tenants.update') }}" method="post">
@@ -89,7 +89,7 @@
               
                         @if($tenant->active === 1)
                         <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal">Archive Tenant</button>
-                        <button type="submit" class="btn btn-success">Save Tenant</button>
+                        <button type="submit" class="btn btn-success shadow">Save Tenant</button>
                         @endif
 
                     </form>
@@ -109,7 +109,7 @@
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                <a class="btn btn-danger" href="{{ route('tenants.archive', ['id' => $tenant->id ]) }}">Yes, Archive Tenant</a>
+                                <a class="btn btn-danger shadow" href="{{ route('tenants.archive', ['id' => $tenant->id ]) }}">Yes, Archive Tenant</a>
                             </div>
                             </div>
                         </div>

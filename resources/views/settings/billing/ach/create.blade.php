@@ -4,7 +4,7 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-12">
-            <div class="card">
+            <div class="card shadow">
                 <div class="card-header">Add New ACH Account</div>
 
                 <div class="card-body">
@@ -97,7 +97,7 @@
 						<p>By clicking 'Add ACH' you authorize SenRent to charge you for your monthly payment</p>
 
                         <div class="mt-3">
-						    <button class="btn btn-primary">Add ACH</button>
+						    <button class="btn btn-primary shadow">Add ACH</button>
                         </div>
 					</form>
 

@@ -5,7 +5,7 @@
 
     <div class="row justify-content-center">
         <div class="col-md-12">
-            <div class="card">
+            <div class="card shadow">
                 <div class="card-header">Users Management</div>
 
                 <div class="card-body">
@@ -19,7 +19,7 @@
 
                     <div class="mb-3 text-right">
                         <a href="{{ route('users.archived') }}" class="btn btn-link">View Archived Users</a>
-                        <a href="{{ route('users.create') }}" class="btn btn-success">Add User</a>
+                        <a href="{{ route('users.create') }}" class="btn btn-success shadow">Add User</a>
                     </div>
 
                     <table class="table table-hover">
@@ -50,7 +50,7 @@
                                     @endif
                                 
                                 </td>
-                                <td><a href="{{ route('users.edit', ['id' => $user->id ]) }}" class="btn btn-info text-white">Edit Tenant</a></td>
+                                <td><a href="{{ route('users.edit', ['id' => $user->id ]) }}" class="btn btn-info text-white shadow">Edit Tenant</a></td>
                             </tr>
                          
                         @endforeach

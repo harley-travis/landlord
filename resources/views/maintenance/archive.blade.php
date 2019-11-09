@@ -5,7 +5,7 @@
 
     <div class="row justify-content-center">
         <div class="col-md-12">
-            <div class="card">
+            <div class="card shadow">
                 <div class="card-header">Maintenance Requests</div>
 
                 <div class="card-body">

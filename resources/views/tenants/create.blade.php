@@ -4,13 +4,13 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-12">
-            <div class="card">
+            <div class="card shadow">
                 <div class="card-header">Add New Tenant</div>
 
                 <div class="card-body">
 
                     <div class="mb-3 text-right">
-                        <a href="{{ route('tenants.index') }}" class="btn btn-info text-white">Go Back</a>
+                        <a href="{{ route('tenants.index') }}" class="btn btn-info text-white shadow">Go Back</a>
                     </div>
                     
                     <p>When you create a tenant, they will get an email with their login credentials</p>
@@ -92,7 +92,7 @@
 
                         @csrf
 
-                        <button type="submit" class="btn btn-success">Save Tenant</button>
+                        <button type="submit" class="btn btn-success shadow">Save Tenant</button>
 
                     </form>
 

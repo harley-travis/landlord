@@ -4,7 +4,7 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-12">
-            <div class="card">
+            <div class="card shadow">
                 <div class="card-header">Add Maintenance Request</div>
 
                 <div class="card-body">
@@ -103,7 +103,7 @@
 
                         @csrf
 
-                        <button type="submit" class="btn btn-success">Send Request</button>
+                        <button type="submit" class="btn btn-success shadow">Send Request</button>
 
                     </form>
 

@@ -15,10 +15,10 @@
         </div>
     @endif
 
-    <div class="row justify-content-center pb-5">
+    <div class="row justify-content-center pb-4">
         <div class="col-md-12">
 
-            <div class="card">
+            <div class="card shadow">
                 <div class="card-header">ACH Accounts</div>
 
                 <div class="card-body">
@@ -109,10 +109,10 @@
         </div>
     </div>
 
-    <div class="row justify-content-center pb-5">
+    <div class="row justify-content-center">
         <div class="col-md-12">
 
-            <div class="card">
+            <div class="card shadow">
                 <div class="card-header">Billing History</div>
                 <div class="card-body">
 

@@ -4,7 +4,7 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-12">
-            <div class="card">
+            <div class="card shadow">
                 <div class="card-header">Add New Community</div>
 
                 <div class="card-body">
@@ -25,7 +25,7 @@
 
                         @csrf
 
-                        <button type="submit" class="btn btn-success">Save Community</button>
+                        <button type="submit" class="btn btn-success shadow">Save Community</button>
 
                     </form>
 

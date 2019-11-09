@@ -4,7 +4,7 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-12">
-            <div class="card">
+            <div class="card shadow">
                 <div class="card-header">Verify ACH Account</div>
 
                 <div class="card-body">
@@ -53,7 +53,7 @@
                         @csrf
 
                         <a href="{{ route('settings.billing.index') }}" class="btn btn-outline-secondary">Cancel</a>
-                        <button type="submit" class="btn btn-success">Verify Acccout Now</button>
+                        <button type="submit" class="btn btn-success shadow">Verify Acccout Now</button>
 
                     </form>
 

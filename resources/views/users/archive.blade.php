@@ -5,7 +5,7 @@
 
     <div class="row justify-content-center">
         <div class="col-md-12">
-            <div class="card">
+            <div class="card shadow">
                 <div class="card-header">Archived Users</div>
 
                 <div class="card-body">
@@ -53,7 +53,7 @@
                                     @endif
                                 
                                 </td>
-                                <td><a href="{{ route('users.edit', ['id' => $user->id ]) }}" class="btn btn-info text-white">Edit Tenant</a></td>
+                                <td><a href="{{ route('users.edit', ['id' => $user->id ]) }}" class="btn btn-info text-white shadow">Edit Tenant</a></td>
                             </tr>
                          
                         @endforeach

@@ -4,7 +4,7 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-12">
-            <div class="card">
+            <div class="card shadow">
                 <div class="card-header">Edit User</div>
 
                 <div class="card-body">
@@ -58,7 +58,7 @@
                         @csrf
               
                         <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal">Archive User</button>
-                        <button type="submit" class="btn btn-success">Save User</button>
+                        <button type="submit" class="btn btn-success shadow">Save User</button>
 
                     </form>
 
@@ -77,7 +77,7 @@
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                <a class="btn btn-danger" href="{{ route('users.archive', ['id' => $user->id ]) }}">Yes, Archive User</a>
+                                <a class="btn btn-danger shadow" href="{{ route('users.archive', ['id' => $user->id ]) }}">Yes, Archive User</a>
                             </div>
                             </div>
                         </div>

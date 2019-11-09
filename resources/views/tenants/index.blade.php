@@ -5,7 +5,7 @@
 
     <div class="row justify-content-center">
         <div class="col-md-12">
-            <div class="card">
+            <div class="card shadow">
                 <div class="card-header">Tenants Management</div>
 
                 <div class="card-body">
@@ -19,7 +19,7 @@
 
                     <div class="mb-3 text-right">
                         <a href="{{ route('tenants.archived') }}" class="btn btn-link">View Archived Tenants</a>
-                        <a href="{{ route('tenants.create') }}" class="btn btn-success">Add Tenant</a>
+                        <a href="{{ route('tenants.create') }}" class="btn btn-success shadow">Add Tenant</a>
                     </div>
 
                     <table class="table table-hover">

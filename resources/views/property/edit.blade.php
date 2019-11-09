@@ -4,7 +4,7 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-12">
-            <div class="card">
+            <div class="card shadow">
                 <div class="card-header">Edit Property</div>
 
                 <div class="card-body">
@@ -273,7 +273,7 @@
                         <input type="hidden" name="rent_id" value="{{ $rent->id }}">
 
                         <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal">Delete Property</button>
-                        <button type="submit" class="btn btn-success">Save</button>
+                        <button type="submit" class="btn btn-success shadow">Save</button>
 
                     </form>
 
@@ -292,7 +292,7 @@
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                    <a class="btn btn-danger" href="{{ route('property.delete', ['id' => $property->id ]) }}">Yes, Delete Property</a>
+                                    <a class="btn btn-danger shadow" href="{{ route('property.delete', ['id' => $property->id ]) }}">Yes, Delete Property</a>
                                 </div>
                             </div>
                         </div>

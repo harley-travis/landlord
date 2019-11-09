@@ -4,7 +4,7 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-12">
-            <div class="card">
+            <div class="card shadow">
                 <div class="card-header bg-danger text-white">Free Trial Expiration</div>
 
                 <div class="card-body">
@@ -18,7 +18,7 @@
                     
                     <p>Our pricing starts out at just $15 a month that comes with 5 properties. Add additional properties for just $2 a property.</p>
 
-                    <a href="{{ route('settings.billing.ach.create') }}" class="btn btn-success">Add an ACH account now</a>
+                    <a href="{{ route('settings.billing.ach.create') }}" class="btn btn-success shadow">Add an ACH account now</a>
 
                 </div>
             </div>
