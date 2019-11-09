@@ -16,7 +16,7 @@
     @endif
 
     <div class="row justify-content-center pb-5">
-        <div class="col-md-8">
+        <div class="col-md-12">
 
             <div class="card">
                 <div class="card-header">Billing History</div>
@@ -42,7 +42,7 @@
     </div>
 
     <div class="row justify-content-center pb-5">
-        <div class="col-md-8">
+        <div class="col-md-12">
 
             <div class="card">
                 <div class="card-header">ACH Accounts</div>

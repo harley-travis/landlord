@@ -42,15 +42,6 @@ class CheckTrial
          * UPDATE USERS STRIPE_ID == NULL
          */
 
-
-         /**
-          * need to figure out what to do with the trial. right now the date is left in the database. so no matter what
-          * it will always show this end view.
-          * need to setup more logic to check. or to remove the trial period all together. 
-
-          * in the add ACH need to remove the ach
-          */
-
         // if the users trial is expired redirect them to add billing information
         if ( ! Auth::user()->onTrial() && Auth::user()->trial_ends_at != null ) {
             return redirect('settings/billing/trial/end');

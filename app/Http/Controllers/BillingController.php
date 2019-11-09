@@ -258,6 +258,9 @@ class BillingController extends Controller {
             $this->createTenantSubscription();
         }
 
+        // delete the trial period in the database
+        // should setup logic to make sure that all the bank information is added.
+        // otherwise it will unlock it for them regardless
         $user->trial_ends_at = null;
         $user->save();
 
