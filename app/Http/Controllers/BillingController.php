@@ -18,16 +18,24 @@ class BillingController extends Controller {
 
         $customer = \Stripe\Customer::retrieve($user->stripe_id);
 
+        $invoices = \Stripe\Invoice::all(
+            [
+                 // 'limit' => 12,
+                "customer" => $user->stripe_id,
+            ]
+        );
+
         $bank_accounts = \Stripe\Customer::allSources(
             $user->stripe_id,
             [
-              'limit' => 3,
+              // 'limit' => 3,
               'object' => 'bank_account',
             ]
           );
 
         return view('settings.billing.index', [
             'bank_accounts' => $bank_accounts, 
+            'invoices' => $invoices,
             'customer' => $customer, 
         ]);
 
@@ -203,24 +211,6 @@ class BillingController extends Controller {
     }
 
     public function storeACH(Request $request) {
-
-        /**
-         * NEED TO SETUP LOGIC TO SEE IF THEY HAVE A STRIPE ACCOUNT
-         * IF NOT BUILD ONE. 
-         * DON'T WANT TO HANDLE THAT AT THE REGISTER PAGE
-         * 
-         * WAIT WHAT ABOUT THE TWO WEEK TRIAL???
-         * THEN I MIGHT HAVE TO HANDLE THAT AT THE REGISTRATION 
-         * 
-         * OR CREATE A FORM THAT WHEN THEY CREATE THEIR ACCOUNT, IMMEIDALTY THEY HAVE
-         * TO ADD THEIR BILLING INFORMATION?
-         * 
-         * OR A FORM THAT JUST CREATES A TRIAL PERIOD. IT WOULD CREATE A CUSTOMER IN STIRPE
-         * THEY WOULDN'T HAVE TO PUT IN ANY INFOMRATION
-         * 
-         * AND IT WOULD CANCEL AT 2 WEEK OR PRESENT THEM WITH A FORM TO ADD THEIR BILLING 
-         * INFORMATION
-         */
  
         $user = User::find(Auth::user()->id);
         \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
@@ -264,10 +254,18 @@ class BillingController extends Controller {
         $user->trial_ends_at = null;
         $user->save();
 
+        $invoices = \Stripe\Invoice::all(
+            [
+                 // 'limit' => 12,
+                "customer" => $user->stripe_id,
+            ]
+        );       
+
         return redirect()
             ->route('settings.billing.index', [
                 'bank_accounts' => $bank_accounts, 
                 'customer' => $customer, 
+                'invoices' => $invoices,
             ])->with('info', 'Your account was successfully added. Check your account in 1-2 business days to see 2 small deposits. Verify you account by entering in those deposit amounts. Deposits take 1-3 business days.');
 
     }
@@ -313,10 +311,18 @@ class BillingController extends Controller {
                 ]
             );
 
+            $invoices = \Stripe\Invoice::all(
+                [
+                     // 'limit' => 12,
+                    "customer" => $user->stripe_id,
+                ]
+            );
+
             return redirect()
                 ->route('settings.billing.index', [
                     'bank_accounts' => $bank_accounts, 
                     'customer' => $customer, 
+                    'invoices' => $invoices,
                 ])->with('info', 'Your account was successfully verified.');
 
         }
@@ -335,6 +341,13 @@ class BillingController extends Controller {
             [
                 'limit' => 3,
                 'object' => 'bank_account',
+            ]
+        );
+
+        $invoices = \Stripe\Invoice::all(
+            [
+                 // 'limit' => 12,
+                "customer" => $user->stripe_id,
             ]
         );
 
@@ -357,6 +370,7 @@ class BillingController extends Controller {
             ->route('settings.billing.index', [
                 'bank_accounts' => $bank_accounts, 
                 'customer' => $customer, 
+                'invoices' => $invoices,
             ])->with('info', 'Your account was successfully deleted.');
 
         }
@@ -392,7 +406,7 @@ class BillingController extends Controller {
      * be sure to clairfy that the payment will auto increase
      * if they add a new proprty
      */
-    public function createOwnerSubscription() {
+    public function createOwnerSubscription($id) {
 
         /**
          * every time i delete or add a new account
@@ -416,8 +430,15 @@ class BillingController extends Controller {
          * Does the trial period work, and does it apply every month?
          */
 
+         /**
+          * NEED TO MAKE SURE THAT IT'S SUBSCRIBING TO THE DEFAULT PAYMENT.
+          * IF THEY ADD A NEW PAYMENT, NEED TO MAKE SURE THEY'RE USING THIS PAYMENT
+          */
+
         $user = User::find(Auth::user()->id);
         \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
+
+        $customer = \Stripe\Customer::retrieve($user->stripe_id);
 
         $base = 1500;
         $additionalProperties = 200;
@@ -460,6 +481,28 @@ class BillingController extends Controller {
                 ],
             ],
         ]);
+
+        $bank_accounts = \Stripe\Customer::allSources(
+            $user->stripe_id,
+            [
+                'limit' => 3,
+                'object' => 'bank_account',
+            ]
+        );
+
+        $invoices = \Stripe\Invoice::all(
+            [
+                 // 'limit' => 12,
+                "customer" => $user->stripe_id,
+            ]
+        );
+
+        return redirect()
+            ->route('settings.billing.index', [
+                'bank_accounts' => $bank_accounts, 
+                'customer' => $customer, 
+                'invoices' => $invoices,
+            ])->with('info', 'You have successfully authorized this account. SenRent will bill you automatically each month. Check back here to see your billing history.');
 
     }
 

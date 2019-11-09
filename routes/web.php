@@ -359,5 +359,10 @@ Route::group(['prefix' => 'settings/billing', 'middleware' => ['auth']], functio
     'as'	=> 'settings.billing.trial.activate'
   ]);
 
+  Route::get('authorize/{id}', [
+    'uses'	=> "$c@createOwnerSubscription",
+    'as'	=> 'settings.billing.ach.authorize'
+  ]);
+
 });
 

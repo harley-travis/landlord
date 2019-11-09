@@ -26,22 +26,6 @@ class CheckTrial
             return redirect('settings/billing/trial/begin');
         }
 
-        /**
-         * LEFT OFF HERE. 
-         * IF THE USERS TRIAL IS OVER THEN REDIRECT THEM TO SIGN UP AGAIN
-         * 
-         * I NEED TO FIGURE OUT WHAT THE DATE THAT IS SAVED TO THE TRIAL_END COLUMN IN THE USERS TABLE
-         * LOOKS LIKE. 
-         * 
-         * THEN I NEED TO FIGURE OUT HOW TO MATCH THAT SAME DATA 
-         * 
-         * NEED TO ADD FUNCTIONALITY TO THE END TRIAL BLADE. 
-         * 
-         * CAPTURE THEIR PAYMENT INFORMATION
-         * 
-         * UPDATE USERS STRIPE_ID == NULL
-         */
-
         // if the users trial is expired redirect them to add billing information
         if ( ! Auth::user()->onTrial() && Auth::user()->trial_ends_at != null ) {
             return redirect('settings/billing/trial/end');
