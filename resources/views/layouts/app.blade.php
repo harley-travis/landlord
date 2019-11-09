@@ -134,7 +134,19 @@
 
         <main class="py-4">
             @yield('content')
+
+            <footer class="container-fluid pb-5">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12 text-right">
+                            <span class="">&copy <?php echo date('Y'); ?> SenRent.com | All Rights Reserved.</span>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+
         </main>
+
     </div>
     
     <script src="https://kit.fontawesome.com/53ad0499b2.js" crossorigin="anonymous"></script>
