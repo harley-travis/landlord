@@ -26,8 +26,6 @@ class BillingController extends Controller {
             ]
         );
 
-        
-
         $bank_accounts = \Stripe\Customer::allSources(
             $user->stripe_id,
             [
@@ -657,6 +655,42 @@ class BillingController extends Controller {
         $amount = DB::table('company_tenant')->where('company_id', '=', $user->company_id)->count();
 
         return $amount;
+
+    }
+
+    public function setDefaultPaymentMethod($payment) {
+
+        $user = User::find(Auth::user()->id);
+        $customer = \Stripe\Customer::retrieve($user->stripe_id);
+
+        $update = \Stripe\Customer::update(
+            $user->stripe_id,
+            [
+              'default_source' => $payment,
+            ]
+        );
+
+        $bank_accounts = \Stripe\Customer::allSources(
+            $user->stripe_id,
+            [
+                'limit' => 3,
+                'object' => 'bank_account',
+            ]
+        );
+
+        $invoices = \Stripe\Invoice::all(
+            [
+                 // 'limit' => 12,
+                "customer" => $user->stripe_id,
+            ]
+        );
+
+        return redirect()
+            ->route('settings.billing.index', [
+            'bank_accounts' => $bank_accounts, 
+            'customer' => $customer, 
+            'invoices' => $invoices,
+        ])->with('info', 'Your default payment has be set successfully!');
 
     }
 

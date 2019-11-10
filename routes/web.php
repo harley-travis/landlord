@@ -364,5 +364,10 @@ Route::group(['prefix' => 'settings/billing', 'middleware' => ['auth']], functio
     'as'	=> 'settings.billing.ach.authorize'
   ]);
 
+  Route::get('setDefault/{id}', [
+		'uses'	=> "$c@setDefaultPaymentMethod", 
+		'as'	=> 'settings.billing.setDefault'
+	]);
+
 });
 

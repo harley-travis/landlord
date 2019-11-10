@@ -37,7 +37,11 @@
 
 							<span class="col-6">
                                 <div class="float-right">
-                                    <!-- <a href="#" class="text-primary">Set Default</a> -->
+
+                                    @if( $bank_account->id != $customer->default_source )
+                                    <a href="{{ route('settings.billing.setDefault', ['id' => $bank_account->id ]) }}" class="text-primary pr-3">Set Default</a> 
+                                    @endif
+
                                     <a href="#" class="btn btn-outline-danger" data-toggle="modal" data-target="#deleteACH"><i class="far fa-trash-alt pr-2"></i> Delete Account</a>
 
                                     <!-- Delete ACH Modal -->
