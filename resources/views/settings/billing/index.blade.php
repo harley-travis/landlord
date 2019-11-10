@@ -39,7 +39,33 @@
                                 <div class="float-right">
 
                                     @if( $bank_account->id != $customer->default_source )
-                                    <a href="{{ route('settings.billing.setDefault', ['id' => $bank_account->id ]) }}" class="text-primary pr-3">Set Default</a> 
+                                    <a href="#" class="btn btn-link" data-toggle="modal" data-target="#setDefault">Set Default</a>
+
+                                    <!-- Authorize ACH Modal -->
+                                    <div class="modal fade" id="setDefault" tabindex="-1" role="dialog" aria-labelledby="setDefaultLabel" aria-hidden="true">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="setDefaultLabel">Are you sure you want to authorize this ACH account?</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p>In order to process your payment, you need to authorize SenRent to charge this account on file. Authorizing payment will auto enroll into our monthly payment program of $15/month for 5 properties and an additional $2 charge per additional property.</p>
+                                                <p>Each month may vary the cost, depending on how many properties you added this month.</p>
+                                                <p>By clicking, 'Authorize Payment', you agree to our Terms and Conditions and authorize SenRent to charge the account on file.
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Cancel</button>
+                                                <a href="{{ route('settings.billing.setDefault', ['id' => $bank_account->id ]) }}" class="btn btn-success shadow">Set Default and Authorize</a> 
+                                   
+                                            </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    
                                     @endif
 
                                     <a href="#" class="btn btn-outline-danger" data-toggle="modal" data-target="#deleteACH"><i class="far fa-trash-alt pr-2"></i> Delete Account</a>
@@ -68,6 +94,25 @@
                                     @if($bank_account->status != "verified")
                                     <a href="{{ route('settings.billing.ach.verify', ['id' => $bank_account->id ]) }}" class="btn btn-success"><i class="fas fa-user-check pr-2"></i> Verify ACH Account</a>
                                     @endif
+
+<!-- 
+
+    LEFT OFF HERE 
+    FOR SOME REAONS THE AUTHORIZE PAYMENT IS NOT SHOWING UP ANY MORE
+    I NEED TO FIND A WAY TO SHOW THAT AGAIN
+    I SEEMS THAT PENDING STATUS IS NO LONGER AN OPTION?
+    PERHAPS IT'S BECAUSE IT ONLY WORKS ON THE FIRST ACH ACCOUNT. 
+    IF YOU ADD ANOTHER ONE I DON'T THINK TAHT IT SHOWS IT
+
+    OKAY SO IT'S NOT BECAUSE THERE ARE MULTIPLE ACCOUNTS. IT JUST DOESN'T SHOW PENDING ANYMORE
+    I HAVE CHANGED THE SET DEFAULT FUNCTION TO NOW POP UP AND ASK TO AUTHORIZE
+    I NEED TO SET UP THAT FUNCTINALITY
+
+    I NEED TO FIGURE OUT A BETTER WAY TO ASK TO AUTHORIZE THE ACCOUNT
+    MAYBE I REDIRECT AFTER THE ACCOUNT HAS BEEN VERIFED TO THE AUTHORIZE PAGE
+
+    IF THE SET A NEW ACCOUNT AS DEFAULT, THEN THE POP WILL ALSO AUTHORIZE THE ACCOUNT
+-->
 
                                     @if($bank_account->status === "pending")
                                     <a href="#" class="btn btn-success" data-toggle="modal" data-target="#authorizeACH"><i class="fas fa-check pr-2"></i> Authorize Payment</a>
