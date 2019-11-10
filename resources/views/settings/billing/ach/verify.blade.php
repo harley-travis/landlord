@@ -8,11 +8,17 @@
                 <div class="card-header">Verify ACH Account</div>
 
                 <div class="card-body">
-                    @if (session('info'))
-                        <div class="alert alert-success" role="alert">
-                            {{ session('info') }}
-                        </div>
-                    @endif
+                @if (session('info'))
+                    <div class="alert alert-success shadow-sm" role="alert">
+                        <i class="fas fa-info-circle pr-2"></i>{{ session('info') }}
+                    </div>
+                @endif
+
+                @if (session('danger'))
+                    <div class="alert alert-danger shadow-sm" role="alert">
+                        <i class="fas fa-exclamation-circle pr-2"></i>{{ session('danger') }}
+                    </div>
+                @endif
 
 
                     <div class="alert alert-warning" role="alert">

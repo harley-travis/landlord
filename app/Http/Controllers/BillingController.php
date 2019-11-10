@@ -9,13 +9,14 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class BillingController extends Controller {
+
+    public function __construct() {
+        \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
+    }
     
     public function index() {
 
-        \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
-
         $user = User::find(Auth::user()->id);
-
         $customer = \Stripe\Customer::retrieve($user->stripe_id);
 
         $invoices = \Stripe\Invoice::all(
@@ -25,13 +26,16 @@ class BillingController extends Controller {
             ]
         );
 
+        
+
         $bank_accounts = \Stripe\Customer::allSources(
             $user->stripe_id,
             [
-              // 'limit' => 3,
               'object' => 'bank_account',
             ]
           );
+
+        //dd($bank_accounts);
 
         return view('settings.billing.index', [
             'bank_accounts' => $bank_accounts, 
@@ -60,8 +64,6 @@ class BillingController extends Controller {
     }
 
     public function store(Request $request) {
-
-        \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
 
         $user = User::find(Auth::user()->id);
 
@@ -213,7 +215,6 @@ class BillingController extends Controller {
     public function storeACH(Request $request) {
  
         $user = User::find(Auth::user()->id);
-        \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
 
         $token = $request->request->get('stripeToken');
 
@@ -241,9 +242,9 @@ class BillingController extends Controller {
             ]
         );
 
-/**
- * MOVED THIS TO IT'S OWN FUNCTION
- */
+        /**
+         * MOVED THIS TO IT'S OWN FUNCTION
+         */
 
         // if the user is not a tenant create a subscription
         // if( $user->product > 1 ) { 
@@ -281,7 +282,6 @@ class BillingController extends Controller {
     public function storeVerifyACH(Request $request) {
 
         $user = User::find(Auth::user()->id);
-        \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
 
         $customer = \Stripe\Customer::retrieve($user->stripe_id);
 
@@ -290,27 +290,52 @@ class BillingController extends Controller {
             $user->stripe_id,
             $request->input('id')
         );
+        
+        try {
 
-        if( $bank_account->status === "verified" ) {
-
-            return redirect()
-                    ->back()
-                    ->with('info', 'This account has already been verified.');
-
-        } else {
-             
-            // verify the account
+            // verify the amounts
             $bank_account->verify([
                 'amounts' => [
                     $request->input('value1') * 100, 
                     $request->input('value2') * 100,
                 ]
             ]);
-       
+
             $bank_accounts = \Stripe\Customer::allSources(
                 $user->stripe_id,
                 [
-                    'limit' => 3,
+                    'object' => 'bank_account',
+                ]
+            );
+
+            $invoices = \Stripe\Invoice::all(
+                [
+                    // 'limit' => 12,
+                    "customer" => $user->stripe_id,
+                ]
+            );
+
+            return redirect()
+                ->route('settings.billing.index', [
+                    'bank_accounts' => $bank_accounts, 
+                    'customer' => $customer, 
+                    'invoices' => $invoices,
+                ])->with('info', 'Your account was successfully verified.');
+
+        } 
+        
+        catch(\Stripe\Exception\CardException $e) {
+            // Since it's a decline, \Stripe\Exception\CardException will be caught
+            // echo 'Status is:' . $e->getHttpStatus() . '\n';
+            // echo 'Type is:' . $e->getError()->type . '\n';
+            // echo 'Code is:' . $e->getError()->code . '\n';
+            // // param is '' in this case
+            // echo 'Param is:' . $e->getError()->param . '\n';
+            // echo 'Message is:' . $e->getError()->message . '\n';
+
+            $bank_accounts = \Stripe\Customer::allSources(
+                $user->stripe_id,
+                [
                     'object' => 'bank_account',
                 ]
             );
@@ -323,20 +348,140 @@ class BillingController extends Controller {
             );
 
             return redirect()
-                ->route('settings.billing.index', [
-                    'bank_accounts' => $bank_accounts, 
-                    'customer' => $customer, 
-                    'invoices' => $invoices,
-                ])->with('info', 'Your account was successfully verified.');
+                ->back()
+                ->with('danger',  $e->getError()->message);
 
-        }
+
+          } catch (\Stripe\Exception\RateLimitException $e) {
+
+            $bank_accounts = \Stripe\Customer::allSources(
+                $user->stripe_id,
+                [
+                    'object' => 'bank_account',
+                ]
+            );
+
+            $invoices = \Stripe\Invoice::all(
+                [
+                     // 'limit' => 12,
+                    "customer" => $user->stripe_id,
+                ]
+            );
+
+            return redirect()
+                ->back()
+                ->with('danger',  $e->getError()->message);
+
+          } catch (\Stripe\Exception\InvalidRequestException $e) {
+
+            $bank_accounts = \Stripe\Customer::allSources(
+                $user->stripe_id,
+                [
+                    'object' => 'bank_account',
+                ]
+            );
+
+            $invoices = \Stripe\Invoice::all(
+                [
+                     // 'limit' => 12,
+                    "customer" => $user->stripe_id,
+                ]
+            );
+
+            return redirect()
+                ->back()
+                ->with('danger',  $e->getError()->message);
+
+          } catch (\Stripe\Exception\AuthenticationException $e) {
+
+            $bank_accounts = \Stripe\Customer::allSources(
+                $user->stripe_id,
+                [
+                    'object' => 'bank_account',
+                ]
+            );
+
+            $invoices = \Stripe\Invoice::all(
+                [
+                     // 'limit' => 12,
+                    "customer" => $user->stripe_id,
+                ]
+            );
+
+            return redirect()
+                ->back()
+                ->with('danger',  $e->getError()->message);
+
+            // (maybe you changed API keys recently)
+          } catch (\Stripe\Exception\ApiConnectionException $e) {
+
+            $bank_accounts = \Stripe\Customer::allSources(
+                $user->stripe_id,
+                [
+                    'object' => 'bank_account',
+                ]
+            );
+
+            $invoices = \Stripe\Invoice::all(
+                [
+                     // 'limit' => 12,
+                    "customer" => $user->stripe_id,
+                ]
+            );
+
+            return redirect()
+                ->back()
+                ->with('danger',  $e->getError()->message);
+
+          } catch (\Stripe\Exception\ApiErrorException $e) {
+
+            $bank_accounts = \Stripe\Customer::allSources(
+                $user->stripe_id,
+                [
+                    'object' => 'bank_account',
+                ]
+            );
+
+            $invoices = \Stripe\Invoice::all(
+                [
+                     // 'limit' => 12,
+                    "customer" => $user->stripe_id,
+                ]
+            );
+
+            return redirect()
+                ->back()
+                ->with('danger',  $e->getError()->message);
+
+            // yourself an email
+          } catch (Exception $e) {
+
+            $bank_accounts = \Stripe\Customer::allSources(
+                $user->stripe_id,
+                [
+                    'object' => 'bank_account',
+                ]
+            );
+
+            $invoices = \Stripe\Invoice::all(
+                [
+                     // 'limit' => 12,
+                    "customer" => $user->stripe_id,
+                ]
+            );
+
+            return redirect()
+                ->back()
+                ->with('danger',  $e->getError()->message);
+
+          }
+
             
     }
 
     public function destroyACH($id) {
 
         $user = User::find(Auth::user()->id);
-        \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
 
         $customer = \Stripe\Customer::retrieve($user->stripe_id);
 
@@ -384,8 +529,6 @@ class BillingController extends Controller {
     public function activateTrial() {
         
         $user = User::find(Auth::user()->id);
-        \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
-
         $user->createAsStripeCustomer();
         $user->trial_ends_at = now()->addDays(14);
         $user->save();
@@ -440,8 +583,6 @@ class BillingController extends Controller {
           */
 
         $user = User::find(Auth::user()->id);
-        \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
-
         $customer = \Stripe\Customer::retrieve($user->stripe_id);
 
         $base = 1500;
