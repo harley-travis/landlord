@@ -9,6 +9,9 @@
 
     <title>SenRent | Dashboard</title>
 
+    <link rel="shortcut icon" href="{{url('/img/favicon.ico')}}" type="image/x-icon">
+    <link rel="icon" href="{{url('/img/favicon.ico')}}" type="image/x-icon">
+
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
     <script src="https://js.stripe.com/v3/"></script>
