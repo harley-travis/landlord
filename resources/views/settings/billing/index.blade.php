@@ -114,34 +114,6 @@
     IF THE SET A NEW ACCOUNT AS DEFAULT, THEN THE POP WILL ALSO AUTHORIZE THE ACCOUNT
 -->
 
-                                    @if($bank_account->status === "pending")
-                                    <a href="#" class="btn btn-success" data-toggle="modal" data-target="#authorizeACH"><i class="fas fa-check pr-2"></i> Authorize Payment</a>
-
-                                    <!-- Authorize ACH Modal -->
-                                    <div class="modal fade" id="authorizeACH" tabindex="-1" role="dialog" aria-labelledby="authorizeACHLabel" aria-hidden="true">
-                                        <div class="modal-dialog" role="document">
-                                            <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="authorizeACHLabel">Are you sure you want to authorize this ACH account?</h5>
-                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                                </button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <p>In order to process your payment, you need to authorize SenRent to charge this account on file. Authorizing payment will auto enroll into our monthly payment program of $15/month for 5 properties and an additional $2 charge per additional property.</p>
-                                                <p>Each month may vary the cost, depending on how many properties you added this month.</p>
-                                                <p>By clicking, 'Authorize Payment', you agree to our Terms and Conditions and authorize SenRent to charge the account on file.
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Cancel</button>
-                                                <a href="{{ route('settings.billing.ach.authorize', ['id' => $bank_account->id ]) }}" class="btn btn-success"><i class="fas fa-check pr-2"></i> Authorize Payment</a>
-                                            </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-
-                                    @endif
                                 </div>
 							</span>
 						</li>

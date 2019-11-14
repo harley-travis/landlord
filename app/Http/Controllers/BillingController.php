@@ -313,6 +313,9 @@ class BillingController extends Controller {
                 ]
             );
 
+            // authorize / create subscription service
+            $this->createOwnerSubscription($bank_account->id);
+
             return redirect()
                 ->route('settings.billing.index', [
                     'bank_accounts' => $bank_accounts, 
@@ -542,7 +545,7 @@ class BillingController extends Controller {
         ]);
 
         return redirect()
-            ->route('home')
+            ->route('/')
             ->with('info', 'Your account was successfully deleted.');
     }
 

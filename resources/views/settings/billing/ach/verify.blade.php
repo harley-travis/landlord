@@ -56,10 +56,15 @@
 
                         <input type="hidden" name="id" value="{{ $id }}">
 
+
+                        <p>In order to process your payment, you need to authorize SenRent to charge this account on file. Authorizing payment will auto enroll you into our monthly payment program of $15/month for 5 properties and an additional $2 charge per additional property.</p>
+                        <p>Each month may vary the cost, depending on how many properties you added this month.</p>
+                        <p>By clicking, 'Verify and Authorize', you agree to our Terms and Conditions and authorize SenRent to charge the account on file.</p>
+
                         @csrf
 
                         <a href="{{ route('settings.billing.index') }}" class="btn btn-outline-secondary">Cancel</a>
-                        <button type="submit" class="btn btn-success shadow">Verify Acccout Now</button>
+                        <button type="submit" class="btn btn-success shadow"><i class="fas fa-check pr-2"></i> Verify and Authorize</button>
 
                     </form>
 
