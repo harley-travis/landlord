@@ -6,7 +6,7 @@
 
 Auth::routes();
 
-Route::get('/', 'HomeController@index')->name('home')->middleware('auth', 'trial');
+Route::get('/', 'HomeController@index')->name('dashboard.index')->middleware('auth', 'trial');
 
 
 Route::get('/dashboard', function () {
@@ -14,7 +14,7 @@ Route::get('/dashboard', function () {
 	if( Auth::user()->stripe_id === null) {
 		return view('settings.billing.trial.end');
 	} else {
-		return view('home');
+		return view('dashboard.index');
 	}
     
 });

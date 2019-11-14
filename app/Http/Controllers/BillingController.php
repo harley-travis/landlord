@@ -545,7 +545,7 @@ class BillingController extends Controller {
         ]);
 
         return redirect()
-            ->route('/')
+            ->route('dashboard.index')
             ->with('info', 'Your account was successfully deleted.');
     }
 
