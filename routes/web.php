@@ -285,6 +285,42 @@ Route::group(['prefix' => 'community', 'middleware' => ['auth', 'trial']], funct
 
 });
 
+// STORAGE RENTALS
+Route::group(['prefix' => 'storage-rentals', 'middleware' => ['auth', 'trial']], function() {
+  $c = 'StorageRentalController';
+
+  Route::get('', [
+    'uses' => "$c@index",
+    'as' => 'storage-rentals.index'
+  ]);
+
+  Route::get('create', [
+    'uses' => "$c@create",
+    'as' => 'storage-rentals.create'
+  ]);
+
+  Route::post('create', [
+    'uses' => "$c@store",
+    'as' => 'storage-rentals.add'
+  ]);
+
+  Route::get('edit/{id}', [
+    'uses'	=> "$c@edit",
+    'as'	=> 'storage-rentals.edit'
+  ]);
+
+  Route::post('edit', [
+    'uses'	=> "$c@update",
+    'as'	=> 'storage-rentals.update'
+  ]);
+  
+  Route::get('delete/{id}', [
+    'uses'	=> "$c@destroy",
+    'as'	=> 'storage-rentals.delete'
+  ]);
+
+});
+
 // BILLING
 Route::group(['prefix' => 'settings/billing', 'middleware' => ['auth']], function() {
   $c = 'BillingController';

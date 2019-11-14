@@ -57,10 +57,10 @@
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                     {{ Auth::user()->name }} <span class="caret"></span>
                                 </a>
-                                    
 
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
 
+                                    <a class="dropdown-item" href="{{ route('dashboard.index') }}">Dashboard</a>
 
                                 @if(Auth::user()->role === 0)
                                 <!-- TENANT -->
@@ -76,10 +76,18 @@
 
                                 @elseif(Auth::user()->role === 2)
                                 <!-- OFFICE MANAGER -->
+                                    
+                                    <!-- HOA -->
                                     @if( Auth::user()->product === 3 )
                                     <a class="dropdown-item" href="{{ route('community.index') }}">Communities</a>
-                                    @endif
                                     <a class="dropdown-item" href="{{ route('property.index') }}">Properties</a>
+                                    @endif
+
+                                    <!-- STORAGE RENTALS -->
+                                    @if( Auth::user()->product === 4 )
+                                    <a class="dropdown-item" href="{{ route('storage-rentals.index') }}">Rental Units</a>
+                                    @endif
+
                                     <a class="dropdown-item" href="{{ route('tenants.index') }}">Tenants</a>
                                     <a class="dropdown-item" href="{{ route('maintenance.index') }}">Maintenance</a>
                                     <a class="dropdown-item" href="{{ route('settings.billing.index') }}">Billing</a>
@@ -87,10 +95,18 @@
 
                                 @elseif(Auth::user()->role === 3)
                                 <!-- ADMIN -->
+
+                                    <!-- HOA -->
                                     @if( Auth::user()->product === 3 )
                                     <a class="dropdown-item" href="{{ route('community.index') }}">Communities</a>
-                                    @endif
                                     <a class="dropdown-item" href="{{ route('property.index') }}">Properties</a>
+                                    @endif
+
+                                    <!-- STORAGE RENTALS -->
+                                    @if( Auth::user()->product === 4 )
+                                    <a class="dropdown-item" href="{{ route('storage-rentals.index') }}">Rental Units</a>
+                                    @endif
+                                    
                                     <a class="dropdown-item" href="{{ route('tenants.index') }}">Tenants</a>
                                     <a class="dropdown-item" href="{{ route('maintenance.index') }}">Maintenance</a>
                                     <a class="dropdown-item" href="{{ route('settings.billing.index') }}">Billing</a>
@@ -100,6 +116,7 @@
                                 @elseif(Auth::user()->role === 4)
                                 <!-- SENRENT INTERNAL -->
                                     <a class="dropdown-item" href="{{ route('community.index') }}">Communities</a>
+                                    <a class="dropdown-item" href="{{ route('storage-rentals.index') }}">Rental Units</a>
                                     <a class="dropdown-item" href="{{ route('property.index') }}">Properties</a>
                                     <a class="dropdown-item" href="{{ route('tenants.index') }}">Tenants</a>
                                     <a class="dropdown-item" href="{{ route('maintenance.index') }}">Maintenance</a>
@@ -110,6 +127,7 @@
                                 @elseif(Auth::user()->role === 10)
                                 <!-- TRAVIS -->
                                     <a class="dropdown-item" href="{{ route('community.index') }}">Communities</a>
+                                    <a class="dropdown-item" href="{{ route('storage-rentals.index') }}">Rental Units</a>
                                     <a class="dropdown-item" href="{{ route('property.index') }}">Properties</a>
                                     <a class="dropdown-item" href="{{ route('tenants.index') }}">Tenants</a>
                                     <a class="dropdown-item" href="{{ route('maintenance.index') }}">Maintenance</a>

@@ -51,6 +51,7 @@
                                         <option value="1">Home Owner</option>
                                         <option value="2">Apartment Complex</option>
                                         <option value="3">HOA Association</option>
+                                        <option value="4">Storage Rentals</option>
                                     </select>
                                 </div>    
                             </div>
