@@ -99,7 +99,6 @@
                                     <!-- HOA -->
                                     @if( Auth::user()->product === 3 )
                                     <a class="dropdown-item" href="{{ route('community.index') }}">Communities</a>
-                                    <a class="dropdown-item" href="{{ route('property.index') }}">Properties</a>
                                     @endif
 
                                     <!-- STORAGE RENTALS -->
@@ -107,6 +106,7 @@
                                     <a class="dropdown-item" href="{{ route('storage-rentals.index') }}">Rental Units</a>
                                     @endif
                                     
+                                    <a class="dropdown-item" href="{{ route('property.index') }}">Properties</a>
                                     <a class="dropdown-item" href="{{ route('tenants.index') }}">Tenants</a>
                                     <a class="dropdown-item" href="{{ route('maintenance.index') }}">Maintenance</a>
                                     <a class="dropdown-item" href="{{ route('settings.billing.index') }}">Billing</a>
