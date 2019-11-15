@@ -280,7 +280,6 @@ class BillingController extends Controller {
     public function storeVerifyACH(Request $request) {
 
         $user = User::find(Auth::user()->id);
-
         $customer = \Stripe\Customer::retrieve($user->stripe_id);
 
         // get the existing bank account
@@ -313,6 +312,12 @@ class BillingController extends Controller {
                 ]
             );
 
+            /**
+             * this might not work becuase what if it returns and error?
+             * i did this assuming only successful attempts would work.
+             * 
+             * this is why it might be useful to have a separte verify button
+             */
             // authorize / create subscription service
             $this->createOwnerSubscription($bank_account->id);
 
@@ -583,50 +588,16 @@ class BillingController extends Controller {
           * IF THEY ADD A NEW PAYMENT, NEED TO MAKE SURE THEY'RE USING THIS PAYMENT
           */
 
+          /**
+           * when you verify and athorize, it charges immedialty. Which it should
+           * unless you're still in your 14 day trial. 
+           * not really a big bug though.
+           * 
+           * it's charge $0. need to see why it's not getting at least the $15 monthly fee
+           */
+
         $user = User::find(Auth::user()->id);
         $customer = \Stripe\Customer::retrieve($user->stripe_id);
-
-        $base = 1500;
-        $additionalProperties = 200;
-        $freeUnits = 5;
-        $usage = $this->calculateUsage();
-        $amount = '';
-
-        if( $usage <= $freeUnits ) {
-            $amount = $base;
-        } else {
-            $amount = ( $usage - $freeUnits ) * $additionalProperties + $base;
-        }
-
-        // $product = \Stripe\Product::create([
-        //     'name' => 'Monthly Home Owner Service',
-        //     'type' => 'service',
-        // ]);
-
-        $plan = \Stripe\Plan::create([
-            "nickname" => $user->name ." Home Owner Metered Monthly",
-            "product" => "prod_G7cAszLu1IUcgA", // hard coded. i think i just need one of these
-            "amount" => $amount,
-            "currency" => "usd",
-            "interval" => "month",
-            "usage_type" => "metered",
-            "trial_period_days" => 14,
-        ]);
-
-        /**
-         * this came from laravael docs might be useful to use
-         * https://laravel.com/docs/5.8/billing#without-payment-method-up-front
-         */
-        //$user->newSubscription('main', 'monthly')->create($paymentMethod);
-
-        $subscription = \Stripe\Subscription::create([
-            "customer" => $user->stripe_id,
-            "items" => [
-                [
-                    "plan" => $plan->id,
-                ],
-            ],
-        ]);
 
         $bank_accounts = \Stripe\Customer::allSources(
             $user->stripe_id,
@@ -643,12 +614,138 @@ class BillingController extends Controller {
             ]
         );
 
-        return redirect()
+        $base = 1500; // $15
+        $additionalProperties = 200; // $2
+        $freeUnits = 5;
+        $usage = $this->calculateUsage();
+        $amount = null;
+
+        if( $usage <= $freeUnits ) {
+            $amount = $base;
+        } else if($usage === 1) {
+            $amount = 0;
+        } else {
+            $amount = ( $usage - $freeUnits ) * $additionalProperties + $base;
+        }
+
+        try {
+
+            $plan = \Stripe\Plan::create([
+                "nickname" => $user->name ." Home Owner Metered Monthly",
+                "product" => "prod_G7cAszLu1IUcgA", // hard coded. i think i just need one of these
+                "amount" => $amount,
+                "billing_scheme" => "per_unit",
+                "currency" => "usd",
+                "interval" => "month",
+                "interval_count" => 1,
+                "trial_period_days" => 14,
+            ]);
+
+            $subscription = \Stripe\Subscription::create([
+                "customer" => $user->stripe_id,
+                "items" => [
+                    [
+                        "plan" => $plan->id,
+                    ],
+                ],
+            ]);
+
+            return redirect()
             ->route('settings.billing.index', [
                 'bank_accounts' => $bank_accounts, 
                 'customer' => $customer, 
                 'invoices' => $invoices,
             ])->with('info', 'You have successfully authorized this account. SenRent will bill you automatically each month. Check back here to see your billing history.');
+
+          } catch(\Stripe\Exception\CardException $e) {
+            
+            return redirect()
+                ->route('settings.billing.index', [
+                    'bank_accounts' => $bank_accounts, 
+                    'customer' => $customer, 
+                    'invoices' => $invoices,
+                ])->with('danger',  $e->getError()->message);
+
+          } catch (\Stripe\Exception\RateLimitException $e) {
+            
+            return redirect()
+                ->route('settings.billing.index', [
+                    'bank_accounts' => $bank_accounts, 
+                    'customer' => $customer, 
+                    'invoices' => $invoices,
+                ])->with('danger',  $e->getError()->message);
+
+          } catch (\Stripe\Exception\InvalidRequestException $e) {
+            
+            return redirect()
+                ->route('settings.billing.index', [
+                    'bank_accounts' => $bank_accounts, 
+                    'customer' => $customer, 
+                    'invoices' => $invoices,
+                ])->with('danger',  $e->getError()->message);
+
+          } catch (\Stripe\Exception\AuthenticationException $e) {
+            
+            return redirect()
+                ->route('settings.billing.index', [
+                    'bank_accounts' => $bank_accounts, 
+                    'customer' => $customer, 
+                    'invoices' => $invoices,
+                ])->with('danger',  $e->getError()->message);
+
+          } catch (\Stripe\Exception\ApiConnectionException $e) {
+            
+            return redirect()
+                ->route('settings.billing.index', [
+                    'bank_accounts' => $bank_accounts, 
+                    'customer' => $customer, 
+                    'invoices' => $invoices,
+                ])->with('danger',  $e->getError()->message);
+
+          } catch (\Stripe\Exception\ApiErrorException $e) {
+            
+            return redirect()
+                ->route('settings.billing.index', [
+                    'bank_accounts' => $bank_accounts, 
+                    'customer' => $customer, 
+                    'invoices' => $invoices,
+                ])->with('danger',  $e->getError()->message);
+
+          } catch (Exception $e) {
+            
+            return redirect()
+                ->route('settings.billing.index', [
+                    'bank_accounts' => $bank_accounts, 
+                    'customer' => $customer, 
+                    'invoices' => $invoices,
+                ])->with('danger',  $e->getError()->message);
+
+          }
+  
+
+
+        // $product = \Stripe\Product::create([
+        //     'name' => 'Monthly Home Owner Service',
+        //     'type' => 'service',
+        // ]);
+
+        
+
+        /**
+         * this came from laravael docs might be useful to use
+         * https://laravel.com/docs/5.8/billing#without-payment-method-up-front
+         */
+        //$user->newSubscription('main', 'monthly')->create($paymentMethod);
+
+        // $subscription = \Stripe\Subscription::create([
+        //     "customer" => $user->stripe_id,
+        //     "items" => [
+        //         [
+        //             "plan" => $plan->id,
+        //         ],
+        //     ],
+        // ]);
+
 
     }
 
