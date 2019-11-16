@@ -83,11 +83,11 @@
                             </tbody>
                         </table>
                     </div>
+                    @endif
 
                     {{ $requests->links() }}
 
                 </div>
-                @endif
             </div>
         </div>
     </div>
