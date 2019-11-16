@@ -6,6 +6,7 @@ use App\User;
 use Auth;
 use DB;
 use Carbon\Carbon;
+use Stripe_Error;
 use Illuminate\Http\Request;
 
 class BillingController extends Controller {
@@ -319,7 +320,7 @@ class BillingController extends Controller {
              * this is why it might be useful to have a separte verify button
              */
             // authorize / create subscription service
-            $this->createOwnerSubscription($bank_account->id);
+            //$this->createOwnerSubscription($bank_account->id);
 
             return redirect()
                 ->route('settings.billing.index', [
@@ -651,11 +652,11 @@ class BillingController extends Controller {
             ]);
 
             return redirect()
-            ->route('settings.billing.index', [
-                'bank_accounts' => $bank_accounts, 
-                'customer' => $customer, 
-                'invoices' => $invoices,
-            ])->with('info', 'You have successfully authorized this account. SenRent will bill you automatically each month. Check back here to see your billing history.');
+                ->route('settings.billing.index', [
+                    'bank_accounts' => $bank_accounts, 
+                    'customer' => $customer, 
+                    'invoices' => $invoices,
+                ])->with('info', 'You have successfully authorized this account. SenRent will bill you automatically each month. Check back here to see your billing history.');
 
           } catch(\Stripe\Exception\CardException $e) {
             

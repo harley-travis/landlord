@@ -95,24 +95,11 @@
                                     <a href="{{ route('settings.billing.ach.verify', ['id' => $bank_account->id ]) }}" class="btn btn-success"><i class="fas fa-user-check pr-2"></i> Verify ACH Account</a>
                                     @endif
 
-<!-- 
-
-    LEFT OFF HERE 
-    FOR SOME REAONS THE AUTHORIZE PAYMENT IS NOT SHOWING UP ANY MORE
-    I NEED TO FIND A WAY TO SHOW THAT AGAIN
-    I SEEMS THAT PENDING STATUS IS NO LONGER AN OPTION?
-    PERHAPS IT'S BECAUSE IT ONLY WORKS ON THE FIRST ACH ACCOUNT. 
-    IF YOU ADD ANOTHER ONE I DON'T THINK TAHT IT SHOWS IT
-
-    OKAY SO IT'S NOT BECAUSE THERE ARE MULTIPLE ACCOUNTS. IT JUST DOESN'T SHOW PENDING ANYMORE
-    I HAVE CHANGED THE SET DEFAULT FUNCTION TO NOW POP UP AND ASK TO AUTHORIZE
-    I NEED TO SET UP THAT FUNCTINALITY
-
-    I NEED TO FIGURE OUT A BETTER WAY TO ASK TO AUTHORIZE THE ACCOUNT
-    MAYBE I REDIRECT AFTER THE ACCOUNT HAS BEEN VERIFED TO THE AUTHORIZE PAGE
-
-    IF THE SET A NEW ACCOUNT AS DEFAULT, THEN THE POP WILL ALSO AUTHORIZE THE ACCOUNT
--->
+                                    @if( $invoices->isEmpty() && $bank_account->status === "verified")
+                                    <!-- NEED TO LOCK THE APP IF THEY DON'T AUTHORIZE THIS PAYMENT AFTER TRIAL PERID. PULL THE TRIAL PERID FROM THE DB -->
+                                    <!-- NEED TO PULL UP A MODEL TO TELL THEM THAT WE ARE GOING TO CHARGE THEIR CARD -->
+                                     <a href="{{ route('settings.billing.ach.authorize', ['id' => $bank_account->id ]) }}" class="btn btn-success text-white"><i class="fas fa-user-check pr-2"></i> Authorize ACH Account</a>
+                                    @endif
 
                                 </div>
 							</span>
