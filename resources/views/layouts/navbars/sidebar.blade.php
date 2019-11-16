@@ -43,7 +43,7 @@
                     </a>
                 </div>
             </li>
-        </ul>A
+        </ul>
         <!-- Collapse -->
         <div class="collapse navbar-collapse" id="sidenav-collapse-main">
             <!-- Collapse header -->
@@ -51,7 +51,7 @@
                 <div class="row">
                     <div class="col-6 collapse-brand">
                         <a href="{{ route('home') }}">
-                            <img src="{{url('/img/logo-white.png')}}" alt="senrent logo" />
+                            <img src="{{url('/img/logo.png')}}" alt="senrent logo" style="width:100%;height:auto;" />
                         </a>
                     </div>
                     <div class="col-6 collapse-close">
@@ -62,8 +62,8 @@
                     </div>
                 </div>
             </div>
-            <!-- Form -->
-            <form class="mt-4 mb-3 d-md-none">
+            <!-- SEARCH -->
+            <!-- <form class="mt-4 mb-3 d-md-none">
                 <div class="input-group input-group-rounded input-group-merge">
                     <input type="search" class="form-control form-control-rounded form-control-prepended" placeholder="{{ __('Search') }}" aria-label="Search">
                     <div class="input-group-prepend">
@@ -72,7 +72,7 @@
                         </div>
                     </div>
                 </div>
-            </form>
+            </form> -->
             <!-- Navigation -->
             <ul class="navbar-nav">
                 <li class="nav-item">
