@@ -23,6 +23,8 @@
         <!-- Argon CSS -->
         <link type="text/css" href="{{ asset('argon') }}/css/argon.css?v=1.0.0" rel="stylesheet">
 
+        <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+
         <script src="https://js.stripe.com/v3/"></script>
     </head>
     <body class="{{ $class ?? '' }}">
