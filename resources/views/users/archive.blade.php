@@ -63,13 +63,14 @@
                             </tbody>
                         </table>
                     </div>
-
+                    @endif
+                    
                     {{ $users->links() }}
 
                 </div>
             </div>
         </div>
-        @endif
+        
     </div>
 
     @include('layouts.footers.auth')

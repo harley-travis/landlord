@@ -61,10 +61,11 @@
                             </tbody>
                         </table>
                     </div>
+                    @endif
+                    
                     {{ $feedbacks->links() }}
 
                 </div>
-            @endif
             </div>
         </div>
     </div>
