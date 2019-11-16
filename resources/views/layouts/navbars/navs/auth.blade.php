@@ -17,7 +17,7 @@
         <!-- User -->
         <ul class="navbar-nav align-items-center d-none d-md-flex">
             <li class="nav-item dropdown">
-                <a class="nav-link pr-0" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <a class="nav-link pr-0  no-link-hover" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <div class="media align-items-center">
                         <span class="avatar avatar-sm rounded-circle">
                             <img alt="Image placeholder" src="{{ asset('argon') }}/img/theme/team-4-800x800.jpg">
