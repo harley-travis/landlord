@@ -1,17 +1,24 @@
-@extends('layouts.app')
+@extends('layouts.app', ['page_title' => "Add Tenant"])
 
 @section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-12">
-            <div class="card shadow">
-                <div class="card-header">Add New Tenant</div>
+@include('layouts.headers.cards')
+
+<div class="container-fluid mt--9">
+    <div class="row">
+        <div class="col">
+            <div class="card bg-secondary shadow">
+                <div class="card-header border-0">
+                    <div class="row align-items-center">
+                        <div class="col-8">
+                            <h3 class="mb-0">Add New Tenant</h3>
+                        </div>
+                        <div class="col-4 text-right">
+                            
+                        </div>
+                    </div>
+                </div>
 
                 <div class="card-body">
-
-                    <div class="mb-3 text-right">
-                        <a href="{{ route('tenants.index') }}" class="btn btn-info text-white shadow">Go Back</a>
-                    </div>
                     
                     <p>When you create a tenant, they will get an email with their login credentials</p>
 
@@ -83,7 +90,6 @@
                             <label for="property">Property</label>
                             <select id="property_id" name="property_id" class="form-control">
                                 <option>Select Property</option>
-                                <option value="">No Property</option>
                                 @foreach($properties as $property)
                                 <option value="{{ $property->id }}">{{ $property->address_1 }} {{ $property->address_2 }}</option>
                                 @endforeach
@@ -100,5 +106,7 @@
             </div>
         </div>
     </div>
+
+    @include('layouts.footers.auth')
 </div>
 @endsection

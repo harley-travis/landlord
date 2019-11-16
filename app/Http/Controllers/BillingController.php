@@ -551,8 +551,8 @@ class BillingController extends Controller {
         ]);
 
         return redirect()
-            ->route('dashboard.index')
-            ->with('info', 'Your account was successfully deleted.');
+            ->route('home')
+            ->with('info', 'Your account was successfully created.');
     }
 
     /**

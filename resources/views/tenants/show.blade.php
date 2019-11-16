@@ -1,24 +1,31 @@
-@extends('layouts.app')
+@extends('layouts.app', ['page_title' => {{ $tenant->name }}])
 
 @section('content')
-<div class="container">
-    @if(Session::has('info'))
-        <div class="alert alert-success" role="alert">
-            <h4 class="alert-heading">Success!</h4>
-            <p>{{ Session::get('info') }}</p>
-        </div>
-    @endif
-    <div class="row justify-content-center">
-        <div class="col-md-12">
-            <div class="card shadow">
-                <div class="card-header">{{ $tenant->name }}</div>
+@include('layouts.headers.cards')
+
+<div class="container-fluid mt--9">
+    <div class="row">
+        <div class="col">
+            <div class="card bg-secondary shadow">
+                <div class="card-header border-0">
+                    <div class="row align-items-center">
+                        <div class="col-8">
+                            <h3 class="mb-0">{{ $tenant->name }}</h3>
+                        </div>
+                        <div class="col-4 text-right">
+                        </div>
+                    </div>
+                </div>
 
                 <div class="card-body">
 
-                    <div class="mb-3 text-right">
-                        <a href="{{ route('tenants.index') }}" class="btn btn-info text-white shadow">Go Back</a>
+                @if(Session::has('info'))
+                    <div class="alert alert-success" role="alert">
+                        <h4 class="alert-heading">Success!</h4>
+                        <p>{{ Session::get('info') }}</p>
                     </div>
-
+                @endif
+                
                     <table class="table">
                         <tr>
                             <td>Phone Number</td>
@@ -77,5 +84,7 @@
             </div>
         </div>
     </div>
+
+    @include('layouts.footers.auth')
 </div>
 @endsection

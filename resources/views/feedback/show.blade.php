@@ -1,13 +1,22 @@
-@extends('layouts.app')
+@extends('layouts.app', ['page_title' => "Feedback Request"])
 
 @section('content')
-<div class="container">
+@include('layouts.headers.cards')
 
-    <div class="row justify-content-center">
-        <div class="col-md-12">
-            <div class="card shadow">
-                <div class="card-header">Feedback Request</div>
-
+<div class="container-fluid mt--9">
+    <div class="row">
+        <div class="col">
+            <div class="card bg-secondary shadow">
+                <div class="card-header border-0">
+                    <div class="row align-items-center">
+                        <div class="col-8">
+                            <h3 class="mb-0">Feedback Request</h3>
+                        </div>
+                        <div class="col-4 text-right">
+                            
+                        </div>
+                    </div>
+                </div>
                 <div class="card-body">
 
                 @if(Session::has('info'))
@@ -17,20 +26,16 @@
                     </div>
                 @endif
 
-                    <div class="mb-3 text-right">
-                        <a href="{{ route('feedback.index') }}" class="btn btn-info text-white">Go Back</a>
-                    </div>
-
                     <h3>{{ $feedback->subject }}</h3>
                     <small>
                         @if($feedback->status === 0)
-                            Pending
+                            <span class="text-warning">Pending</span>
                         @elseif($feedback->status === 1) 
-                            Under Review
+                            <span class="text-info">Under Review</span>
                         @elseif($feedback->status === 2) 
-                            In Progress
+                            <span class="text-primary">In Progress</span>
                         @elseif($feedback->status === 3) 
-                            Completed
+                            <span class="text-success">Completed</span>
                         @endif
                     </small> 
                     <br>
@@ -57,11 +62,12 @@
                         <button type="submit" class="btn btn-primary shadow">Update Maintenance Request</button>
                     </form>
 
-
                 </div>
 
             </div>
         </div>
     </div>
+
+    @include('layouts.footers.auth')
 </div>
 @endsection

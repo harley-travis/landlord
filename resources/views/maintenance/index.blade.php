@@ -1,13 +1,22 @@
-@extends('layouts.app')
+@extends('layouts.app', ['page_title' => "Maintenance Requests"])
 
 @section('content')
-<div class="container">
+@include('layouts.headers.cards')
 
-    <div class="row justify-content-center">
-        <div class="col-md-12">
-            <div class="card shadow">
-                <div class="card-header">Maintenance Requests</div>
-
+<div class="container-fluid mt--9">
+    <div class="row">
+        <div class="col">
+            <div class="card bg-secondary shadow">
+                <div class="card-header border-0">
+                    <div class="row align-items-center">
+                        <div class="col-8">
+                            <h3 class="mb-0">Maintenance Requests</h3>
+                        </div>
+                        <div class="col-4 text-right">
+                            <a href="{{ route('maintenance.create') }}" class="btn btn-success shadow"><i class="fas fa-plus-circle pr-2"></i> Create Ticket</a>
+                        </div>
+                    </div>
+                </div>
                 <div class="card-body">
 
                 @if(Session::has('info'))
@@ -27,59 +36,62 @@
                     <div class="pt-3 pb-3"></div>
 
                     <div class="text-center">
-                        <a href="{{ route('maintenance.create') }}" class="btn btn-success">Add Maintenance Request</a>
+                        <a href="{{ route('maintenance.create') }}" class="btn btn-success"><i class="fas fa-plus-circle pr-2"></i> Create Ticket</a>
                     </div>
 
                 @else
 
-                    <div class="mb-3 text-right">
-                        <a href="{{ route('maintenance.archived') }}" class="btn btn-link">View Archived Requests</a>
-                        <a href="{{ route('maintenance.create') }}" class="btn btn-success">Add Maintenance Request</a>
+                    <div class="table-responsive">
+                        <table class="table align-items-center table-flush table-hover">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th>Subject</th>
+                                    <th>Description</th>
+                                    <th>Emergency</th>
+                                    <th>Date Submitted</th>
+                                    <th>Status</th>
+                                    <th>View</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($requests as $request)
+                                <tr>
+                                    <td>{{ $request->subject }}</td>
+                                    <td>{{ $request->description }}</td>
+                                    <td>
+                                        @if($request->emergency === 0)
+                                            No
+                                        @else 
+                                            <span class="text-danger"><strong>Yes</strong></span>
+                                        @endif
+                                    </td>
+                                    <td>{{ $request->created_at }}</td>
+                                    <td>
+                                        @if($request->status === 0)
+                                            <span class="text-danger">Pending</span>
+                                        @elseif($request->status === 1) 
+                                            <span class="text-primary">Under Review</span>
+                                        @elseif($request->status === 2) 
+                                            <span class="text-success">In Progress</span>
+                                        @elseif($request->status === 3) 
+                                            <span class="text-success"><strong>Completed</strong></span>
+                                        @endif
+                                    </td>
+                                    <td><a href="{{ route('maintenance.show', ['id' => $request->id ]) }}" class="btn btn-info text-white">View</a></td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
                     </div>
 
-                    <table class="table table-hover">
-                        <tr>
-                            <th>Subject</th>
-                            <th>Description</th>
-                            <th>Emergency</th>
-                            <th>Date Submitted</th>
-                            <th>Status</th>
-                            <th>View</th>
-                        </tr>
-                        @foreach($requests as $request)
-                        <tr>
-                            <td>{{ $request->subject }}</td>
-                            <td>{{ $request->description }}</td>
-                            <td>
-                                @if($request->emergency === 0)
-                                    No
-                                @else 
-                                    <span class="text-danger"><strong>Yes</strong></span>
-                                @endif
-                            </td>
-                            <td>{{ $request->created_at }}</td>
-                            <td>
-                                @if($request->status === 0)
-                                    <span class="text-danger">Pending</span>
-                                @elseif($request->status === 1) 
-                                    <span class="text-primary">Under Review</span>
-                                @elseif($request->status === 2) 
-                                    <span class="text-success">In Progress</span>
-                                @elseif($request->status === 3) 
-                                    <span class="text-success"><strong>Completed</strong></span>
-                                @endif
-                            </td>
-                            <td><a href="{{ route('maintenance.show', ['id' => $request->id ]) }}" class="btn btn-info text-white">View</a></td>
-                        </tr>
-                        @endforeach
-
-                    </table>
-
                     {{ $requests->links() }}
+
                 </div>
                 @endif
             </div>
         </div>
     </div>
+
+    @include('layouts.footers.auth')
 </div>
 @endsection

@@ -1,13 +1,24 @@
-@extends('layouts.app')
+@extends('layouts.app', ['page_title' => "Customer Feedback"])
 
 @section('content')
-<div class="container">
+@include('layouts.headers.cards')
 
-    <div class="row justify-content-center">
-        <div class="col-md-12">
+<div class="container-fluid mt--9">
+
+    <div class="row">
+        <div class="col">
          @if(Auth::user()->role >= 4)
             <div class="card shadow">
-                <div class="card-header">Customer Feedback</div>
+                <div class="card-header border-0">
+                    <div class="row align-items-center">
+                        <div class="col-8">
+                            <h3 class="mb-0">View Customer Feedback</h3>
+                        </div>
+                        <div class="col-4 text-right">
+                            
+                        </div>
+                    </div>
+                </div>
                 <div class="card-body">   
 
                 @if(Session::has('info'))
@@ -17,40 +28,41 @@
                     </div>
                 @endif
 
-                    <div class="mb-3 text-right">
-                        <a href="{{ route('feedback.archived') }}" class="btn btn-link">View Archived Feedback</a>
+                    <div class="table-responsive">
+                        <table class="table align-items-center table-flush table-hover">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th>Submitted By</th>
+                                    <th>Subject</th>
+                                    <th>Description</th>
+                                    <th>Status</th>
+                                    <th>View Feedback</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($feedbacks as $feedback)
+
+                                <tr>
+                                    <td>{{ $feedback->name }}</td>
+                                    <td>{{ $feedback->subject }}</td>
+                                    <td>{{ $feedback->description }}</td>
+                                    <td>
+                                        @if($feedback->status === 0)
+                                            Pending
+                                        @elseif($feedback->status === 1) 
+                                            Under Review
+                                        @elseif($feedback->status === 2) 
+                                            In Progress
+                                        @elseif($feedback->status === 3) 
+                                            Completed
+                                        @endif
+                                    </td>
+                                    <td><a href="{{ route('feedback.show', ['id' => $feedback->id ]) }}" class="btn btn-info text-uppercase">View</a></td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
                     </div>
-
-                    <table class="table table-hover">
-                        <tr>
-                            <th>Submitted By</th>
-                            <th>Subject</th>
-                            <th>Description</th>
-                            <th>Status</th>
-                            <th>View Feedback</th>
-                        </tr>
-                        @foreach($feedbacks as $feedback)
-
-                        <tr>
-                            <td>{{ $feedback->name }}</td>
-                            <td>{{ $feedback->subject }}</td>
-                            <td>{{ $feedback->description }}</td>
-                            <td>
-                                @if($feedback->status === 0)
-                                    Pending
-                                @elseif($feedback->status === 1) 
-                                    Under Review
-                                @elseif($feedback->status === 2) 
-                                    In Progress
-                                @elseif($feedback->status === 3) 
-                                    Completed
-                                @endif
-                            </td>
-                            <td><a href="{{ route('feedback.show', ['id' => $feedback->id ]) }}" class="btn btn-info text-white">View</a></td>
-                        </tr>
-                        @endforeach
-
-                    </table>
 
                     {{ $feedbacks->links() }}
                 </div>
@@ -66,7 +78,7 @@
 
         </div>
     </div>
+
+    @include('layouts.footers.auth')
 </div>
-
-
 @endsection

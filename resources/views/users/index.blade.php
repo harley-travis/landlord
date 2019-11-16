@@ -1,13 +1,22 @@
-@extends('layouts.app')
+@extends('layouts.app', ['page_title' => "Users Management"])
 
 @section('content')
-<div class="container">
+@include('layouts.headers.cards')
 
-    <div class="row justify-content-center">
-        <div class="col-md-12">
-            <div class="card shadow">
-                <div class="card-header">Users Management</div>
-
+<div class="container-fluid mt--9">
+    <div class="row">
+        <div class="col">
+            <div class="card bg-secondary shadow">
+                <div class="card-header border-0">
+                    <div class="row align-items-center">
+                        <div class="col-8">
+                            <h3 class="mb-0">Users Management</h3>
+                        </div>
+                        <div class="col-4 text-right">
+                            <a href="{{ route('users.create') }}" class="btn btn-success shadow"><i class="fas fa-plus-circle pr-2"></i> Add User</a>
+                        </div>
+                    </div>
+                </div>
                 <div class="card-body">
 
                 @if(Session::has('info'))
@@ -17,49 +26,51 @@
                     </div>
                 @endif
 
-                    <div class="mb-3 text-right">
-                        <a href="{{ route('users.archived') }}" class="btn btn-link">View Archived Users</a>
-                        <a href="{{ route('users.create') }}" class="btn btn-success shadow">Add User</a>
+                    <div class="table-responsive">
+                        <table class="table align-items-center table-flush table-hover">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Role</th>
+                                    <td>Edit</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($users as $user)
+                            
+                                    <tr>
+                                        <td>{{ $user->name }}</td>
+                                        <td>{{ $user->email }}</td>
+                                        <td>
+                                        
+                                            @if($user->role == 1)
+                                                Maintenance Worker
+                                            @elseif($user->role == 2)
+                                                Office Manager
+                                            @elseif($user->role == 3)
+                                                Admin
+                                            @elseif($user->role == 4)
+                                                Super Admin
+                                            @elseif($user->role == 10)
+                                                The Master
+                                            @endif
+                                        
+                                        </td>
+                                        <td><a href="{{ route('users.edit', ['id' => $user->id ]) }}" class="btn btn-info shadow">Edit Tenant</a></td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
                     </div>
 
-                    <table class="table table-hover">
-                        <tr>
-                            <th>Name</th>
-                            <th>Email</th>
-                            <th>Role</th>
-                            <td>Edit</th>
-                        </tr>
-
-                        @foreach($users as $user)
-                       
-                            <tr>
-                                <td>{{ $user->name }}</td>
-                                <td>{{ $user->email }}</td>
-                                <td>
-                                
-                                    @if($user->role == 1)
-                                        Maintenance Worker
-                                    @elseif($user->role == 2)
-                                        Office Manager
-                                    @elseif($user->role == 3)
-                                        Admin
-                                    @elseif($user->role == 4)
-                                        Super Admin
-                                    @elseif($user->role == 10)
-                                        The Master
-                                    @endif
-                                
-                                </td>
-                                <td><a href="{{ route('users.edit', ['id' => $user->id ]) }}" class="btn btn-info text-white shadow">Edit Tenant</a></td>
-                            </tr>
-                         
-                        @endforeach
-                      
-                    </table>
                     {{ $users->links() }}
+                
                 </div>
             </div>
         </div>
     </div>
+
+    @include('layouts.footers.auth')
 </div>
 @endsection

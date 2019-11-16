@@ -35,7 +35,7 @@ return [
     |--------------------------------------------------------------------------
     | SMTP Host Port
     |--------------------------------------------------------------------------
-    | 
+    |
     | This is the SMTP port used by your application to deliver e-mails to
     | users of the application. Like the host we have set this value to
     | stay compatible with the Mailgun e-mail application by default.
@@ -56,7 +56,7 @@ return [
     */
 
     'from' => [
-        'address' => env('MAIL_FROM_ADDRESS', 'noreply@senrent.com'),
+        'address' => env('MAIL_FROM_ADDRESS', 'hello@senrent.com'),
         'name' => env('MAIL_FROM_NAME', 'Example'),
     ],
 

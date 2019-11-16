@@ -7,8 +7,8 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Laravel\Cashier\Billable;
 
-class User extends Authenticatable {
-
+class User extends Authenticatable
+{
     use Notifiable, Billable;
 
     /**
@@ -51,5 +51,4 @@ class User extends Authenticatable {
     public function company() {
         return $this->belongsTo('App\Company');
     }
-
 }

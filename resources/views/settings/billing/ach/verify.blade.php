@@ -1,12 +1,22 @@
-@extends('layouts.app')
+@extends('layouts.app', ['page_title' => "Verify ACH Account"])
 
 @section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-12">
-            <div class="card shadow">
-                <div class="card-header">Verify ACH Account</div>
+@include('layouts.headers.cards')
 
+<div class="container-fluid mt--9">
+    <div class="row">
+        <div class="col">
+            <div class="card bg-secondary shadow">
+                <div class="card-header border-0">
+                    <div class="row align-items-center">
+                        <div class="col-8">
+                            <h3 class="mb-0">Verify ACH Account</h3>
+                        </div>
+                        <div class="col-4 text-right">
+                           
+                        </div>
+                    </div>
+                </div>
                 <div class="card-body">
                 @if (session('info'))
                     <div class="alert alert-success shadow-sm" role="alert">
@@ -56,11 +66,12 @@
 
                         <input type="hidden" name="id" value="{{ $id }}">
 
-
+                        <br>
                         <p>In order to process your payment, you need to authorize SenRent to charge this account on file. Authorizing payment will auto enroll you into our monthly payment program of $15/month for 5 properties and an additional $2 charge per additional property.</p>
                         <p>Each month may vary the cost, depending on how many properties you added this month.</p>
                         <p>By clicking, 'Verify and Authorize', you agree to our Terms and Conditions and authorize SenRent to charge the account on file.</p>
-
+                        <br>
+                        
                         @csrf
 
                         <a href="{{ route('settings.billing.index') }}" class="btn btn-outline-secondary">Cancel</a>
@@ -73,5 +84,7 @@
             </div>
         </div>
     </div>
+
+    @include('layouts.footers.auth')
 </div>
 @endsection

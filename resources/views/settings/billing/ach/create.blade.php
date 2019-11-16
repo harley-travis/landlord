@@ -1,11 +1,22 @@
-@extends('layouts.app')
+@extends('layouts.app', ['page_title' => "Add ACH Account"])
 
 @section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-12">
-            <div class="card shadow">
-                <div class="card-header">Add New ACH Account</div>
+@include('layouts.headers.cards')
+
+<div class="container-fluid mt--9">
+    <div class="row">
+        <div class="col">
+            <div class="card bg-secondary shadow">
+                <div class="card-header border-0">
+                    <div class="row align-items-center">
+                        <div class="col-8">
+                            <h3 class="mb-0">Add ACH Account</h3>
+                        </div>
+                        <div class="col-4 text-right">
+                           
+                        </div>
+                    </div>
+                </div>
 
                 <div class="card-body">
                     @if (session('status'))
@@ -93,8 +104,7 @@
 
 						@csrf
 
-						<br>
-						<p>By clicking 'Add ACH' you authorize SenRent to charge you for your monthly payment</p>
+						<br><p>By clicking 'Add ACH' you authorize SenRent to charge you for your monthly payment</p><br>
 
                         <div class="mt-3">
 						    <button class="btn btn-primary shadow">Add ACH</button>
@@ -105,5 +115,7 @@
             </div>
         </div>
     </div>
+
+	@include('layouts.footers.auth')
 </div>
 @endsection

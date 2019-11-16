@@ -1,13 +1,21 @@
-@extends('layouts.app')
+@extends('layouts.app', ['page_title' => "Maintenance Request"])
 
 @section('content')
-<div class="container">
+@include('layouts.headers.cards')
 
-    <div class="row justify-content-center">
-        <div class="col-md-12">
-            <div class="card shadow">
-                <div class="card-header">Maintenance Request</div>
-
+<div class="container-fluid mt--9">
+    <div class="row">
+        <div class="col">
+            <div class="card bg-secondary shadow">
+                <div class="card-header border-0">
+                    <div class="row align-items-center">
+                        <div class="col-8">
+                            <h3 class="mb-0">Maintenance Request</h3>
+                        </div>
+                        <div class="col-4 text-right">
+                        </div>
+                    </div>
+                </div>
                 <div class="card-body">
 
                 @if(Session::has('info'))
@@ -31,8 +39,6 @@
                             @endif
 
                         @endif
-
-                        <a href="{{ route('maintenance.index') }}" class="btn btn-info text-white">Go Back</a>
 
                     </div>
 
@@ -128,5 +134,7 @@
             </div>
         </div>
     </div>
+
+    @include('layouts.footers.auth')
 </div>
 @endsection

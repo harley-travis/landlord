@@ -1,18 +1,23 @@
-@extends('layouts.app')
+@extends('layouts.app', ['page_title' => "Edit $user->name"])
 
 @section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-12">
-            <div class="card shadow">
-                <div class="card-header">Edit User</div>
+@include('layouts.headers.cards')
+
+<div class="container-fluid mt--9">
+    <div class="row">
+        <div class="col">
+            <div class="card bg-secondary shadow">
+                <div class="card-header border-0">
+                    <div class="row align-items-center">
+                        <div class="col-8">
+                            <h3 class="mb-0">Edit {{ $user->name }}</h3>
+                        </div>
+                        <div class="col-4 text-right">
+                        </div>
+                    </div>
+                </div>
 
                 <div class="card-body">
-
-                    <div class="mb-3 text-right">
-                        <a href="{{ route('users.index') }}" class="btn btn-info text-white">Go Back</a>
-                    </div>
-                    
                     <form action="{{ route('users.update') }}" method="post">
 
                         <div class="form-group">
@@ -87,5 +92,7 @@
             </div>
         </div>
     </div>
+
+    @include('layouts.footers.auth')
 </div>
 @endsection

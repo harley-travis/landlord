@@ -1,18 +1,23 @@
-@extends('layouts.app')
+@extends('layouts.app', ['page_title' => "Edit Property"])
 
 @section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-12">
-            <div class="card shadow">
-                <div class="card-header">Edit Property</div>
+@include('layouts.headers.cards')
 
-                <div class="card-body">
-
-                    <div class="mb-3 text-right">
-                        <a href="{{ route('property.index') }}" class="btn btn-info text-white">Go Back</a>
+<div class="container-fluid mt--9">
+    <div class="row">
+        <div class="col">
+            <div class="card bg-secondary shadow">
+                <div class="card-header border-0">
+                    <div class="row align-items-center">
+                        <div class="col-8">
+                            <h3 class="mb-0">Edit Property</h3>
+                        </div>
+                        <div class="col-4 text-right">
+                        </div>
                     </div>
-                    
+                </div>
+
+                <div class="card-body">                    
                     <form action="{{ route('property.update') }}" method="post">
 
                         <div class="accordion" id="accordionExample">
@@ -81,7 +86,7 @@
 
                                             @if($property->occupied === 0)
 
-                                            <div class="form-group">
+                                            <!-- <div class="form-group">
                                                 <label for="occupied">Vacancy</label>
                                                 <div class="form-check form-check-inline">
                                                     <input class="form-check-input" type="radio" name="occupied" id="occupied_yes" value="{{$property->occupied}}" checked>
@@ -91,11 +96,23 @@
                                                     <input class="form-check-input" type="radio" name="occupied" id="occupied_no" value="1">
                                                     <label class="form-check-label" for="occupied_no">Yes</label>
                                                 </div>
+                                            </div> -->
+
+                                            <div class="form-group">
+                                                <label for="occupied">Vacancy</label>
+                                                <div class="custom-control custom-radio mb-3">
+                                                    <input name="occupied" class="custom-control-input" id="occupied_yes" type="radio" value="{{$property->occupied}}">
+                                                    <label class="custom-control-label" for="occupied_yes">No</label>
+                                                </div>
+                                                <div class="custom-control custom-radio mb-3">
+                                                    <input name="occupied" class="custom-control-input" id="occupied_no" checked="" type="radio"  value="1">
+                                                    <label class="custom-control-label" for="occupied_no">Yes</label>
+                                                </div>
                                             </div>
 
                                             @elseif($property->occupied === 1)
 
-                                            <div class="form-group">
+                                            <!-- <div class="form-group">
                                                 <label for="vacany">Vacancy</label>
                                                 <div class="form-check form-check-inline">
                                                     <input class="form-check-input" type="radio" name="occupied" id="occupied_yes" value="0">
@@ -105,13 +122,25 @@
                                                     <input class="form-check-input" type="radio" name="occupied" id="occupied_no" value="{{$property->occupied}}" checked>
                                                     <label class="form-check-label" for="occupied_no">Yes</label>
                                                 </div>
+                                            </div> -->
+
+                                            <div class="form-group">
+                                                <label for="occupied">Vacancy</label>
+                                                <div class="custom-control custom-radio mb-3">
+                                                    <input name="occupied" class="custom-control-input" id="occupied_yes" type="radio" value="0">
+                                                    <label class="custom-control-label" for="occupied_yes">No</label>
+                                                </div>
+                                                <div class="custom-control custom-radio mb-3">
+                                                    <input name="occupied" class="custom-control-input" id="occupied_no" checked="" type="radio"  value="value="{{$property->occupied}}"">
+                                                    <label class="custom-control-label" for="occupied_no">Yes</label>
+                                                </div>
                                             </div>
 
                                             @endif
 
                                             @if($property->pet === 0)
 
-                                            <div class="form-group">
+                                            <!-- <div class="form-group">
                                                 <label for="pet">Pets Allowed</label>
                                                 <div class="form-check form-check-inline">
                                                     <input class="form-check-input" type="radio" name="pet" id="pet_yes" value="{{$property->pet}}" checked>
@@ -121,10 +150,22 @@
                                                     <input class="form-check-input" type="radio" name="pet" id="pet_no" value="1">
                                                     <label class="form-check-label" for="pet_yes">Yes</label>
                                                 </div>
+                                            </div> -->
+
+                                            <div class="form-group">
+                                                <label for="pet">Pets Allowed</label>
+                                                <div class="custom-control custom-radio mb-3">
+                                                    <input name="pet" class="custom-control-input" id="pet_yes" type="radio" value="{{$property->pet}}">
+                                                    <label class="custom-control-label" for="pet_yes">No</label>
+                                                </div>
+                                                <div class="custom-control custom-radio mb-3">
+                                                    <input name="pet" class="custom-control-input" id="pet_no" checked="" type="radio"  value="1">
+                                                    <label class="custom-control-label" for="pet_no">Yes</label>
+                                                </div>
                                             </div>
 
                                             @elseif($property->pet === 1)
-
+<!-- 
                                             <div class="form-group">
                                                 <label for="pet">Pets Allowed</label>
                                                 <div class="form-check form-check-inline">
@@ -134,6 +175,18 @@
                                                 <div class="form-check form-check-inline">
                                                     <input class="form-check-input" type="radio" name="pet" id="pet_no" value="{{$property->pet}}" checked>
                                                     <label class="form-check-label" for="pet_yes">Yes</label>
+                                                </div>
+                                            </div> -->
+
+                                            <div class="form-group">
+                                                <label for="pet">Pets Allowed</label>
+                                                <div class="custom-control custom-radio mb-3">
+                                                    <input name="pet" class="custom-control-input" id="pet_yes" type="radio" value="0">
+                                                    <label class="custom-control-label" for="pet_yes">No</label>
+                                                </div>
+                                                <div class="custom-control custom-radio mb-3">
+                                                    <input name="pet" class="custom-control-input" id="pet_no" checked="" type="radio" value="{{$property->pet}}">
+                                                    <label class="custom-control-label" for="pet_no">Yes</label>
                                                 </div>
                                             </div>
 
@@ -272,8 +325,8 @@
                         <input type="hidden" name="property_id" value="{{ $property_id }}">
                         <input type="hidden" name="rent_id" value="{{ $rent->id }}">
 
-                        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal">Delete Property</button>
-                        <button type="submit" class="btn btn-success shadow">Save</button>
+                        <button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#deleteModal">Delete Property</button>
+                        <button type="submit" class="btn btn-success shadow">Save Property</button>
 
                     </form>
 
@@ -302,5 +355,7 @@
             </div>
         </div>
     </div>
+
+    @include('layouts.footers.auth')
 </div>
 @endsection

@@ -1,11 +1,22 @@
-@extends('layouts.app')
+@extends('layouts.app', ['page_title' => "Send Feedback"])
 
 @section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-12">
-            <div class="card shadow">
-                <div class="card-header">Send Feedback</div>
+@include('layouts.headers.cards')
+
+<div class="container-fluid mt--9">
+    <div class="row">
+        <div class="col">
+            <div class="card bg-secondary shadow">
+                <div class="card-header border-0">
+                    <div class="row align-items-center">
+                        <div class="col-8">
+                            <h3 class="mb-0">Send Feedback</h3>
+                        </div>
+                        <div class="col-4 text-right">
+                            
+                        </div>
+                    </div>
+                </div>
 
                 @if(Session::has('info'))
                     <div class="alert alert-success" role="alert">
@@ -16,11 +27,9 @@
 
                 <div class="card-body">
 
-                    <div class="mb-3 text-right">
-                        <a href="{{ route('feedback.index') }}" class="btn btn-info text-white">Go Back</a>
-                    </div>
-                    
                     <form action="{{ route('feedback.add') }}" method="post">
+
+                        <p>Thank you for taking time out of your day to let us know how we can improve our app. Let us know how we can be better so that we can meet your needs.</p>
 
                         <div class="form-group">
                             <label for="subject">Subject <small class="text-danger pl-2">required</small></label>
@@ -53,5 +62,7 @@
             </div>
         </div>
     </div>
+
+    @include('layouts.footers.auth')
 </div>
 @endsection

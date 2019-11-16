@@ -1,53 +1,67 @@
-@extends('layouts.app')
+@extends('layouts.app', ['page_title' => "Community Management"])
 
 @section('content')
-<div class="container">
+@include('layouts.headers.cards')
 
-    <div class="row justify-content-center">
-        <div class="col-md-12">
-            <div class="card shadow">
-                <div class="card-header">Community Management</div>
+<div class="container-fluid mt--9">
+    <div class="row">
+        <div class="col">
+            <div class="card bg-secondary shadow">
+                <div class="card-header border-0">
+                    <div class="row align-items-center">
+                        <div class="col-8">
+                            <h3 class="mb-0">Community Management</h3>
+                        </div>
+                        <div class="col-4 text-right">
+                            <a href="{{ route('community.create') }}" class="btn btn-success shadow"><i class="fas fa-plus-circle pr-2"></i> Add Community</a>
+                        </div>
+                    </div>
+                </div>
 
                 <div class="card-body">
 
-                @if(Session::has('info'))
-                    <div class="alert alert-success" role="alert">
-                        <h4 class="alert-heading">Success!</h4>
-                        <p>{{ Session::get('info') }}</p>
-                    </div>
-                @endif
+                    @if(Session::has('info'))
+                        <div class="alert alert-success" role="alert">
+                            <h4 class="alert-heading">Success!</h4>
+                            <p>{{ Session::get('info') }}</p>
+                        </div>
+                    @endif
 
-                @if($communities->isEmpty())
-                    
-                    <p>You don't have any properties added! Let's add one now!</p>
-                    <div class="pb-5 text-left">
-                        <a href="{{ route('community.create') }}" class="btn btn-primary shadow">Add Community</a>
+                    @if($communities->isEmpty())
+                        <p>You don't have any properties added! Let's add one now!</p>
+                        <div class="pb-5 text-left">
+                            <a href="{{ route('community.create') }}" class="btn btn-primary shadow">Add Community</a>
+                        </div>       
+                    @else
+                
+                    <div class="table-responsive">
+                        <table class="table align-items-center table-flush table-hover">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th>Name</th>
+                                    <td>Edit</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($communities as $community)
+                                <tr>
+                                    <td>{{ $community->hoa_community }} </td>
+                                    <td><a href="{{ route('community.edit', ['id' => $community->id ]) }}" class="btn btn-info shadow">Edit Community</a></td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
                     </div>
-                           
-                @else
 
-                    <div class="mb-3 text-right">
-                        <a href="{{ route('community.create') }}" class="btn btn-success shadow">Add Community</a>
-                    </div>
-
-                    <table class="table table-hover">
-                        <tr>
-                            <th>Name</th>
-                            <td>Edit</th>
-                        </tr>
-                        @foreach($communities as $community)
-                        <tr>
-                            <td>{{ $community->hoa_community }} </td>
-                            <td><a href="{{ route('community.edit', ['id' => $community->id ]) }}" class="btn btn-info text-white">Edit Community</a></td>
-                        </tr>
-                        @endforeach
-                    </table>
-                    {{ $communities->links() }}
+                        {{ $communities->links() }}
 
                 </div>
                 @endif
             </div>
         </div>
     </div>
+
+    
 </div>
+@include('layouts.footers.auth')
 @endsection

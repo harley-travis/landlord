@@ -29,7 +29,7 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/';
+    protected $redirectTo = '/home';
 
     /**
      * Create a new controller instance.
@@ -65,7 +65,7 @@ class RegisterController extends Controller
      * @param  array  $data
      * @return \App\User
      */
-    protected function create(array $data) {
+    protected function create(array $data)  {
 
         $c = Company::create([
             'name' => $data['company_name'],   
@@ -80,5 +80,4 @@ class RegisterController extends Controller
             'role' => '3',
         ]);
     }
-
 }

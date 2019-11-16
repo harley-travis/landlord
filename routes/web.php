@@ -1,23 +1,43 @@
 <?php
 
-// Route::get('/', function () {
-//     return view('home');
-// });
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register web routes for your application. These
+| routes are loaded by the RouteServiceProvider within a group which
+| contains the "web" middleware group. Now create something great!
+|
+*/
 
+Route::get('/', function () {
+    return view('welcome');
+});
 Auth::routes();
 
-Route::get('/', 'HomeController@index')->name('dashboard.index')->middleware('auth', 'trial');
+//Route::get('/home', 'HomeController@index')->name('home');
 
+Route::group(['middleware' => 'auth'], function () {
+	Route::resource('user', 'UserController', ['except' => ['show']]);
+	Route::get('profile', ['as' => 'profile.edit', 'uses' => 'ProfileController@edit']);
+	Route::put('profile', ['as' => 'profile.update', 'uses' => 'ProfileController@update']);
+	Route::put('profile/password', ['as' => 'profile.password', 'uses' => 'ProfileController@password']);
+});
 
-Route::get('/dashboard', function () {
+// Route::get('/', 'HomeController@index')->name('dashboard.index')->middleware('auth', 'trial');
+
+Route::get('/home', function () {
 	
 	if( Auth::user()->stripe_id === null) {
-		return view('settings.billing.trial.end');
+		return view('settings.billing.trial.begin');
 	} else {
-		return view('dashboard.index');
+		return view('dashboard');
 	}
     
-});
+})->name('home');
+
+
 
 // PROPERTIES
 Route::group(['prefix' => 'property', 'middleware' => ['auth', 'trial']], function() {
@@ -407,3 +427,4 @@ Route::group(['prefix' => 'settings/billing', 'middleware' => ['auth']], functio
 
 });
 
+Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');

@@ -1,11 +1,22 @@
-@extends('layouts.app')
+@extends('layouts.app', ['page_title' => "Add Payment Method"])
 
 @section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-12">
-            <div class="card shadow">
-                <div class="card-header">Add Payment Method</div>
+@include('layouts.headers.cards')
+
+<div class="container-fluid mt--9">
+    <div class="row">
+        <div class="col">
+            <div class="card bg-secondary shadow">
+                <div class="card-header border-0">
+                    <div class="row align-items-center">
+                        <div class="col-8">
+                            <h3 class="mb-0">Add Payment Method</h3>
+                        </div>
+                        <div class="col-4 text-right">
+                            <a href="{{ route('settings.billing.ach.create') }}" class="btn btn-success"><i class="fas fa-plus-circle pr-2"></i>Add ACH Account</a>
+                        </div>
+                    </div>
+                </div>
 
                 <div class="card-body">
                     @if (session('status'))
@@ -35,6 +46,8 @@
             </div>
         </div>
     </div>
+
+    @include('layouts.footers.auth')
 </div>
 
 <script>

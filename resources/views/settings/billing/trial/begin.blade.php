@@ -1,11 +1,22 @@
-@extends('layouts.app')
+@extends('layouts.app', ['page_title' => "Begin Your 14 Free Day Trial"])
 
 @section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-12">
-            <div class="card shadow">
-                <div class="card-header bg-success text-white">Begin Your 14 Free Day Trial</div>
+@include('layouts.headers.cards')
+
+<div class="container-fluid mt--9">
+    <div class="row">
+        <div class="col">
+            <div class="card bg-secondary shadow">
+                <div class="card-header bg-success border-0">
+                    <div class="row align-items-center">
+                        <div class="col-8">
+                            <h3 class="mb-0 text-white">Begin Your 14 Free Day Trial</h3>
+                        </div>
+                        <div class="col-4 text-right">
+                           
+                        </div>
+                    </div>
+                </div>
 
                 <div class="card-body">
                     @if (session('status'))
@@ -27,5 +38,7 @@
             </div>
         </div>
     </div>
+
+    @include('layouts.footers.auth')
 </div>
 @endsection

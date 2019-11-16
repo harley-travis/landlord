@@ -1,27 +1,36 @@
-@extends('layouts.app')
+@extends('layouts.app', ['page_title' => "ACH Accounts"])
 
 @section('content')
-<div class="container">
+@include('layouts.headers.cards')
 
-    @if (session('info'))
-        <div class="alert alert-success shadow-sm" role="alert">
-            <i class="fas fa-info-circle pr-2"></i>{{ session('info') }}
-        </div>
-    @endif
-
-    @if (session('danger'))
-        <div class="alert alert-danger shadow-sm" role="alert">
-            <i class="fas fa-exclamation-circle pr-2"></i>{{ session('danger') }}
-        </div>
-    @endif
-
-    <div class="row justify-content-center pb-4">
-        <div class="col-md-12">
-
-            <div class="card shadow">
-                <div class="card-header">ACH Accounts</div>
+<div class="container-fluid mt--9">
+    <div class="row">
+        <div class="col">
+            <div class="card bg-secondary shadow">
+                <div class="card-header border-0">
+                    <div class="row align-items-center">
+                        <div class="col-8">
+                            <h3 class="mb-0">ACH Accounts</h3>
+                        </div>
+                        <div class="col-4 text-right">
+                            <a href="{{ route('settings.billing.ach.create') }}" class="btn btn-success"><i class="fas fa-plus-circle pr-2"></i>Add ACH Account</a>
+                        </div>
+                    </div>
+                </div>
 
                 <div class="card-body">
+
+                    @if (session('info'))
+                        <div class="alert alert-success shadow-sm" role="alert">
+                            <i class="fas fa-info-circle pr-2"></i>{{ session('info') }}
+                        </div>
+                    @endif
+
+                    @if (session('danger'))
+                        <div class="alert alert-danger shadow-sm" role="alert">
+                            <i class="fas fa-exclamation-circle pr-2"></i>{{ session('danger') }}
+                        </div>
+                    @endif
 
                     <ul class="list-group">
 					    @foreach( $bank_accounts as $bank_account )
@@ -106,61 +115,68 @@
 						</li>
 						@endforeach 
 					</ul>
-                    
-                    <div class="mt-3">
-                        <a href="{{ route('settings.billing.ach.create') }}" class="btn btn-outline-success"><i class="fas fa-plus-circle pr-2"></i>Add ACH Account</a>
-                    </div>
-
+     
                 </div>
-            </div>
+            </div> <!-- card -->
+        </div> <!-- col -->
+    </div> <!-- row -->
 
-        </div>
-    </div>
+    <div class="row mt-3">
+        <div class="col">
+            <div class="card bg-secondary shadow">
+                <div class="card-header border-0">
+                    <div class="row align-items-center">
+                        <div class="col-8">
+                            <h3 class="mb-0">Billing History</h3>
+                        </div>
+                        <div class="col-4 text-right">
+                        
+                        </div>
+                    </div>
+                </div>
 
-    <div class="row justify-content-center">
-        <div class="col-md-12">
-
-            <div class="card shadow">
-                <div class="card-header">Billing History</div>
                 <div class="card-body">
 
-                    <table class="table table-borderless table-hover">
-						<thead>
-							<tr>
-								<th scope="col">Date</th>
-								<th scope="col">Type</th>
-								<th scope="col">Amount</th>
-								<th scope="col">Paid</th>
-								<th scope="col">Receipt</th>
-							</tr>
-						</thead>
-						<tbody>
+                    <div class="table-responsive">
+                        <table class="table align-items-center table-flush table-hover">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th scope="col">Date</th>
+                                    <th scope="col">Type</th>
+                                    <th scope="col">Amount</th>
+                                    <th scope="col">Paid</th>
+                                    <th scope="col">Receipt</th>
+                                </tr>
+                            </thead>
+                            <tbody>
 
-                            @foreach( $invoices as $invoice )
-							<tr>
-								<td scope="row">{{ \Carbon\Carbon::createFromTimestamp($invoice->created)->toFormattedDateString() }}</td>
-								<td>Automatic Charge</td>
-								<td>${{ $invoice->amount_paid / 100 }}</td>
-								<td>
-									@if($invoice->attempted == 1)
-										<span class="text-success"><i class="fas fa-check pr-2"></i> Success</span>
-									@else
-										<span class="text-danger"><i class="fas fa-times pr-2"></i> Failed</span>
-									@endif
-								</td>
-								<td><a href="{{ $invoice->invoice_pdf }}"><i class="fas fa-download pr-2"></i> Download Invoice</a></td>
-							</tr>
-							@endforeach
-
-						</tbody>
-					</table>
+                                @foreach( $invoices as $invoice )
+                                <tr>
+                                    <td scope="row">{{ \Carbon\Carbon::createFromTimestamp($invoice->created)->toFormattedDateString() }}</td>
+                                    <td>Automatic Charge</td>
+                                    <td>${{ $invoice->amount_paid / 100 }}</td>
+                                    <td>
+                                        @if($invoice->attempted == 1)
+                                            <span class="text-success"><i class="fas fa-check pr-2"></i> Success</span>
+                                        @else
+                                            <span class="text-danger"><i class="fas fa-times pr-2"></i> Failed</span>
+                                        @endif
+                                    </td>
+                                    <td><a href="{{ $invoice->invoice_pdf }}"><i class="fas fa-download pr-2"></i> Download Invoice</a></td>
+                                </tr>
+                                @endforeach
+						    </tbody>
+					    </table>
+                    </div>
 
                     <!-- to do: create pagination for billing -->
 
-                </div>
-            </div>
-        </div>
-    </div>
+                </div> <!-- card-body -->
+            </div><!-- card -->
+        </div><!-- col -->
+    </div> <!-- row -->
+
+    @include('layouts.footers.auth')
 
 </div>
 

@@ -1,19 +1,23 @@
-@extends('layouts.app')
+@extends('layouts.app', ['page_title' => "Add Property"])
 
 @section('content')
+@include('layouts.headers.cards')
 
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-12">
-            <div class="card shadow">
-                <div class="card-header">Add New Property</div>
+<div class="container-fluid mt--9">
+    <div class="row">
+        <div class="col">
+            <div class="card bg-secondary shadow">
+                <div class="card-header border-0">
+                    <div class="row align-items-center">
+                        <div class="col-8">
+                            <h3 class="mb-0">Add New Property</h3>
+                        </div>
+                        <div class="col-4 text-right">
+                        </div>
+                    </div>
+                </div>
 
                 <div class="card-body">
-
-                    <div class="mb-3 text-right">
-                        <a href="{{ route('property.index') }}" class="btn btn-info text-white">Go Back</a>
-                    </div>
-                    
                     <form action="{{ route('property.add') }}" method="post">
 
                         <div class="accordion" id="accordionExample">
@@ -82,6 +86,18 @@
 
                                         <div class="form-group">
                                             <label for="occupied">Vacancy</label>
+                                            <div class="custom-control custom-radio mb-3">
+                                                <input name="occupied" class="custom-control-input" id="occupied_yes" type="radio" value="0">
+                                                <label class="custom-control-label" for="occupied_yes">No</label>
+                                            </div>
+                                            <div class="custom-control custom-radio mb-3">
+                                                <input name="occupied" class="custom-control-input" id="occupied_no" checked="" type="radio"  value="1">
+                                                <label class="custom-control-label" for="occupied_no">Yes</label>
+                                            </div>
+                                        </div>
+
+                                        <!-- <div class="form-group">
+                                            <label for="occupied">Vacancy</label>
                                             <div class="form-check form-check-inline">
                                                 <input class="form-check-input" type="radio" name="occupied" id="occupied_yes" value="0" checked>
                                                 <label class="form-check-label" for="occupied_yes">No</label>
@@ -90,17 +106,29 @@
                                                 <input class="form-check-input" type="radio" name="occupied" id="occupied_no" value="1">
                                                 <label class="form-check-label" for="occupied_no">Yes</label>
                                             </div>
-                                        </div> 
-
+                                        </div>  -->
+<!-- 
                                         <div class="form-group">
                                             <label for="pet">Pets Allowed</label>
                                             <div class="form-check form-check-inline">
                                                 <input class="form-check-input" type="radio" name="pet" id="pet_yes" value="0" checked>
-                                                <label class="form-check-label" for="pet_no">No</label>
+                                                <label class="form-check-label" for="pet_yes">No</label>
                                             </div>
                                             <div class="form-check form-check-inline">
                                                 <input class="form-check-input" type="radio" name="pet" id="pet_no" value="1">
-                                                <label class="form-check-label" for="pet_yes">Yes</label>
+                                                <label class="form-check-label" for="pet_no">Yes</label>
+                                            </div>
+                                        </div> -->
+
+                                        <div class="form-group">
+                                            <label for="pet">Pets Allowed</label>
+                                            <div class="custom-control custom-radio mb-3">
+                                                <input name="pet" class="custom-control-input" id="pet_yes" type="radio" value="0">
+                                                <label class="custom-control-label" for="pet_yes">No</label>
+                                            </div>
+                                            <div class="custom-control custom-radio mb-3">
+                                                <input name="pet" class="custom-control-input" id="pet_no" checked="" type="radio"  value="1">
+                                                <label class="custom-control-label" for="pet_no">Yes</label>
                                             </div>
                                         </div>
 
@@ -240,5 +268,7 @@
             </div>
         </div>
     </div>
+
+    @include('layouts.footers.auth')
 </div>
 @endsection
