@@ -1,6 +1,6 @@
 <nav class="navbar navbar-top navbar-horizontal navbar-expand-md navbar-dark">
     <div class="container px-4">
-        <a class="navbar-brand" href="{{ route('home') }}">
+        <a class="navbar-brand" href="https://senrent.com" target="_blank">
             <img src="{{url('/img/logo-white.png')}}" alt="senrent logo" />
         </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-collapse-main" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -11,7 +11,7 @@
             <div class="navbar-collapse-header d-md-none">
                 <div class="row">
                     <div class="col-6 collapse-brand">
-                        <a href="{{ route('home') }}">
+                        <a href="https://senrent.com" target="_blank">
                             <img src="{{url('/img/logo.png')}}" alt="senrent logo" style="width:100%;height:auto;" />
                         </a>
                     </div>
