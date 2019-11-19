@@ -9,7 +9,7 @@
             <img src="{{url('/img/logo.png')}}" class="navbar-brand-img" alt="senrent logo" style="max-width:75%">
         </a>
         <!-- User -->
-        <!-- not sure what this is -->
+        <!-- MOBILE NAV -->
         <ul class="nav align-items-center d-md-none">
             <li class="nav-item dropdown">
                 <a class="nav-link" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -23,17 +23,17 @@
                     <div class=" dropdown-header noti-title">
                         <h6 class="text-overflow m-0">{{ __('Welcome!') }}</h6>
                     </div>
-                    <a href="#" class="dropdown-item">
+                    <a href="{{ route('settings.billing.index') }}" class="dropdown-item">
                         <i class="ni ni-settings-gear-65"></i>
-                        <span>{{ __('Settings') }}</span>
+                        <span>Billing</span>
                     </a>
-                    <a href="#" class="dropdown-item">
+                    <a href="{{ route('feedback.create') }}" class="dropdown-item">
                         <i class="ni ni-calendar-grid-58"></i>
-                        <span>{{ __('Activity') }}</span>
+                        <span>Send Feedback</span>
                     </a>
                     <a href="#" class="dropdown-item">
                         <i class="ni ni-support-16"></i>
-                        <span>{{ __('Support') }}</span>
+                        <span>Help</span>
                     </a>
                     <div class="dropdown-divider"></div>
                     <a href="{{ route('logout') }}" class="dropdown-item" onclick="event.preventDefault();

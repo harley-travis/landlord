@@ -20929,11 +20929,11 @@ textarea[resize='horizontal']
     border-left: 0;
 }
 
-.table-flush tbody tr:first-child td,
+/* .table-flush tbody tr:first-child td,
 .table-flush tbody tr:first-child th
 {
     border-top: 0;
-}
+} */
 
 .table-flush tbody tr:last-child td,
 .table-flush tbody tr:last-child th
