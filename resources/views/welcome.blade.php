@@ -1,7 +1,7 @@
 @extends('layouts.app', ['class' => 'bg-default', 'page_title' => ''])
 
 @section('content')
-    <div class="header bg-gradient-primary py-7 py-lg-8">
+    <div class="header purple-graident py-7 py-lg-8">
         <div class="container">
             <div class="header-body text-center mt-7 mb-7">
                 <div class="row justify-content-center">
