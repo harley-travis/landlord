@@ -37,7 +37,7 @@ Route::group(['middleware' => 'auth'], function () {
 
 Route::get('/home', function () {
 	
-	if( Auth::user()->stripe_id === null) {
+	if( Auth::user()->stripe_id === null && Auth::user()->role === 3 ) {
 		return view('settings.billing.trial.begin');
 	} else {
 		return view('dashboard');

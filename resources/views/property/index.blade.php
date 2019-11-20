@@ -69,8 +69,27 @@
                                             No
                                         @endif
                                     </td>
-                                    <td>${{ $property->rent_amount }}</td>
-                                    <td>{{ $property->lease_length }} months</td>
+                                    <td>
+                                        
+                                        @if( $property->rent_amount === '' || $property->rent_amount === null || $property->rent_amount === 0 )
+                                            No amount set
+                                        @else
+                                    
+                                        ${{ $property->rent_amount }}
+                                    
+                                        @endif
+                                    </td>
+                                    <td>
+                                    
+                                        @if( $property->lease_length === '' || $property->lease_length === null || $property->lease_length === 0 )
+                                            No lease date set
+                                        @else
+
+                                        {{ $property->lease_length }} months
+                                    
+                                        @endif
+                                    
+                                    </td>
                                     <td><a href="{{ route('property.edit', ['id' => $property->id ]) }}" class="btn btn-info">Edit Property</a></td>
                                 </tr>
                                 @endforeach
@@ -82,34 +101,6 @@
 
                 @endif
 
-                @if( Auth::user()->product === 3 || Auth::user()->product === 10 )
-
-                    <div class="table-responsive">
-                        <table class="table align-items-center table-flush table-hover">
-                            <thead class="thead-light">
-                                <tr>
-                                    <th>Community Name</th>
-                                    <th>Address</th>
-                                    <th>Monthly HOA</th>
-                                    <th>Edit</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach($communities as $community)
-                                <tr>
-                                    <td>{{ $community->hoa_community }}</td>
-                                    <td>{{ $community->address_1 }} {{ $community->address_2 }} {{ $community->address_3 }}</td>
-                                    <td>${{ $community->hoa_amount }}</td>
-                                    <td><a href="{{ route('property.edit', ['id' => $community->id ]) }}" class="btn btn-info">Edit Property</a></td>
-                                </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
-
-                    {{ $properties->links() }}
-
-                @endif
                 </div><!-- card-body -->
                 @endif
             </div>

@@ -105,7 +105,7 @@
                                                     <label class="custom-control-label" for="occupied_yes">No</label>
                                                 </div>
                                                 <div class="custom-control custom-radio mb-3">
-                                                    <input name="occupied" class="custom-control-input" id="occupied_no" checked="" type="radio"  value="1">
+                                                    <input name="occupied" class="custom-control-input" id="occupied_no" checked="" type="radio" value="1">
                                                     <label class="custom-control-label" for="occupied_no">Yes</label>
                                                 </div>
                                             </div>
@@ -131,7 +131,7 @@
                                                     <label class="custom-control-label" for="occupied_yes">No</label>
                                                 </div>
                                                 <div class="custom-control custom-radio mb-3">
-                                                    <input name="occupied" class="custom-control-input" id="occupied_no" checked="" type="radio"  value="value="{{$property->occupied}}"">
+                                                    <input name="occupied" class="custom-control-input" id="occupied_no" checked="" type="radio" value="{{$property->occupied}}">
                                                     <label class="custom-control-label" for="occupied_no">Yes</label>
                                                 </div>
                                             </div>

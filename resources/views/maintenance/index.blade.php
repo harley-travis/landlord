@@ -13,7 +13,9 @@
                             <h3 class="mb-0">Maintenance Requests</h3>
                         </div>
                         <div class="col-4 text-right">
+                            @if( Auth::user()->role === 0 )
                             <a href="{{ route('maintenance.create') }}" class="btn btn-success shadow"><i class="fas fa-plus-circle pr-2"></i> Create Ticket</a>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -26,27 +28,26 @@
                     </div>
                 @endif
 
-                @if ( $requests->isEmpty() && Auth::user()->role === 3 )
-                    You have no archived maintenance requests
+                @if ( $requests->isEmpty() && Auth::user()->role != 0 )
+                   
+                <i class="fas fa-glass-cheers"></i> <span class="text-success font-weight-bold">Congratulations! You have no maintenance requests. Keep up the good work!</span>
 
                 @elseif( $requests->isEmpty() && Auth::user()->role === 0 )
 
                     You do not currently have any open maintenance requests. <br>
 
                     <div class="pt-3 pb-3"></div>
-
+               
                     <div class="text-center">
                         <a href="{{ route('maintenance.create') }}" class="btn btn-success"><i class="fas fa-plus-circle pr-2"></i> Create Ticket</a>
                     </div>
 
                 @else
-
                     <div class="table-responsive">
                         <table class="table align-items-center table-flush table-hover">
                             <thead class="thead-light">
                                 <tr>
                                     <th>Subject</th>
-                                    <th>Description</th>
                                     <th>Emergency</th>
                                     <th>Date Submitted</th>
                                     <th>Status</th>
@@ -57,7 +58,6 @@
                                 @foreach($requests as $request)
                                 <tr>
                                     <td>{{ $request->subject }}</td>
-                                    <td>{{ $request->description }}</td>
                                     <td>
                                         @if($request->emergency === 0)
                                             No

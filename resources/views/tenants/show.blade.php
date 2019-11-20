@@ -1,4 +1,4 @@
-@extends('layouts.app', ['page_title' => {{ $tenant->name }}])
+@extends('layouts.app', ['page_title' => 'Tenant Profile'])
 
 @section('content')
 @include('layouts.headers.cards')

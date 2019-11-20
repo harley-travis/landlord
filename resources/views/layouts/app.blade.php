@@ -26,6 +26,16 @@
         <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 
         <script src="https://js.stripe.com/v3/"></script>
+
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-L3NFNGSXEQ"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+
+            gtag('config', 'G-L3NFNGSXEQ');
+        </script>
     </head>
     <body class="{{ $class ?? '' }}">
         @auth()

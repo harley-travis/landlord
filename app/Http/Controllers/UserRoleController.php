@@ -5,12 +5,11 @@ namespace App\Http\Controllers;
 use Auth;
 use App\User;
 use App\Company;
-use App\UserRole;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
-class UserRoleController extends Controller
-{
+class UserRoleController extends Controller {
+
     /**
      * Display a listing of the resource.
      *
@@ -97,20 +96,19 @@ class UserRoleController extends Controller
      * @param  \App\UserRole  $userRole
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request) {
+    public function update(Request $request, User $user) {
 
         $request->validate([
             'name' => 'required',
             'email' => 'required|email',
-            'password' => 'required|min:8',
             'role' => 'required',
         ]);
-        
-        $u = User::find($request->input('id'));
-        $u->name = $request->input('name');
-        $u->email = $request->input('email');
-        $u->role = $request->input('role');
-        $u->save();
+                
+        $user = User::find($request->input('id'));
+        $user->name = $request->input('name');
+        $user->email = $request->input('email');
+        $user->role = $request->input('role');
+        $user->save();
 
         return redirect()
                 ->route('users.index')

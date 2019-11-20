@@ -89,11 +89,14 @@
                         <div class="form-group">
                             <label for="property">Property</label>
                             <select id="property_id" name="property_id" class="form-control">
-                                <option>Select Property</option>
+                                <option value="">- Select Property -</option>
                                 @foreach($properties as $property)
                                 <option value="{{ $property->id }}">{{ $property->address_1 }} {{ $property->address_2 }}</option>
                                 @endforeach
                             </select>
+                            @error('property_id')
+                            <span class='invalid-feedback'>{{ $message }}</span>
+                            @enderror
                         </div>                      
 
                         @csrf

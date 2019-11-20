@@ -93,4 +93,15 @@ class CommunityController extends Controller {
                 ->with('info', 'Good job! Your community was updated successfully!');
     }
 
+    public function destroy($id) {
+
+        $community = Community::find($id);
+        $community->delete();
+
+        return redirect()
+            ->route('community.index')
+            ->with('info', 'Your community was successfully deleted');
+
+    }
+
 }
