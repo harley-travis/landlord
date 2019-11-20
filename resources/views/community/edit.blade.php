@@ -6,7 +6,7 @@
 <div class="container-fluid mt--9">
     <div class="row">
         <div class="col">
-            <div class="card bg-secondary shadow">
+            <div class="card shadow">
                 <div class="card-header border-0">
                     <div class="row align-items-center">
                         <div class="col-8">
