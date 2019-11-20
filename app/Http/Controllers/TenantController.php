@@ -127,7 +127,7 @@ class TenantController extends Controller {
         /**
          * This should be the live version
          */
-        Mail::to($email)->send(new TenantCreated($tenant));
+        Mail::to($email)->send(new TenantCreated($findTenant, $findUser));
 
         return redirect()
                 ->route('tenants.index')
