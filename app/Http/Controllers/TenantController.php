@@ -115,7 +115,7 @@ class TenantController extends Controller {
        /**
         * testing version
         */
-        Mail::to($e)->send(new TenantCreated($findTenant, $findUser));
+        //Mail::to($e)->send(new TenantCreated($findTenant, $findUser));
 
         /**
          * this function is to send rent reminder
@@ -127,7 +127,7 @@ class TenantController extends Controller {
         /**
          * This should be the live version
          */
-        //Mail::to($email)->send(new TenantCreated($tenant));
+        Mail::to($email)->send(new TenantCreated($tenant));
 
         return redirect()
                 ->route('tenants.index')
