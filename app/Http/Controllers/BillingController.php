@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use Mail;
 use App\User;
 use Auth;
 use DB;
 use Carbon\Carbon;
 use Stripe_Error;
 use Illuminate\Http\Request;
+use App\Mail\UserCreated;
 
 class BillingController extends Controller {
 
@@ -549,6 +551,11 @@ class BillingController extends Controller {
             "usage_type" => "metered",
             "trial_period_days" => 14,
         ]);
+
+        // testing email
+        $e = 'travis.harley@senrent.com';
+
+        Mail::to($e)->send(new UserCreated($user));
 
         return redirect()
             ->route('home')
