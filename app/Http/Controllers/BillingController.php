@@ -553,9 +553,9 @@ class BillingController extends Controller {
         ]);
 
         // testing email
-        $e = 'travis.harley@senrent.com';
+        //$e = 'travis.harley@senrent.com';
 
-        Mail::to($e)->send(new UserCreated($user));
+        Mail::to($user->email)->send(new UserCreated($user));
 
         return redirect()
             ->route('home')
