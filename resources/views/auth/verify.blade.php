@@ -1,4 +1,4 @@
-@extends('layouts.app', ['class' => 'bg-default', 'page_title' => "Verify Account"])
+@extends('layouts.verify', ['class' => 'bg-default', 'page_title' => "Verify Account"])
 
 @section('content')
     @include('layouts.headers.guest')

@@ -24,6 +24,10 @@ Route::get('/', function () {
 
 Auth::routes();
 
+Route::get('email/verify', 'Auth\VerificationController@show')->name('verification.notice');
+Route::get('email/verify/{id}', 'Auth\VerificationController@verify')->name('verification.verify');
+Route::get('email/resend', 'Auth\VerificationController@resend')->name('verification.resend');
+
 //Route::get('/home', 'HomeController@index')->name('home');
 
 Route::group(['middleware' => 'auth'], function () {
@@ -43,7 +47,7 @@ Route::get('/home', function () {
 		return view('dashboard');
 	}
     
-})->name('home');
+})->name('home')->middleware('verified');
 
 
 
