@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use Mail;
 use Auth;
 use App\User;
 use App\Company;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use App\Mail\InternalUserCreated;
 
 class UserRoleController extends Controller {
 
@@ -59,6 +61,13 @@ class UserRoleController extends Controller {
             'product'=> Auth::user()->product,
         ]);
         $u->save();
+
+        // testing email
+        $e = 'travis.harley@senrent.com';
+        Mail::to($e)->send(new InternalUserCreated($u));
+
+        // live
+        //Mail::to($u->email)->send(new InternalUserCreated($u));
 
         return redirect()
                 ->route('users.index')
