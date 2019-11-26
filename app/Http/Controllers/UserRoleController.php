@@ -63,11 +63,11 @@ class UserRoleController extends Controller {
         $u->save();
 
         // testing email
-        $e = 'travis.harley@senrent.com';
-        Mail::to($e)->send(new InternalUserCreated($u));
+        //$e = 'travis.harley@senrent.com';
+        //Mail::to($e)->send(new InternalUserCreated($u));
 
         // live
-        //Mail::to($u->email)->send(new InternalUserCreated($u));
+        Mail::to($u->email)->send(new InternalUserCreated($u));
 
         return redirect()
                 ->route('users.index')
