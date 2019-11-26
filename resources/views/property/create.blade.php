@@ -85,14 +85,14 @@
                                         @if( Auth::user()->product === 1 ||  Auth::user()->product === 2 || Auth::user()->product === 10 )
 
                                         <div class="form-group">
-                                            <label for="occupied">Vacancy</label>
+                                            <label for="occupied">Occupied</label>
                                             <div class="custom-control custom-radio mb-3">
-                                                <input name="occupied" class="custom-control-input" id="occupied_yes" type="radio" value="0">
-                                                <label class="custom-control-label" for="occupied_yes">No</label>
+                                                <input name="occupied" class="custom-control-input" id="occupied_no" type="radio" value="0">
+                                                <label class="custom-control-label" for="occupied_no">No</label>
                                             </div>
                                             <div class="custom-control custom-radio mb-3">
-                                                <input name="occupied" class="custom-control-input" id="occupied_no" checked="" type="radio"  value="1">
-                                                <label class="custom-control-label" for="occupied_no">Yes</label>
+                                                <input name="occupied" class="custom-control-input" id="occupied_yes" checked="" type="radio" value="1">
+                                                <label class="custom-control-label" for="occupied_yes">Yes</label>
                                             </div>
                                         </div>
 
@@ -123,12 +123,12 @@
                                         <div class="form-group">
                                             <label for="pet">Pets Allowed</label>
                                             <div class="custom-control custom-radio mb-3">
-                                                <input name="pet" class="custom-control-input" id="pet_yes" type="radio" value="0">
-                                                <label class="custom-control-label" for="pet_yes">No</label>
+                                                <input name="pet" class="custom-control-input" id="pet_no" type="radio" value="0">
+                                                <label class="custom-control-label" for="pet_no">No</label>
                                             </div>
                                             <div class="custom-control custom-radio mb-3">
-                                                <input name="pet" class="custom-control-input" id="pet_no" checked="" type="radio"  value="1">
-                                                <label class="custom-control-label" for="pet_no">Yes</label>
+                                                <input name="pet" class="custom-control-input" id="pet_yes" checked="" type="radio" value="1">
+                                                <label class="custom-control-label" for="pet_yes">Yes</label>
                                             </div>
                                         </div>
 

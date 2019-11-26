@@ -17,6 +17,7 @@ class Tenant extends Model {
         'secondary_email',
         'number_occupants',
         'active',
+        'assigned',
         'property_id',
         'user_id',
     ];

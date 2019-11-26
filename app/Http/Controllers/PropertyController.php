@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use Auth;
+use App\User;
 use App\Property;
 use App\Rent;
+use App\Tenant;
 use App\Company;
 use App\Community;
 use Illuminate\Http\Request;
@@ -20,10 +22,24 @@ class PropertyController extends Controller {
     public function index() {
 
         $properties = Property::join('rents', 'rents.property_id', '=', 'properties.id')
-                                    ->where('company_id', '=', Auth::user()->company_id)->paginate(15);
+                                    ->where('company_id', '=', Auth::user()->company_id)
+                                    ->paginate(15);
 
         $communities = Community::join('properties', 'communities.id', '=', 'properties.community_id')
                                     ->where('communities.company_id', '=', Auth::user()->company_id)
+                                    ->paginate(15);
+
+
+        $avaliable = Property::join('rents', 'rents.property_id', '=', 'properties.id')
+                                    ->where('company_id', '=', Auth::user()->company_id)
+                                    ->where('occupied', '=', 0)
+                                    ->paginate(15);
+
+        $occupied = User::join('tenants', 'users.id', '=', 'tenants.user_id')
+                                    ->join('properties', 'tenants.property_id', '=', 'properties.id')
+                                    ->where('properties.company_id', '=', Auth::user()->company_id)
+                                    ->where('users.company_id', '=', Auth::user()->company_id)
+                                    ->where('tenants.active', '=', '1')
                                     ->paginate(15);
 
         $company = Company::where('id', '=', Auth::user()->company_id)->first();
@@ -32,6 +48,8 @@ class PropertyController extends Controller {
             'properties' => $properties, 
             'communities' => $communities, 
             'company' => $company,
+            'occupied' => $occupied,
+            'avaliable' => $avaliable,
         ]);
 
     }
@@ -100,7 +118,7 @@ class PropertyController extends Controller {
 
         return redirect()
                 ->route('property.index')
-                ->with('info', 'Good job! Your property was saved successfully!');
+                ->with('info', 'Good job! Your property was saved successfully! Head over to the Tenants page to assign the property to a tenant');
 
     }
 
@@ -125,10 +143,12 @@ class PropertyController extends Controller {
         $property = Property::where('company_id', '=', Auth::user()->company_id)->first();
         $rent = Rent::where('property_id', '=', $id)->first();
         $communities = Community::where('company_id', '=', Auth::user()->company_id)->get();
+        $tenant = Tenant::where('property_id', '=', $id)->first();
 
         return view('property.edit', [
             'property' => $property, 
             'rent' => $rent, 
+            'tenant' => $tenant,
             'property_id' => $id,
             'communities' => $communities
         ]);

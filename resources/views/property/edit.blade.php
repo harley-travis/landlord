@@ -325,7 +325,11 @@
                         <input type="hidden" name="property_id" value="{{ $property_id }}">
                         <input type="hidden" name="rent_id" value="{{ $rent->id }}">
 
+                        @if( $tenant->property_id === null || $tenant->property_id === '' ) 
                         <button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#deleteModal">Delete Property</button>
+                        @else
+                        <button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#tenantRemoveModal">Delete Property</button>
+                        @endif
                         <button type="submit" class="btn btn-success shadow">Save Property</button>
 
                     </form>
@@ -346,6 +350,27 @@
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                                     <a class="btn btn-danger shadow" href="{{ route('property.delete', ['id' => $property->id ]) }}">Yes, Delete Property</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="tenantRemoveModal" tabindex="-1" role="dialog" aria-labelledby="tenantRemoveModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title text-danger" id="tenantRemoveModalLabel">IMPORTANT!</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    You are unable to delete a property if there is a tenant assigned to the property. First remove the tenant, then delete the property. 
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <a class="btn btn-danger shadow" href="{{ route('tenants.edit', ['id' => $tenant->user_id ]) }}">Go To Tenant</a>
                                 </div>
                             </div>
                         </div>

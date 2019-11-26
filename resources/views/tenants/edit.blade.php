@@ -75,18 +75,6 @@
                             <input type="text" class="form-control" name="number_occupants" aria-describedby="number_occupants" value="{{ $tenant->number_occupants }}">
                         </div>
 
-                        <div class="form-group">
-                            <label for="property">Property</label>
-                            <select id="property_id" name="property_id" class="form-control">
-                            <option value="">No Property</option>
-                            @foreach($properties as $property)
-                            <option {{ $tenant->property_id == $property->id ? 'selected':'' }}  value='{{$property->id}}'> 
-                                {{ $property->address_1 }} {{ $property->address_2 }}
-                            </option>
-                            @endforeach
-                            </select>
-                        </div>                       
-
                         @csrf
 
                         <input type="hidden" name="id" value="{{ $tenant->id }}">
@@ -94,6 +82,7 @@
                         <input type="hidden" name="property_id" value="{{ $tenant->property_id }}">
               
                         @if($tenant->active === 1)
+        
                         <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal">Archive Tenant</button>
                         <button type="submit" class="btn btn-success shadow">Save Tenant</button>
                         @endif

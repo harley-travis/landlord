@@ -21,6 +21,6 @@ $factory->define(Tenant::class, function (Faker $faker) {
         'secondary_email' => $faker->email,
         'number_occupants' => $faker->numberBetween(0, 5),
         'active' => $faker->numberBetween(0, 1),
-   
+        'assigned' => $faker->numberBetween(0, 1),
     ];
 });

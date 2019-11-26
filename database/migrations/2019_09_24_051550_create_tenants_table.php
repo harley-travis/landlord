@@ -25,6 +25,7 @@ class CreateTenantsTable extends Migration
             $table->string('secondary_email')->nullable();
             $table->integer('number_occupants')->nullable();
             $table->integer('active')->comment('0 = not active 1 = actives');
+            $table->integer('assigned')->comment('0 = not assigned 1 = assigned');
             $table->timestamps();
 
             $table->foreign('property_id')->references('id')->on('properties');

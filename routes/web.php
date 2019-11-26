@@ -129,8 +129,18 @@ Route::group(['prefix' => 'tenants', 'middleware' => ['auth', 'trial']], functio
     Route::get('archived', [
       'uses'	=> "$c@showArchive",
       'as'	=> 'tenants.archived'
-	]);
+    ]);
 
+    Route::post('assignProperty', [
+      'uses'	=> "$c@assignProperty",
+      'as'	=> 'tenants.assignProperty'
+    ]);
+
+    Route::post('unassignProperty', [
+      'uses'	=> "$c@unassignProperty",
+      'as'	=> 'tenants.unassignProperty'
+    ]);
+    
 });
 
 // MAINTENANCE

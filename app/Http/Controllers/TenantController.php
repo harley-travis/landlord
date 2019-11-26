@@ -24,9 +24,19 @@ class TenantController extends Controller {
      */
     public function index() {
 
-        $tenants = User::join('tenants', 'users.id', '=', 'tenants.user_id')
+        $assigned = User::join('tenants', 'users.id', '=', 'tenants.user_id')
                             ->join('properties', 'tenants.property_id', '=', 'properties.id')
                             ->where('properties.company_id', '=', Auth::user()->company_id)
+                            ->where('users.company_id', '=', Auth::user()->company_id)
+                            ->where('tenants.active', '=', '1')
+                            ->paginate(15);
+
+        $unassigned = User::join('tenants', 'users.id', '=', 'tenants.user_id')
+                            ->where('users.company_id', '=', Auth::user()->company_id)
+                            ->where('tenants.assigned', '=', '0')
+                            ->paginate(15);           
+
+        $tenants = User::join('tenants', 'users.id', '=', 'tenants.user_id')
                             ->where('users.company_id', '=', Auth::user()->company_id)
                             ->where('tenants.active', '=', '1')
                             ->paginate(15);
@@ -34,16 +44,14 @@ class TenantController extends Controller {
         $properties = User::join('properties', 'users.id', '=', 'properties.company_id')
                             ->where('properties.company_id', '=', Auth::user()->company_id)
                             ->get();
-
-        // $tenants = User::join('tenants', 'users.id', '=', 'tenants.user_id')
-        //                     ->where('users.company_id', '=', Auth::user()->company_id)
-        //                     ->paginate(15);
-
-        // $properties = Tenant::join('properties', 'tenants.property_id', '=', 'properties.id')
-        //                     ->where('properties.company_id', '=', Auth::user()->company_id)
-        //                     ->get();
         
-        return view('tenants.index', ['tenants' => $tenants, 'properties' => $properties]);
+        return view('tenants.index', 
+            [
+                'tenants' => $tenants,
+                'properties' => $properties,
+                'assigned' => $assigned,
+                'unassigned' => $unassigned,
+            ]);
     }
 
     /**
@@ -92,7 +100,8 @@ class TenantController extends Controller {
             'secondary_email'=> $request->input('secondary_email'),
             'number_occupants'=> $request->input('number_occupants'),
             'active' => '1',
-            'property_id'=> $request->input('property_id'),
+            'assigned' => '0',
+            // 'property_id'=> $request->input('property_id'),
             'user_id' => $u->id,
         ]);
         $tenant->save();
@@ -238,13 +247,48 @@ class TenantController extends Controller {
 
     public function archive($id) {
 
-        $user = User::find($id);
-
         $tenant = Tenant::where('user_id', '=', $id)->first();
         $tenant->active = 0; // 0 = inactive
+        $tenant->property_id = null;
         $tenant->save();
 
         return redirect()->route('tenants.index')->with('info', 'The tenant was successfully archived');
+    }
+
+    public function assignProperty(Request $request) {
+        // need to assign to property and update that as well. pass in that vari
+
+        $id = $request->input('tenant_id');
+
+        $tenant = Tenant::where('user_id', '=', $id)->first(); 
+        $tenant->assigned = 1;
+        $tenant->property_id = $request->input('property_id');
+        $tenant->save();
+
+        $property = Property::where('id', '=', $request->input('property_id'))->first();
+        $property->occupied = 1;
+        $property->save();
+
+        return redirect()->route('tenants.index')->with('info', 'The tenant was successfully removed from the property');
+
+    }
+
+    public function unassignProperty(Request $request) {
+        // need to remove property as well. pass in that var
+
+        $id = $request->input('tenant_id');
+
+        $tenant = Tenant::where('user_id', '=', $id)->first(); 
+        $tenant->assigned = 0;
+        $tenant->property_id = null;
+        $tenant->save();
+
+        $property = Property::where('id', '=', $request->input('property_id'))->first();
+        $property->occupied = 0;
+        $property->save();
+
+        return redirect()->route('tenants.index')->with('info', 'The tenant was successfully removed from the property');
+
     }
     
 }

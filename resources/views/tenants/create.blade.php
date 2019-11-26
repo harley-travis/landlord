@@ -86,7 +86,7 @@
                             <input type="text" class="form-control" name="number_occupants" aria-describedby="number_occupants" placeholder="Enter number of occupants" value="{{ old('number_occupants') }}">
                         </div>
 
-                        <div class="form-group">
+                        <!-- <div class="form-group">
                             <label for="property">Property</label>
                             <select id="property_id" name="property_id" class="form-control">
                                 <option value="">- Select Property -</option>
@@ -97,7 +97,7 @@
                             @error('property_id')
                             <span class='invalid-feedback'>{{ $message }}</span>
                             @enderror
-                        </div>                      
+                        </div>                       -->
 
                         @csrf
 
