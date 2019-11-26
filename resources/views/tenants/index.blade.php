@@ -46,9 +46,7 @@
                 
                         <table class="table align-items-center table-flush table-hover">
                             <thead class="thead-light">
-                                <tr>
-                                <th>ID</th>  
-                                <th>property ID</th>    
+                                <tr>   
                                 <th>Name</th>
                                 <th>Phone</th>
                                 <th>Email</th>
@@ -59,8 +57,6 @@
                             <tbody>
                                 @foreach($tenants as $tenant)
                                 <tr>
-                                    <td>{{ $tenant->user_id }}</td>
-                                    <td>{{ $tenant->property_id }}</td>
                                     <td><a href="{{ route('tenants.show', ['id' => $tenant->user_id]) }}">{{ $tenant->name }}</a></td>
                                     <td>{{ $tenant->phone }}</td>
                                     <td>{{ $tenant->email }}</td>
