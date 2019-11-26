@@ -139,17 +139,17 @@ class UserRoleController extends Controller {
     public function showArchive() {
 
         $users = User::where('company_id', '=',  Auth::user()->company_id)
-        ->where('role', '=', '100')
-        ->paginate(15);
+                    ->where('role', '=', '100')
+                    ->paginate(15);
 
         return view('users.archive', ['users' => $users]);
     }
 
     public function archive($id) {
 
-        $u = User::find($id);
-        $u->role = 100;
-        $u->save();
+        $user = User::find($id);
+        $user->role = '100'; // 100 > inactive
+        $user->save();
 
         return redirect()->route('users.index')->with('info', 'The user was successfully archived');
     }

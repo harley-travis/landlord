@@ -115,7 +115,7 @@
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                <a class="btn btn-danger shadow" href="{{ route('tenants.archive', ['id' => $tenant->id ]) }}">Yes, Archive Tenant</a>
+                                <a class="btn btn-danger shadow" href="{{ route('tenants.archive', ['id' => $tenant->user_id ]) }}">Yes, Archive Tenant</a>
                             </div>
                             </div>
                         </div>

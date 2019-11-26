@@ -13,8 +13,11 @@
                             <h3 class="mb-0">Tenants Management</h3>
                         </div>
                         <div class="col-4 text-right">
+                            @if( $properties->count() > $tenants->count() )
                             <a href="{{ route('tenants.create') }}" class="btn btn-success shadow"><i class="fas fa-plus-circle pr-2"></i> Add Tenant</a>
+                            @endif
                         </div>
+                        
                     </div>
                 </div>
 
@@ -27,34 +30,38 @@
                     </div>
                 @endif
 
-                @if ( $tenants->isEmpty() )
+                @if ( $tenants->isEmpty() && $properties->count() >= 1 )
 
                 <p>You have no tenants. Let's add one now!</p>
 
                 <div class="pb-5 text-left">
                     <a href="{{ route('tenants.create') }}" class="btn btn-primary shadow"><i class="fas fa-plus-circle pr-2"></i> Add Tenant</a>
                 </div> 
-                
-
-                @else
+            
+                @else              
 
                 <div class="table-responsive">
+
+                {{$tenants}}
+                
                         <table class="table align-items-center table-flush table-hover">
                             <thead class="thead-light">
                                 <tr>
-                                <th>ID</th>    
+                                <th>ID</th>  
+                                <th>property ID</th>    
                                 <th>Name</th>
-                                    <th>Phone</th>
-                                    <th>Email</th>
-                                    <th>Property</th>
-                                    <th>Edit</th>
+                                <th>Phone</th>
+                                <th>Email</th>
+                                <th>Property</th>
+                                <th>Edit</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach($tenants as $tenant)
                                 <tr>
-                                    <td>{{ $tenant->id }}</td>
-                                    <td><a href="{{ route('tenants.show', ['id' => $tenant->id ]) }}">{{ $tenant->name }}</a></td>
+                                    <td>{{ $tenant->user_id }}</td>
+                                    <td>{{ $tenant->property_id }}</td>
+                                    <td><a href="{{ route('tenants.show', ['id' => $tenant->user_id]) }}">{{ $tenant->name }}</a></td>
                                     <td>{{ $tenant->phone }}</td>
                                     <td>{{ $tenant->email }}</td>
                                     <td>
@@ -65,7 +72,7 @@
                                     
                                         {{ $tenant->address_1 }}
                                     </td>
-                                    <td><a href="{{ route('tenants.edit', ['id' => $tenant->id ]) }}" class="btn btn-info text-white">Edit Tenant</a></td>
+                                    <td><a href="{{ route('tenants.edit', ['id' => $tenant->user_id ]) }}" class="btn btn-info text-white">Edit Tenant</a></td>
                                 </tr>  
                                 @endforeach
                             </tbody>

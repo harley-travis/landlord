@@ -31,6 +31,10 @@ class TenantController extends Controller {
                             ->where('tenants.active', '=', '1')
                             ->paginate(15);
 
+        $properties = User::join('properties', 'users.id', '=', 'properties.company_id')
+                            ->where('properties.company_id', '=', Auth::user()->company_id)
+                            ->get();
+
         // $tenants = User::join('tenants', 'users.id', '=', 'tenants.user_id')
         //                     ->where('users.company_id', '=', Auth::user()->company_id)
         //                     ->paginate(15);
@@ -39,7 +43,7 @@ class TenantController extends Controller {
         //                     ->where('properties.company_id', '=', Auth::user()->company_id)
         //                     ->get();
         
-        return view('tenants.index', ['tenants' => $tenants]);
+        return view('tenants.index', ['tenants' => $tenants, 'properties' => $properties]);
     }
 
     /**
@@ -144,11 +148,11 @@ class TenantController extends Controller {
     public function show($id) {
 
         $tenant = User::join('tenants', 'users.id', '=', 'tenants.user_id')
-                            ->where('tenants.id', '=', $id)
+                            ->where('users.id', '=', $id)
                             ->first();
 
         $property = Property::join('tenants', 'properties.id', '=', 'tenants.property_id')
-                            ->where('tenants.id', '=', $id)
+                            ->where('tenants.id', '=', $tenant->id)
                             ->first();
                             
         return view('tenants.show', ['tenant' => $tenant, 'property' => $property]);
@@ -163,7 +167,7 @@ class TenantController extends Controller {
     public function edit($id) {
 
         $tenant = User::join('tenants', 'users.id', '=', 'tenants.user_id')
-                            ->where('tenants.id', '=', $id)
+                            ->where('users.id', '=', $id)
                             ->first();
 
         $properties = Property::where('company_id', '=', Auth::user()->company_id)->get();
@@ -234,8 +238,10 @@ class TenantController extends Controller {
 
     public function archive($id) {
 
-        $tenant = Tenant::find($id);
-        $tenant->active = 0;
+        $user = User::find($id);
+
+        $tenant = Tenant::where('user_id', '=', $id)->first();
+        $tenant->active = 0; // 0 = inactive
         $tenant->save();
 
         return redirect()->route('tenants.index')->with('info', 'The tenant was successfully archived');

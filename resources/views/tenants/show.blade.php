@@ -76,8 +76,8 @@
                     </table>
 
                     @if($tenant->active === 1)
-                    <a href="{{ route('tenants.archive', ['id' => $tenant->id ]) }}" class="btn btn-danger">Archive Tenanat</a>
-                    <a href="{{ route('tenants.edit', ['id' => $tenant->id ]) }}" class="btn btn-primary shadow">Edit Tenanat</a>
+                    <a href="{{ route('tenants.archive', ['id' => $tenant->user_id ]) }}" class="btn btn-danger">Archive Tenanat</a>
+                    <a href="{{ route('tenants.edit', ['id' => $tenant->user_id ]) }}" class="btn btn-primary shadow">Edit Tenanat</a>
                     @endif
 
                 </div>
