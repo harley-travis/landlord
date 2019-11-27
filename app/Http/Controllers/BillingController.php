@@ -548,8 +548,8 @@ class BillingController extends Controller {
             "amount" => 0,
             "currency" => "usd",
             "interval" => "month",
-            "usage_type" => "metered",
-            "trial_period_days" => 14,
+            "usage_type" => "licensed",
+            "trial_end" => $user->trial_ends_at,
         ]);
 
         // testing email

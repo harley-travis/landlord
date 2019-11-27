@@ -36,7 +36,7 @@ class DatabaseSeeder extends Seeder {
             'role' => '10',
             'product' => '10', 
             'remember_token' => '',
-            'stripe_id' => 'cus_G3TGgX2v2na3KD', // dummy data. sorry no good hackers
+            'stripe_id' => 'cus_GFme8tZcVXTYF1', // dummy data. sorry no good hackers
             'card_brand' => 'Visa', 
             'card_last_four' => '5555',
             'created_at' => Carbon::now(),

@@ -13,6 +13,7 @@
                             <h3 class="mb-0">ACH Accounts</h3>
                         </div>
                         <div class="col-4 text-right">
+                            <i class="fas fa-question-circle color-purple mr-3" data-toggle="tooltip" data-placement="left" title="Currently we do not support credit cards"></i>
                             <a href="{{ route('settings.billing.ach.create') }}" class="btn btn-success"><i class="fas fa-plus-circle pr-2"></i>Add ACH Account</a>
                         </div>
                     </div>
@@ -123,7 +124,7 @@
 
     <div class="row mt-3">
         <div class="col">
-            <div class="card bg-secondary shadow">
+            <div class="card shadow">
                 <div class="card-header border-0">
                     <div class="row align-items-center">
                         <div class="col-8">
@@ -136,6 +137,10 @@
                 </div>
 
                 <div class="card-body">
+
+                @if( $invoices->isEmpty() ) 
+                    <p class="text-center">No transactions at this time</p>
+                @else
 
                     <div class="table-responsive">
                         <table class="table align-items-center table-flush table-hover">
@@ -170,7 +175,7 @@
                     </div>
 
                     <!-- to do: create pagination for billing -->
-
+                @endif
                 </div> <!-- card-body -->
             </div><!-- card -->
         </div><!-- col -->

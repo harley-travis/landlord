@@ -22,25 +22,25 @@ class PropertyController extends Controller {
     public function index() {
 
         $properties = Property::join('rents', 'rents.property_id', '=', 'properties.id')
-                                    ->where('company_id', '=', Auth::user()->company_id)
-                                    ->paginate(15);
+                            ->where('company_id', '=', Auth::user()->company_id)
+                            ->paginate(15);
 
         $communities = Community::join('properties', 'communities.id', '=', 'properties.community_id')
-                                    ->where('communities.company_id', '=', Auth::user()->company_id)
-                                    ->paginate(15);
+                            ->where('communities.company_id', '=', Auth::user()->company_id)
+                            ->paginate(15);
 
 
         $avaliable = Property::join('rents', 'rents.property_id', '=', 'properties.id')
-                                    ->where('company_id', '=', Auth::user()->company_id)
-                                    ->where('occupied', '=', 0)
-                                    ->paginate(15);
+                            ->where('company_id', '=', Auth::user()->company_id)
+                            ->where('occupied', '=', 0)
+                            ->paginate(15);
 
         $occupied = User::join('tenants', 'users.id', '=', 'tenants.user_id')
-                                    ->join('properties', 'tenants.property_id', '=', 'properties.id')
-                                    ->where('properties.company_id', '=', Auth::user()->company_id)
-                                    ->where('users.company_id', '=', Auth::user()->company_id)
-                                    ->where('tenants.active', '=', '1')
-                                    ->paginate(15);
+                            ->join('properties', 'tenants.property_id', '=', 'properties.id')
+                            ->where('properties.company_id', '=', Auth::user()->company_id)
+                            ->where('users.company_id', '=', Auth::user()->company_id)
+                            ->where('tenants.active', '=', '1')
+                            ->paginate(15);
 
         $company = Company::where('id', '=', Auth::user()->company_id)->first();
         
@@ -89,29 +89,29 @@ class PropertyController extends Controller {
             'address_3' => $request->input('address_3'),
             'city' => $request->input('city'),
             'state' => $request->input('state'),
-            'zip'=> $request->input('zip'),
-            'country'=> $request->input('country'),
-            'occupied'=> $request->input('occupied'),
-            'pet'=> $request->input('pet'),
-            'bed_amount'=> $request->input('bed_amount'),
-            'bath_amount'=> $request->input('bath_amount'),
-            'square_footage'=> $request->input('square_footage'),
-            'description'=> $request->input('description'),
-            'community_id'=> $request->input('community_id'),
+            'zip' => $request->input('zip'),
+            'country' => $request->input('country'),
+            'occupied' => $request->input('occupied'),
+            'pet' => $request->input('pet'),
+            'bed_amount' => $request->input('bed_amount'),
+            'bath_amount' => $request->input('bath_amount'),
+            'square_footage' => $request->input('square_footage'),
+            'description' => $request->input('description'),
+            'community_id' => $request->input('community_id'),
             'company_id' => Auth::user()->company_id,
         ]);
         $property->save();
 
         $rent = new Rent([
             'lease_length'=> $request->input('lease_length'),
-            'rent_amount'=> $request->input('rent_amount'),
-            'deposit_amount'=> $request->input('deposit_amount'),
-            'pet_deposit_amount'=> $request->input('pet_deposit_amount'),
-            'amount_refundable'=> $request->input('amount_refundable'),
-            'late_date'=> $request->input('late_date'),
-            'late_fee'=> $request->input('late_fee'),
-            'account_number'=> $request->input('account_number'),
-            'hoa_amount'=> $request->input('hoa_amount'),
+            'rent_amount' => $request->input('rent_amount'),
+            'deposit_amount' => $request->input('deposit_amount'),
+            'pet_deposit_amount' => $request->input('pet_deposit_amount'),
+            'amount_refundable' => $request->input('amount_refundable'),
+            'late_date' => $request->input('late_date'),
+            'late_fee' => $request->input('late_fee'),
+            'account_number' => $request->input('account_number'),
+            'hoa_amount' => $request->input('hoa_amount'),
             'property_id' => $property->id,
         ]);
         $rent->save();
