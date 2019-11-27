@@ -71,7 +71,9 @@
                         </tr>
                         <tr>
                             <td>Property</td>
-                            <td>{{ $property->address_1 }} {{ $property->address_2 }} {{ $property->address_3 }}</td>
+                            <td>
+                                {{ $property->address_1 }} {{ $property->address_2 }} {{ $property->address_3 }}
+                            </td>
                         </tr>
                     </table>
 

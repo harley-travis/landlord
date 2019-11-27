@@ -49,7 +49,6 @@
                         <div class="form-group">
                             <label for="role">User Role <small class="text-danger pl-2">required</small></label>
                             <select id="role" name="role" class="form-control {{ $errors->has('role') ? 'is-invalid' : '' }}">
-                                <option>Select User Role</option>
                                 <option value="1">Maintenance Worker</option>
                                 <option value="2">Office Manager</option>
                                 <option value="3">Admin</option>

@@ -14,8 +14,9 @@
             <li class="nav-item dropdown">
                 <a class="nav-link" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <div class="media align-items-center">
-                        <span class="avatar avatar-sm rounded-circle">
-                        <img alt="Image placeholder" src="{{ asset('argon') }}/img/theme/team-1-800x800.jpg">
+                        <span class="avatar avatar-sm rounded-circle font-weight-bold">
+                        {{ Auth::user()->name[0] }}
+                        <!-- <img alt="Image placeholder" src="{{ asset('argon') }}/img/theme/team-1-800x800.jpg"> -->
                         </span>
                     </div>
                 </a>
@@ -129,10 +130,25 @@
                         </a>
                     </li>   
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('tenants.index') }}">
-                            <i class="fas fa-user-friends text-blue"></i> Tenants
+                        <a class="nav-link" href="#tenants" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="tenants">
+                            <i class="fas fa-wrench text-info"></i>
+                            <span class="">Tenants</span>
                         </a>
-                    </li> 
+                        <div class="collapse" id="tenants">
+                            <ul class="nav nav-sm flex-column">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('tenants.index') }}">
+                                        View All
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('tenants.archived') }}">
+                                        View Archived
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
 
                 <!-- ADMIN -->
                 @elseif(Auth::user()->role === 3)
@@ -161,10 +177,25 @@
                         </a>
                     </li>   
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('tenants.index') }}">
-                            <i class="fas fa-user-friends text-blue"></i> Tenants
+                        <a class="nav-link" href="#tenants" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="tenants">
+                            <i class="fas fa-wrench text-info"></i>
+                            <span class="">Tenants</span>
                         </a>
-                    </li> 
+                        <div class="collapse" id="tenants">
+                            <ul class="nav nav-sm flex-column">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('tenants.index') }}">
+                                        View All
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('tenants.archived') }}">
+                                        View Archived
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#users" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="users">
                             <i class="far fa-user-circle text-pink"></i>
@@ -205,10 +236,25 @@
                         </a>
                     </li> 
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('tenants.index') }}">
-                            <i class="fas fa-user-friends text-blue"></i> Tenants
+                        <a class="nav-link" href="#tenants" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="tenants">
+                            <i class="fas fa-wrench text-info"></i>
+                            <span class="">Tenants</span>
                         </a>
-                    </li> 
+                        <div class="collapse" id="tenants">
+                            <ul class="nav nav-sm flex-column">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('tenants.index') }}">
+                                        View All
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('tenants.archived') }}">
+                                        View Archived
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#users" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="users">
                             <i class="far fa-user-circle text-pink"></i>
@@ -250,11 +296,25 @@
                         </a>
                     </li> 
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('tenants.index') }}">
-                            <i class="fas fa-user-friends text-blue"></i> Tenants
+                        <a class="nav-link" href="#tenants" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="tenants">
+                            <i class="fas fa-wrench text-info"></i>
+                            <span class="">Tenants</span>
                         </a>
-                    </li> 
-
+                        <div class="collapse" id="tenants">
+                            <ul class="nav nav-sm flex-column">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('tenants.index') }}">
+                                        View All
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('tenants.archived') }}">
+                                        View Archived
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#users" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="users">
                             <i class="far fa-user-circle text-pink"></i>

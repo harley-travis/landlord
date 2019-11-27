@@ -11,7 +11,7 @@
                 <div class="card-header border-0">
                     <div class="row align-items-center">
                         <div class="col-8">
-                            <h3 class="mb-0">Newly Created Tenants</h3>
+                            <h3 class="mb-0">New Tenants</h3>
                         </div>
                         <div class="col-4 text-right">
                             <a href="{{ route('tenants.create') }}" class="btn btn-success shadow"><i class="fas fa-plus-circle pr-2"></i> Add Tenant</a>

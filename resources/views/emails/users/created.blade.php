@@ -11,7 +11,7 @@ Login to your account and get started! Here is a list to get you going.
 
 2) Create a tenant.
 
-3) Add any additional users to your acocunt like office managers or maintenance workers. 
+3) Add any additional users to your account like office managers or maintenance workers. 
 
 If you have any troubles navigating the site, you can always reach out for support. Contact us at support@senrent.com.
 

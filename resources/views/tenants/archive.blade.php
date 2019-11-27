@@ -1,51 +1,51 @@
-@extends('layouts.app')
+@extends('layouts.app', ['page_title' => "Tenants Management"])
 
 @section('content')
-<div class="container">
+@include('layouts.headers.cards')
 
-    <div class="row justify-content-center">
-        <div class="col-md-12">
+<div class="container-fluid mt--9">
+
+    <div class="row">
+        <div class="col">
             <div class="card shadow">
-                <div class="card-header">Archived Tenants</div>
+                <div class="card-header border-0">
+                    <div class="row align-items-center">
+                        <div class="col-8">
+                            <h3 class="mb-0">Archived Tenants</h3>
+                        </div>
+                        <div class="col-4 text-right">
+                            <a href="{{ route('tenants.create') }}" class="btn btn-success shadow"><i class="fas fa-plus-circle pr-2"></i> Add Tenant</a>
+                        </div>
+                    </div>
+                </div>
 
                 <div class="card-body">
 
-                @if(Session::has('info'))
-                    <div class="alert alert-success" role="alert">
-                        <h4 class="alert-heading">Success!</h4>
-                        <p>{{ Session::get('info') }}</p>
-                    </div>
-                @endif
+                    @if(Session::has('info'))
+                        <div class="alert alert-success" role="alert">
+                            <h4 class="alert-heading">Success!</h4>
+                            <p>{{ Session::get('info') }}</p>
+                        </div>
+                    @endif
 
 
                     @if($tenants->isEmpty())
-                        You have no archived tenants
-
-                        <div class="mb-3 text-right">
-                            <a href="{{ route('tenants.index') }}" class="btn btn-primary">Go Back</a>
-                        </div>
+                        <p class="text-center">You have no archived tenants</p>
                     @else
-
-                    <div class="mb-3 text-right">
-                        <a href="{{ route('tenants.index') }}" class="btn btn-primary">Go Back</a>
-                    </div>
 
                     <table class="table table-hover">
                         <tr>
                             <th>Name</th>
                             <th>Phone</th>
                             <th>Email</th>
-                  
                         </tr>
                         @foreach($tenants as $tenant)
                         <tr>
-                            <td><a href="{{ route('tenants.show', ['id' => $tenant->id ]) }}">{{ $tenant->name }}</a></td>
+                            <td><a href="{{ route('tenants.show', ['id' => $tenant->user_id ]) }}">{{ $tenant->name }}</a></td>
                             <td>{{ $tenant->phone }}</td>
                             <td>{{ $tenant->email }}</td>
-                      
                         </tr>
                         @endforeach
-                      
                     </table>
 
                     @endif
