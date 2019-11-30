@@ -25,7 +25,7 @@
 
         <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 
-        <script src="https://js.stripe.com/v3/"></script>
+        @yield('head')
 
         <!-- Global site tag (gtag.js) - Google Analytics -->
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-L3NFNGSXEQ"></script>
@@ -61,5 +61,7 @@
         
         <!-- Argon JS -->
         <script src="{{ asset('argon') }}/js/argon.js?v=1.0.0"></script>
+
+        @yield('otherJs')
     </body>
 </html>

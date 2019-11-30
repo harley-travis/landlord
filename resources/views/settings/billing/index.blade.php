@@ -4,6 +4,30 @@
 @include('layouts.headers.cards')
 
 <div class="container-fluid mt--9">
+
+    @if($user->stripe_account === null)
+    <div class="row mb-3">
+        <div class="col">
+            <div class="card shadow">
+                <div class="card-header border-0">
+                    <div class="row align-items-center">
+                        <div class="col-8">
+                            <h3 class="mb-0">Account Onboarding</h3>
+                        </div>
+                        <div class="col-4 text-right">
+                           
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <p>In order to start accepting rent from your tenants, we will have to onboard you accept payment from your tenants. Click the link below to get started.</p>
+                    <a href="https://dashboard.stripe.com/express/oauth/authorize?response_type=code&client_id={{ env('STRIPE_CLIENT_ID') }}&scope=read_write" class="btn btn-primary">Start Onboarding</a>
+                </div>
+            </div> <!-- card -->
+        </div> <!-- col -->
+    </div> <!-- row -->
+    @endif
+
     <div class="row">
         <div class="col">
             <div class="card shadow">
@@ -14,6 +38,7 @@
                         </div>
                         <div class="col-4 text-right">
                             <i class="fas fa-question-circle color-purple mr-3" data-toggle="tooltip" data-placement="left" title="Currently we do not support credit cards"></i>
+                            <a href="{{ route('settings.billing.subscription.create') }}" class="btn btn-primary"><i class="fas fa-plus-circle pr-2"></i>Add Subscription</a>
                             <a href="{{ route('settings.billing.ach.create') }}" class="btn btn-success"><i class="fas fa-plus-circle pr-2"></i>Add ACH Account</a>
                         </div>
                     </div>

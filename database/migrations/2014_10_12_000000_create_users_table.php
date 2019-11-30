@@ -24,6 +24,7 @@ class CreateUsersTable extends Migration
             $table->integer('product')->comment('0=tenant 1=home owners 2=apt 3=hoa');
             $table->rememberToken();
             $table->timestamps();
+            $table->string('stripe_account')->nullable(); // for new stripe accounts for them to accept payment
 
             $table->foreign('company_id')->references('id')->on('companies');
         });

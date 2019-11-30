@@ -374,12 +374,12 @@ Route::group(['prefix' => 'settings/billing', 'middleware' => ['auth']], functio
 
   Route::get('create', [
     'uses' => "$c@create",
-    'as' => 'settings.billing.create'
+    'as' => 'settings.billing.subscription.create'
   ]);
 
-  Route::post('create', [
+  Route::post('subscribe', [
     'uses' => "$c@store",
-    'as' => 'settings.billing.add'
+    'as' => 'settings.billing.subscribe'
   ]);
 
   Route::get('ach/create', [
@@ -445,7 +445,17 @@ Route::group(['prefix' => 'settings/billing', 'middleware' => ['auth']], functio
   Route::get('setDefault/{id}', [
 		'uses'	=> "$c@setDefaultPaymentMethod", 
 		'as'	=> 'settings.billing.setDefault'
-	]);
+  ]);
+  
+  Route::get('confirmation', [
+    'uses'	=> "$c@showConfirmation",
+    'as'	=> 'settings.billing.confirmation'
+  ]);
+
+  Route::post('expressConnection', [
+    'uses'	=> "$c@completeExpressConnection",
+    'as'	=> 'settings.billing.expressConnection'
+  ]); 
 
 });
 

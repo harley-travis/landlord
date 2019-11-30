@@ -13,6 +13,10 @@ use App\Mail\UserCreated;
 
 class BillingController extends Controller {
 
+    /**
+     * https://www.youtube.com/watch?v=OtLmqDpH-C8
+     */
+
     public function __construct() {
         \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
     }
@@ -36,9 +40,8 @@ class BillingController extends Controller {
             ]
           );
 
-        //dd($bank_accounts);
-
         return view('settings.billing.index', [
+            'user' => $user,
             'bank_accounts' => $bank_accounts, 
             'invoices' => $invoices,
             'customer' => $customer, 
@@ -54,36 +57,67 @@ class BillingController extends Controller {
         return view('settings.billing.trial.end');
     }
 
+    public function showConfirmation() {
+        return view('settings.billing.express');
+    }
+
     public function create() {
 
         $user = User::find(Auth::user()->id);
 
-        return view('settings.billing.create', [
+        return view('settings.billing.subscription.create', [
             'intent' => $user->createSetupIntent()
         ]);
 
     }
 
     public function store(Request $request) {
+        ///dd('hi');
 
-        $user = User::find(Auth::user()->id);
+        //$user = User::find(Auth::user()->id);
 
-        // $payment_method = \Stripe\PaymentMethod::retrieve($intent->payment_method);
-        // $payment_method->attach(['customer' => $user->stripe_id]);
+        $user = auth()->user();
 
-        $card = \Stripe\Customer::createSource(
-            $user->stripe_id,
-            [
-              'source' => 'tok_amex',
-              'object' => 'card',
+        $paymentMethod = $request->payment_method;
 
-            ]
-          );
+        // monthly $15/mon $2 property
+        $planId = 'plan_GFq5J9sIXkOyh4';
 
+        // plan based on the user product
+        //$plan = $user->product;
 
-        return view('settings.billing.index', [
+        /**
+         * NEED TO CREATE/GRAB ALL THE PLAN IDS FOR THIS 
+         */
+        // if($plan === 1) {
+        //     $planId = 'plan_GFq5J9sIXkOyh4';
+        // } else if ($plan === 2 ) {
+        //     $planId = 'plan_GFq5J9sIXkOyh4';
+        // } else if ($plan === 3) {
+        //     $planId = 'plan_GFq5J9sIXkOyh4';
+        // } else if ($plan === 4) {
+        //     $planId = 'plan_GFq5J9sIXkOyh4';
+        // }
 
-        ]);     
+        // if we want to grab it from the form
+        //$planId = $request->plan;
+
+        $subscription = \Stripe\Subscription::create([
+            'customer' => $user->stripe_id,
+            'items' => [
+                [
+                    'plan' => $planId,
+                   // 'quantity' => 100,
+                ],
+            ],
+        ]);
+
+        //$user->newSubscription('default', $planId)->create($paymentMethod);
+
+        // /$user->subscription('default')->incrementQuantity(100);
+
+        //return response(['status' => 'success']);
+        return view('settings.billing.subscription.index');     
 
     }
 
@@ -794,6 +828,46 @@ class BillingController extends Controller {
                 "customer" => $user->stripe_id,
             ]
         );
+
+        return redirect()
+            ->route('settings.billing.index', [
+            'bank_accounts' => $bank_accounts, 
+            'customer' => $customer, 
+            'invoices' => $invoices,
+        ])->with('info', 'Your default payment has be set successfully!');
+
+    }
+
+    public function completeExpressConnection(Request $request) {
+
+        $response = \Stripe\OAuth::token([
+            'grant_type' => 'authorization_code',
+            'code' => $request->input('code'),
+        ]);
+            
+        // Access the connected account id in the response
+        $connected_account_id = $response->stripe_user_id;
+
+        $user = User::find(Auth::user()->id);
+        $user->stripe_account = $request->input('code');
+        $user->save();
+
+        $bank_accounts = \Stripe\Customer::allSources(
+            $user->stripe_id,
+            [
+                'limit' => 3,
+                'object' => 'bank_account',
+            ]
+        );
+
+        $invoices = \Stripe\Invoice::all(
+            [
+                 // 'limit' => 12,
+                "customer" => $user->stripe_id,
+            ]
+        );
+
+        $customer = \Stripe\Customer::retrieve($user->stripe_id);
 
         return redirect()
             ->route('settings.billing.index', [
