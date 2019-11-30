@@ -9,6 +9,7 @@ use App\Company;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Mail\InternalUserCreated;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 
 class UserRoleController extends Controller {
 
@@ -67,7 +68,8 @@ class UserRoleController extends Controller {
         //Mail::to($e)->send(new InternalUserCreated($u));
 
         // live
-        Mail::to($u->email)->send(new UserCreated($u));
+        MustVerify::EmailsendEmailVerificationNotification();
+        Mail::to($u->email)->send(new InternalUserCreated($u));
 
         return redirect()
                 ->route('users.index')
