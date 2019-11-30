@@ -67,7 +67,7 @@ class UserRoleController extends Controller {
         //Mail::to($e)->send(new InternalUserCreated($u));
 
         // live
-        Mail::to($u->email)->send(new InternalUserCreated($u));
+        Mail::to($u->email)->send(new UserCreated($u));
 
         return redirect()
                 ->route('users.index')

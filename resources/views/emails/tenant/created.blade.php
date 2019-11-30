@@ -5,7 +5,7 @@ Your property owner just created an account for you at SenRent.com. Login to sta
 
 When you login, we encourage you to update your password.
 
-@component('mail::button', ['url' => 'http://senrent.com/login'])
+@component('mail::button', ['url' => 'https://app.senrent.com/login'])
 Login
 @endcomponent
 
