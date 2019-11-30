@@ -10,8 +10,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Mail\InternalUserCreated;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Foundation\Auth\VerifiesEmails;
 
-class UserRoleController extends Controller {
+class UserRoleController extends Controller implements MustVerifyEmail {
+
+    use VerifiesEmails;
 
     /**
      * Display a listing of the resource.
