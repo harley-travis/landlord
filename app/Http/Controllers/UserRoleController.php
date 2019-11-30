@@ -68,7 +68,7 @@ class UserRoleController extends Controller {
 
         // live
         $user->sendEmailVerificationNotification();
-        Mail::to($u->email)->send(new InternalUserCreated($u));
+        //Mail::to($u->email)->send(new InternalUserCreated($u));
 
         return redirect()
                 ->route('users.index')
