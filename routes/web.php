@@ -44,7 +44,7 @@ Route::get('/home', function () {
 	if( Auth::user()->stripe_id === null && Auth::user()->role === 3 ) {
 		return view('settings.billing.trial.begin');
 	} else if(Auth::user()->role === 0) {
-    return view('tenants.billing');
+    return view('tenants.billing.index');
   } else {
 		return view('dashboard');
 	}
