@@ -43,7 +43,9 @@ Route::get('/home', function () {
 	
 	if( Auth::user()->stripe_id === null && Auth::user()->role === 3 ) {
 		return view('settings.billing.trial.begin');
-	} else {
+	} else if(Auth::user()->role === 0) {
+    return view('tenants.billing');
+  } else {
 		return view('dashboard');
 	}
     
@@ -139,6 +141,26 @@ Route::group(['prefix' => 'tenants', 'middleware' => ['auth', 'trial']], functio
     Route::post('unassignProperty', [
       'uses'	=> "$c@unassignProperty",
       'as'	=> 'tenants.unassignProperty'
+    ]);
+
+    Route::get('billing', [
+      'uses' => "$c@showPayIndex",
+      'as' => 'tenants.billing.index'
+    ]);
+
+    Route::get('billing/pay', [
+      'uses' => "$c@showPay",
+      'as' => 'tenants.billing.pay'
+    ]);
+
+    Route::get('billing/review', [
+      'uses' => "$c@showReview",
+      'as' => 'tenants.billing.review'
+    ]);
+
+    Route::get('billing/confirmation', [
+      'uses' => "$c@showPaymentConfirmation",
+      'as' => 'tenants.billing.confirmation'
     ]);
     
 });

@@ -584,7 +584,7 @@ class BillingController extends Controller {
             "currency" => "usd",
             "interval" => "month",
             "usage_type" => "licensed",
-           // "trial_end" => carbon()->now->days(14),
+           // "trial_end" => carbon()->now()->days(14),
         ]);
 
         // testing email
@@ -876,6 +876,96 @@ class BillingController extends Controller {
             'customer' => $customer, 
             'invoices' => $invoices,
         ])->with('info', 'You have successfully completed the onboarding process! Have fun!');
+
+    }
+
+    public function showPayIndex() {
+        return view('tenants.billing.index');
+    }
+
+    public function showPay() {
+        return view('tenants.billing.pay');
+    }
+
+    public function showReview() {
+        return view('tenants.billing.review');
+    }
+
+    public function showPaymentConfirmation() {
+        return view('tenants.billing.confirmation');
+    }
+
+    public function showRentPreview() {
+
+        // get the rent payment based on the property and tenant
+
+        // SHOW THE FEE AMOUNT need to calculate the $# and times it for them. maybe just a standard number
+        // need to show ACH and CC amount
+
+        // return the view
+
+    }
+
+    public function payRent() {
+
+        // NEED TO RETURN WHAT PAYMENT METHOD
+
+        // the tenant logged in will see this page. 
+        $tenant = Tenant::where('user_id', '=', Auth::user()->id)->first();
+
+        $property = Property::join('rents', 'rents.property_id', '=', 'properties.id')
+                            ->where('properties.id', '=', $tenant->property_id)
+                            ->first();
+
+        $company = Company::where('id', '=', Auth::user()->company_id);
+
+        $proprietor = User::where('company_id', '=', Auth::user()->company_id)
+                            ->where('role', '=', '3')
+                            ->first();
+
+        // find the tenant stripe_id
+        $rent = $property->rent_amount * 100 ; // the number X 10 to get the penny amount for the transaction
+
+        // the amount times the conv. fee
+        $cc = ( $rent * 0.029 ) + 30; // 2.9% + 30 cents conv. fee
+        $ach = ( $rent * 0.0025 ) + 225; //0.25% + 2.25
+
+        // if ACH
+        // if() {
+
+        // } else {
+
+        // }
+
+        
+
+        // try {
+
+        // } catch {
+
+        // }
+
+        
+
+        //$total = $rent + $convenience;
+
+        // transaction
+        $charge = \Stripe\Charge::create([
+            "amount" => $total, // total amount of rent and convience fee
+            "currency" => "usd",
+            "source" => "tok_visa", // capture the tenant payment method
+            "transfer_data" => [
+                "amount" => $rent, 
+                "destination" => $proprietor->stripe_account, // this is the proprietor stripe_account number
+            ],
+        ]);
+
+        // validation
+
+        // return view
+        return redirect()
+            ->route('tenants.billing.confirmation')
+            ->with('info', 'Your payment was successfully. You should see the amount withdrawn from your account within 1-3 business days.');
 
     }
 
