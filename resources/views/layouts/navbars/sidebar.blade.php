@@ -14,7 +14,7 @@
             <li class="nav-item dropdown">
                 <a class="nav-link" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <div class="media align-items-center">
-                        <span class="avatar avatar-sm rounded-circle font-weight-bold">
+                        <span class="avatar avatar-sm rounded-circle font-weight-bold bg-primary">
                         {{ Auth::user()->name[0] }}
                         <!-- <img alt="Image placeholder" src="{{ asset('argon') }}/img/theme/team-1-800x800.jpg"> -->
                         </span>

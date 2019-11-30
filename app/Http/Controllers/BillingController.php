@@ -45,6 +45,7 @@ class BillingController extends Controller {
             'bank_accounts' => $bank_accounts, 
             'invoices' => $invoices,
             'customer' => $customer, 
+            'intent' => $user->createSetupIntent()
         ]);
 
     }
@@ -583,7 +584,7 @@ class BillingController extends Controller {
             "currency" => "usd",
             "interval" => "month",
             "usage_type" => "licensed",
-            "trial_end" => $user->trial_ends_at,
+           // "trial_end" => carbon()->now->days(14),
         ]);
 
         // testing email
@@ -874,7 +875,7 @@ class BillingController extends Controller {
             'bank_accounts' => $bank_accounts, 
             'customer' => $customer, 
             'invoices' => $invoices,
-        ])->with('info', 'Your default payment has be set successfully!');
+        ])->with('info', 'You have successfully completed the onboarding process! Have fun!');
 
     }
 
