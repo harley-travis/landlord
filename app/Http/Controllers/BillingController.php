@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Mail;
 use App\User;
+use App\Tenant;
+use App\Property;
 use Auth;
 use DB;
 use Carbon\Carbon;
@@ -880,11 +882,32 @@ class BillingController extends Controller {
     }
 
     public function showPayIndex() {
-        return view('tenants.billing.index');
+
+        $tenant = Tenant::where('user_id', '=', Auth::user()->id)->first();
+
+        $property = Property::join('rents', 'rents.property_id', '=', 'properties.id')
+                            ->where('properties.id', '=', $tenant->property_id)
+                            ->first();
+
+        return view('tenants.billing.index', [
+                    'tenant' => $tenant,
+                    'property' => $property,
+        ]);
     }
 
     public function showPay() {
-        return view('tenants.billing.pay');
+       
+        $tenant = Tenant::where('user_id', '=', Auth::user()->id)->first();
+
+        $property = Property::join('rents', 'rents.property_id', '=', 'properties.id')
+                            ->where('properties.id', '=', $tenant->property_id)
+                            ->first();
+
+        return view('tenants.billing.pay', [
+                    'tenant' => $tenant,
+                    'property' => $property,
+        ]);
+        
     }
 
     public function showReview() {

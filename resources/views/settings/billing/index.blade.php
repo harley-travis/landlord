@@ -1,4 +1,4 @@
-@extends('layouts.app', ['page_title' => "ACH Accounts"])
+@extends('layouts.app', ['page_title' => "Billing Settings"])
 
 @section('head')
 
@@ -35,7 +35,7 @@
 
 <div class="container-fluid mt--9">
 
-    @if($user->stripe_account === null)
+    @if($user->stripe_account === null && $user->role >= 1)
     <div class="row mb-3">
         <div class="col">
             <div class="card shadow">

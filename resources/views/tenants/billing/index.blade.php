@@ -25,10 +25,17 @@
                         </div>
                     @endif
 
-                    Amount: $1000
-                    Due: 12/6/2019
 
-                    <a href="#" class="btn btn-primary">Make a Payment</a>
+                    @if( $property->rent_amount === 0) 
+                    Amount: $0.00
+                    @else
+                    Amount: ${{ $property->rent_amount }}
+                    Due: 1 {{ \Carbon\Carbon::now()->addMonth()->format('F') }}, {{ \Carbon\Carbon::now()->year }}
+                    @endif
+
+                    <p>Payment late on the {{ $property->late_date}} {{ \Carbon\Carbon::now()->addMonth()->format('F') }}, {{ \Carbon\Carbon::now()->year }}</p>
+
+                    <br><a href="{{ route('tenants.billing.pay') }}" class="btn btn-primary">Make a Payment</a>
                    
 
                 </div>

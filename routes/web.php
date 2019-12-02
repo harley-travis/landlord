@@ -92,6 +92,7 @@ Route::group(['prefix' => 'property', 'middleware' => ['auth', 'trial']], functi
 // TENANTS
 Route::group(['prefix' => 'tenants', 'middleware' => ['auth', 'trial']], function() {
     $c = 'TenantController';
+    $bc = 'BillingController';
 
     Route::get('', [
         'uses' => "$c@index",
@@ -144,22 +145,22 @@ Route::group(['prefix' => 'tenants', 'middleware' => ['auth', 'trial']], functio
     ]);
 
     Route::get('billing', [
-      'uses' => "$c@showPayIndex",
+      'uses' => "$bc@showPayIndex",
       'as' => 'tenants.billing.index'
     ]);
 
     Route::get('billing/pay', [
-      'uses' => "$c@showPay",
+      'uses' => "$bc@showPay",
       'as' => 'tenants.billing.pay'
     ]);
 
     Route::get('billing/review', [
-      'uses' => "$c@showReview",
+      'uses' => "$bc@showReview",
       'as' => 'tenants.billing.review'
     ]);
 
     Route::get('billing/confirmation', [
-      'uses' => "$c@showPaymentConfirmation",
+      'uses' => "$bc@showPaymentConfirmation",
       'as' => 'tenants.billing.confirmation'
     ]);
     

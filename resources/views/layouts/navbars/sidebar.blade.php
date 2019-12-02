@@ -111,6 +111,11 @@
                         <i class="ni ni-planet text-blue"></i> Billing History
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('tenants.billing.index') }}">
+                        <i class="ni ni-planet text-blue"></i> Pay Rent
+                    </a>
+                </li>
                 
                 <!-- OFFICE MANAGER -->
                 @elseif(Auth::user()->role === 2)
@@ -280,6 +285,11 @@
                 <!-- TRAVIS -->
                 @elseif(Auth::user()->role === 10)
 
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('tenants.billing.index') }}">
+                        <i class="ni ni-planet text-blue"></i> Pay Rent
+                    </a>
+                </li>
                 <li class="nav-item">
                         <a class="nav-link" href="{{ route('property.index') }}">
                         <i class="ni ni-pin-3 text-orange"></i> Properties
