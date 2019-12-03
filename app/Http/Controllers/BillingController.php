@@ -1009,9 +1009,13 @@ class BillingController extends Controller {
          * EVEN NUMBER. IF THERE ARE DECIMALS. 
          */
 
+        //dd($proprietor);
+
         $amount = $request->input('rent');
         $convenience = ( $amount * 0.0025 ) + .25;
         $total = $amount + $convenience;
+
+        dd($proprietor->stripe_account);
 
         // transaction
         $charge = \Stripe\Charge::create([
