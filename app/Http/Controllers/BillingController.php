@@ -1015,7 +1015,7 @@ class BillingController extends Controller {
         $convenience = ( $amount * 0.0025 ) + .25;
         $total = $amount + $convenience;
 
-        dd($proprietor->stripe_account);
+        //dd($proprietor->stripe_account);
 
         // transaction
         $charge = \Stripe\Charge::create([
