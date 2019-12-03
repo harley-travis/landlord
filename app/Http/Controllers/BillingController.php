@@ -1008,12 +1008,13 @@ class BillingController extends Controller {
 
         // transaction
         $charge = \Stripe\Charge::create([
-            "amount" => $request->input('total'), // total amount of rent and convience fee
-            "currency" => "usd",
-            "source" => $bank_account, // capture the tenant payment method
-            "transfer_data" => [
-                "amount" => $request->input('rent'), 
-                "destination" => $proprietor->stripe_account, // this is the proprietor stripe_account number
+            'amount' => $request->input('total'), // total amount of rent and convience fee
+            'currency' => "usd",
+            'source' => $bank_account, // capture the tenant payment method
+            'customer' => $customer->id,
+            'transfer_data' => [
+                'amount' => $request->input('rent'), 
+                'destination' => $proprietor->stripe_account, // this is the proprietor stripe_account number
             ],
         ]);
 

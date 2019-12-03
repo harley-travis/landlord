@@ -129,7 +129,7 @@
         }
     </script>
 
-    <script src="https://js.stripe.com/v3/"></script>
+    <!-- <script src="https://js.stripe.com/v3/"></script>
 
     <script>
 
@@ -153,7 +153,7 @@
 
                     // Send the token to your server.
                     stripeTokenHandler(result.token);
-                    
+
                 }
             });
         });
@@ -171,7 +171,7 @@
             form.submit();
         }
 
-    </script>
+    </script> -->
 
 
 @endsection
