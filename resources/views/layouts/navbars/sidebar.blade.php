@@ -107,13 +107,13 @@
                 @if(Auth::user()->role === 0)
 
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('settings.billing.index') }}">
-                        <i class="ni ni-planet text-blue"></i> Billing History
+                    <a class="nav-link" href="{{ route('tenants.billing.index') }}">
+                        <i class="ni ni-credit-card text-green"></i> Pay Rent
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('tenants.billing.index') }}">
-                        <i class="ni ni-planet text-blue"></i> Pay Rent
+                    <a class="nav-link" href="{{ route('settings.billing.index') }}">
+                        <i class="ni ni-archive-2 text-primary"></i> Billing History
                     </a>
                 </li>
                 
@@ -372,7 +372,7 @@
 
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('feedback.create') }}">
-                        <i class="fas fa-comments text-green"></i> Send Feedback
+                        <i class="fas fa-comments text-default"></i> Send Feedback
                     </a>
                 </li>   
                             
@@ -384,12 +384,12 @@
             <!-- Navigation -->
             <ul class="navbar-nav mb-md-3">
                 <li class="nav-item">
-                    <a class="nav-link" href="#">
+                    <a class="nav-link" href="https://senrent.com/privacy-policy.php" target="_blank">
                         <i class="fas fa-user-secret"></i> Privacy Policy
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">
+                    <a class="nav-link" href="https://senrent.com/terms-of-use.php" target="_blank">
                         <i class="fas fa-file-signature"></i> Terms of Service
                     </a>
                 </li>

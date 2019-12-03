@@ -105,15 +105,26 @@ class BillingController extends Controller {
         // if we want to grab it from the form
         //$planId = $request->plan;
 
-        $subscription = \Stripe\Subscription::create([
-            'customer' => $user->stripe_id,
-            'items' => [
-                [
-                    'plan' => $planId,
-                   // 'quantity' => 100,
+        if( Auth::user()->role != 0 ) {
+
+            $subscription = \Stripe\Subscription::create([
+                'customer' => $user->stripe_id,
+                'items' => [
+                    [
+                        'plan' => $planId,
+                    // 'quantity' => 100,
+                    ],
                 ],
-            ],
-        ]);
+            ]);
+
+        } else {
+
+            $customer = \Stripe\Customer::update([
+                Auth::user()->stripe_id,
+                'source' => $request->input('stripeToken'),
+            ]);
+
+        }
 
         //$user->newSubscription('default', $planId)->create($paymentMethod);
 
@@ -897,15 +908,28 @@ class BillingController extends Controller {
 
     public function showPay() {
        
+        $user = Auth::user();
+
         $tenant = Tenant::where('user_id', '=', Auth::user()->id)->first();
 
         $property = Property::join('rents', 'rents.property_id', '=', 'properties.id')
                             ->where('properties.id', '=', $tenant->property_id)
                             ->first();
 
+        $customer = \Stripe\Customer::retrieve($user->stripe_id);
+
+        $bank_accounts = \Stripe\Customer::allSources(
+            $user->stripe_id,
+                [
+                    'object' => 'bank_account',
+                ]
+            );
+
         return view('tenants.billing.pay', [
                     'tenant' => $tenant,
                     'property' => $property,
+                    'bank_accounts' => $bank_accounts,
+                    'customer' => $customer,
         ]);
         
     }

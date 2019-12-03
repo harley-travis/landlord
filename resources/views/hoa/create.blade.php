@@ -18,18 +18,6 @@
                 </div>
 
                 <div class="card-body">
-
-                    @if ($errors->any())
-                        <div class="alert alert-danger" role="alert">
-                            <h4 class="alert-heading">Hold the phone! You forgot something...</h4>
-                            <ul>
-                                @foreach ($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>
-                        </div>
-                    @endif
-
                     <form action="{{ route('property.add') }}" method="post">
 
                         <div class="accordion" id="accordionExample">
@@ -37,7 +25,7 @@
                                 <div class="card-header" id="headingOne">
                                     <h2 class="mb-0">
                                         <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                            Property Details <small class="text-danger pl-2">required</small>
+                                            Property Details
                                         </button>
                                     </h2>
                                 </div>
@@ -153,7 +141,7 @@
                                 <div class="card-header" id="headingTwo">
                                     <h2 class="mb-0">
                                         <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                            Rent Information <small class="text-danger pl-2">required</small>
+                                            Rent Information
                                         </button>
                                     </h2>
                                 </div>
@@ -168,11 +156,8 @@
                                         @if( Auth::user()->product === 1 ||  Auth::user()->product === 2 || Auth::user()->product === 10 )
 
                                         <div class="form-group">
-                                            <label for="rent_amount">Lease Amount <small class="text-danger pl-2">required</small></label>
-                                            <input type="text" class="form-control  {{ $errors->has('rent_amount') ? 'is-invalid' : '' }}" name="rent_amount" aria-describedby="rent_amount" placeholder="Enter amount of lease" value="{{ old('rent_amount') }}">
-                                            @error('rent_amount')
-                                            <span class='invalid-feedback'>{{ $message }}</span>
-                                            @enderror
+                                            <label for="rent_amount">Lease Amount</label>
+                                            <input type="text" class="form-control" name="rent_amount" aria-describedby="rent_amount" placeholder="Enter amount of lease" value="{{ old('rent_amount') }}">
                                         </div>
 
                                         <div class="form-group">
@@ -200,6 +185,32 @@
                                             <label for="late_fee">Late Fee Amount</label>
                                             <input type="text" class="form-control" name="late_fee" aria-describedby="late_fee" placeholder="Enter the late fee amount" value="{{ old('late_fee') }}">
                                         </div>
+
+                                        @endif
+
+                                        <!-- HOA USERS -->
+                                        @if( Auth::user()->product === 3 || Auth::user()->product === 10 )
+
+                                        <div class="form-group">
+                                            <label for="account_number">HOA Account Number</label>
+                                            <input type="text" class="form-control" name="account_number" aria-describedby="account_number" placeholder="Enter HOA account number" value="{{ old('account_number') }}">
+                                            <small id="emailHelp" class="form-text text-muted">Only needed if you already have account numbers assigned to tenants.</small>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="hoa_amount">Monthly HOA Fees</label>
+                                            <input type="text" class="form-control" name="hoa_amount" aria-describedby="hoa_amount" placeholder="Enter monthly HOA fee" value="{{ old('hoa_amount') }}">
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="community_id">Community</label>
+                                            <select id="community_id" name="community_id" class="form-control">
+                                                <option value="">Select Community</option>
+                                                @foreach($communities as $community)
+                                                <option value="{{ $community->id }}">{{ $community->hoa_community }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>   
 
                                         @endif
 

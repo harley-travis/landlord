@@ -58,37 +58,36 @@
     </div> <!-- row -->
     @endif
 
+    @if($user->role != 0 )
     <div class="row mb-3">
         <div class="col">
             <div class="card shadow">
                 <div class="card-header border-0">
                     <div class="row align-items-center">
-                        <div class="col-8">
+                        <div class="col">
                             <h3 class="mb-0">Add Credit Card</h3>
-                        </div>
-                        <div class="col-4 text-right">
-                            
+                            <small class="mt-4">Paying with a credit card results in a 2.9% convience fee. We recommend paying with ACH account to avoid large convience fees.</small>
                         </div>
                     </div>
                 </div>
 
                 <div class="card-body">
 
+                    
+                    <input placeholder="Card Holder Name" class="form-control mb-2" id="card-holder-name" type="text">
 
-                <input placeholder="Card Holder Name" class="form-control mb-2" id="card-holder-name" type="text">
+                    <!-- Stripe Elements Placeholder -->
+                    <div id="card-element"></div>
 
-                <!-- Stripe Elements Placeholder -->
-                <div id="card-element"></div>
-
-                <button class="mt-3 btn btn-primary" id="card-button" data-secret="{{ $intent->client_secret }}">
-                    Add Credit Card and Subscribe
-                </button>
-
+                    <button class="mt-3 btn btn-primary" id="card-button" data-secret="{{ $intent->client_secret }}">
+                        Add Credit Card and Subscribe
+                    </button>
 
                 </div>
             </div>
         </div>
     </div>
+    @endif
 
     <div class="row">
         <div class="col">
@@ -192,7 +191,7 @@
                                     <a href="{{ route('settings.billing.ach.verify', ['id' => $bank_account->id ]) }}" class="btn btn-success"><i class="fas fa-user-check pr-2"></i> Verify ACH Account</a>
                                     @endif
 
-                                    @if( $invoices->isEmpty() && $bank_account->status === "verified")
+                                    @if( $invoices->isEmpty() && $bank_account->status === "verified" && $user->role != 0)
                                     <!-- NEED TO LOCK THE APP IF THEY DON'T AUTHORIZE THIS PAYMENT AFTER TRIAL PERID. PULL THE TRIAL PERID FROM THE DB -->
                                     <!-- NEED TO PULL UP A MODEL TO TELL THEM THAT WE ARE GOING TO CHARGE THEIR CARD -->
                                      <a href="{{ route('settings.billing.ach.authorize', ['id' => $bank_account->id ]) }}" class="btn btn-success text-white"><i class="fas fa-user-check pr-2"></i> Authorize ACH Account</a>
@@ -300,12 +299,38 @@
                 } else {
                     // The card has been verified successfully...
                     console.log('handling success', setupIntent.payment_method);
-                    axios.post('/settings/billing/subscribe',{
-                        payment_method: setupIntent.payment_method,
-                        //plan : plan
-                    }).then((data)=>{
-                        location.replace(data.data.success_url)
-                    });
+
+                    if( {{ Auth::user()->role }} === 0 ) {
+
+                        // need to buid this out for a future release. this is code that i found on stripes site
+                        // https://stripe.com/docs/payments/accept-a-payment-charges#php
+                        // we don't want to encourage our users to use a Credit Card because of the high rates
+
+                        function stripeTokenHandler(token) {
+                        // Insert the token ID into the form so it gets submitted to the server
+                        var form = document.getElementById('payment-form');
+                        var hiddenInput = document.createElement('input');
+                        hiddenInput.setAttribute('type', 'hidden');
+                        hiddenInput.setAttribute('name', 'stripeToken');
+                        hiddenInput.setAttribute('value', token.id);
+                        form.appendChild(hiddenInput);
+
+                        // Submit the form
+                        form.submit();
+
+                        }
+
+                    } else {
+
+                        axios.post('/settings/billing/subscribe',{
+                            payment_method: setupIntent.payment_method,
+                            //plan : plan
+                        }).then((data)=>{
+                            location.replace(data.data.success_url)
+                        });
+
+                    }
+  
                 }
             });
         })

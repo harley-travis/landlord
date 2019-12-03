@@ -101,7 +101,6 @@ class TenantController extends Controller {
             'number_occupants'=> $request->input('number_occupants'),
             'active' => '1',
             'assigned' => '0',
-            // 'property_id'=> $request->input('property_id'),
             'user_id' => $u->id,
         ]);
         $tenant->save();

@@ -25,19 +25,25 @@
                         </div>
                     @endif
 
+                    @if( $tenant->property_id === null )
+
+                        <span class="text-danger font-weight-bold">Your landlord has not assigned you to a property yet. Contact them if you don't see your property in a day or two.</span>
+
+                    @else
+
 
                     @if( $property->rent_amount === 0) 
-                    Amount: $0.00
+                    <span>$0.00</span>
                     @else
-                    Amount: ${{ $property->rent_amount }}
-                    Due: 1 {{ \Carbon\Carbon::now()->addMonth()->format('F') }}, {{ \Carbon\Carbon::now()->year }}
+                    <h2 class="display-2 text-success mb-5">${{ $property->rent_amount }}</h2>
+                    <p>Payment due {{ \Carbon\Carbon::now()->addMonth()->format('F') }} 1, {{ \Carbon\Carbon::now()->year }}</p>
                     @endif
 
-                    <p>Payment late on the {{ $property->late_date}} {{ \Carbon\Carbon::now()->addMonth()->format('F') }}, {{ \Carbon\Carbon::now()->year }}</p>
+                    <p>Payment late on {{ $property->late_date}} 15, {{ \Carbon\Carbon::now()->addMonth()->format('F') }}, {{ \Carbon\Carbon::now()->year }}</p>
 
                     <br><a href="{{ route('tenants.billing.pay') }}" class="btn btn-primary">Make a Payment</a>
                    
-
+                    @endif
                 </div>
             </div>
         </div>

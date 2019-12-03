@@ -31,8 +31,8 @@ class PropertyController extends Controller {
 
 
         $avaliable = Property::join('rents', 'rents.property_id', '=', 'properties.id')
-                            ->where('company_id', '=', Auth::user()->company_id)
-                            ->where('occupied', '=', 0)
+                            ->where('properties.company_id', '=', Auth::user()->company_id)
+                            ->where('properties.occupied', '=', 0)
                             ->paginate(15);
 
         $occupied = User::join('tenants', 'users.id', '=', 'tenants.user_id')
@@ -81,6 +81,7 @@ class PropertyController extends Controller {
             'state' => 'required',
             'country' => 'required',
             'city' => 'required',
+            'rent_amount' => 'required',
         ]);
 
         $property = new Property([
