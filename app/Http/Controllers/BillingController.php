@@ -868,7 +868,7 @@ class BillingController extends Controller {
         $connected_account_id = $response->stripe_user_id;
 
         $user = User::find(Auth::user()->id);
-        $user->stripe_account = $request->input('code');
+        $user->stripe_account = $response->stripe_user_id;
         $user->save();
 
         $bank_accounts = \Stripe\Customer::allSources(
