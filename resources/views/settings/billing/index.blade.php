@@ -123,7 +123,7 @@
 					    @foreach( $bank_accounts as $bank_account )
 						<li class="list-group-item">
 							<span class="col-6">
-                                <i class="fas fa-university"></i> {{ $bank_account->bank_name }}
+                                <i class="fas fa-university mr-2"></i> {{ $bank_account->bank_name }}
                                 <span class="pl-3">******** {{ $bank_account->last4 }} </span>
                             
                                 @if($bank_account->id == $customer->default_source)

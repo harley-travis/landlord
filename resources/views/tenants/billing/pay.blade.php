@@ -5,6 +5,8 @@
 
 <div class="container-fluid mt--9">
 
+    <form action="{{ route('tenants.billing.review') }}" method="post">
+
     <div class="row mb-3">
         <div class="col">
             <div class="card shadow">
@@ -15,6 +17,7 @@
                         </div>
                         <div class="col-4 text-right">
                             <span class="text-success font-weight-bold display-4">${{ $property->rent_amount }}</span>
+                            <input type="hidden" name="amount" value="{{ $property->rent_amount }}">
                         </div>
                     </div>
                 </div>
@@ -85,35 +88,55 @@
 
                             @foreach( $bank_accounts as $bank_account )
 
-                                <div class="custom-control custom-control-alternative custom-checkbox mb-3">
-                                    <input class="custom-control-input" id="customCheck5" type="checkbox" checked>
-                                    <label class="custom-control-label " for="customCheck5">
 
-                                        <i class="fas fa-university ml-4    "></i> {{ $bank_account->bank_name }}
-                                        <span class="pl-3">******** {{ $bank_account->last4 }} </span>
+
+                            <div class="form-group">
+
+                                @if($bank_account->id == $customer->default_source)
+                                <div class="custom-control custom-radio mb-3">
+                                    <input name="source" class="custom-control-input" id="agree-{{ $bank_account->id }}" type="radio" value="{{ $bank_account->id }}" checked="">
+                                    <label class="custom-control-label" for="agree-{{ $bank_account->id }}">
                                     
-                                        @if($bank_account->id == $customer->default_source)
-                                            <span class="badge badge-primary">Default</span>
-                                        @endif
-                                        </span>
+                                        <i class="fas fa-university ml-4 mr-2"></i> {{ $bank_account->bank_name }}
+                                        <span class="pl-3">********  {{ $bank_account->last4 }}</span>
+                                        <span class="badge badge-primary">Default</span>
 
                                     </label>
                                 </div>
+                                @else
+                                <div class="custom-control custom-radio mb-3">
+                                    <input name="source" class="custom-control-input" id="agree-{{ $bank_account->id }}" type="radio" value="{{ $bank_account->id }}">
+                                    <label class="custom-control-label" for="agree-{{ $bank_account->id }}">
+
+                                        <i class="fas fa-university ml-4 mr-2"></i> {{ $bank_account->bank_name }}
+                                        <span class="pl-3">********  {{ $bank_account->last4 }}</span>
+                                
+                                    </label>
+                                </div>
+                                @endif
+
+                            </div>
+
 
                             @endforeach 
 
                         </div>
+                        <div class="col text-right">
+                            <a href="{{ route('settings.billing.index') }}" class="btn btn-link text-success">Add Another Payment Method</a>
+                        </div>
                     </div>
                     
-                    
                     <a href="{{ route('tenants.billing.index') }}" class="btn btn-link">Cancel</a>
-                    <a href="{{ route('tenants.billing.review') }}" class="btn btn-primary">Continue</a>
+                    <button type="submit" class="btn btn-primary">Continue</button>
                    
-
                 </div>
             </div>
         </div>
     </div>
+
+        @csrf
+        
+    </form>
 
 </div>
 @endsection

@@ -154,9 +154,14 @@ Route::group(['prefix' => 'tenants', 'middleware' => ['auth', 'trial']], functio
       'as' => 'tenants.billing.pay'
     ]);
 
-    Route::get('billing/review', [
-      'uses' => "$bc@showReview",
+    Route::post('billing/review', [
+      'uses' => "$bc@storePayReview",
       'as' => 'tenants.billing.review'
+    ]);
+
+    Route::post('billing/payrent', [
+      'uses' => "$bc@payRent",
+      'as' => 'tenants.billing.payRent'
     ]);
 
     Route::get('billing/confirmation', [

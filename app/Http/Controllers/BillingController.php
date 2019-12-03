@@ -6,6 +6,7 @@ use Mail;
 use App\User;
 use App\Tenant;
 use App\Property;
+use App\Company;
 use Auth;
 use DB;
 use Carbon\Carbon;
@@ -923,7 +924,7 @@ class BillingController extends Controller {
                 [
                     'object' => 'bank_account',
                 ]
-            );
+        );
 
         return view('tenants.billing.pay', [
                     'tenant' => $tenant,
@@ -934,30 +935,53 @@ class BillingController extends Controller {
         
     }
 
-    public function showReview() {
-        return view('tenants.billing.review');
+    public function storePayReview(Request $request) {
+
+        $user = Auth::user();
+        $customer = \Stripe\Customer::retrieve($user->stripe_id);
+
+        $bank_account = \Stripe\Customer::retrieveSource(
+            $user->stripe_id,
+            $request->input('source')
+        );
+
+        $date = $request->input('date');
+        $source = $request->input('source');
+        $amount = $request->input('amount');
+        $convenience = ( $amount * 0.0025 ) + .25;
+
+        /**
+         * TO DO
+         * 
+         * Calculate the conv. fee based on payment method.
+         */
+        // the amount times the conv. fee
+        // $cc = ( $rent * 0.029 ) + 30; // 2.9% + 30 cents conv. fee
+        //$ach = ( $rent * 0.0025 ) + 225; //0.25% + 2.25
+
+        return view('tenants.billing.review', [
+            'date' => $date,
+            'source' => $source,
+            'amount' => $amount,
+            'bank_account' => $bank_account,
+            'customer' => $customer,
+            'convenience' => $convenience,
+        ]);
+
+
     }
 
     public function showPaymentConfirmation() {
         return view('tenants.billing.confirmation');
     }
 
-    public function showRentPreview() {
-
-        // get the rent payment based on the property and tenant
-
-        // SHOW THE FEE AMOUNT need to calculate the $# and times it for them. maybe just a standard number
-        // need to show ACH and CC amount
-
-        // return the view
-
-    }
-
-    public function payRent() {
+    public function payRent(Request $request) {
 
         // NEED TO RETURN WHAT PAYMENT METHOD
 
-        // the tenant logged in will see this page. 
+        $user = Auth::user();
+        $customer = \Stripe\Customer::retrieve($user->stripe_id);
+
         $tenant = Tenant::where('user_id', '=', Auth::user()->id)->first();
 
         $property = Property::join('rents', 'rents.property_id', '=', 'properties.id')
@@ -970,39 +994,19 @@ class BillingController extends Controller {
                             ->where('role', '=', '3')
                             ->first();
 
-        // find the tenant stripe_id
-        $rent = $property->rent_amount * 100 ; // the number X 10 to get the penny amount for the transaction
 
-        // the amount times the conv. fee
-        $cc = ( $rent * 0.029 ) + 30; // 2.9% + 30 cents conv. fee
-        $ach = ( $rent * 0.0025 ) + 225; //0.25% + 2.25
-
-        // if ACH
-        // if() {
-
-        // } else {
-
-        // }
-
-        
-
-        // try {
-
-        // } catch {
-
-        // }
-
-        
-
-        //$total = $rent + $convenience;
+        $bank_account = \Stripe\Customer::retrieveSource(
+            $user->stripe_id,
+            $request->input('source')
+        );
 
         // transaction
         $charge = \Stripe\Charge::create([
-            "amount" => $total, // total amount of rent and convience fee
+            "amount" => $request->input('total'), // total amount of rent and convience fee
             "currency" => "usd",
-            "source" => "tok_visa", // capture the tenant payment method
+            "source" => $bank_account, // capture the tenant payment method
             "transfer_data" => [
-                "amount" => $rent, 
+                "amount" => $request->input('rent'), 
                 "destination" => $proprietor->stripe_account, // this is the proprietor stripe_account number
             ],
         ]);

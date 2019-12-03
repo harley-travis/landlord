@@ -28,19 +28,11 @@
                     <div class="row mb-5">
 
                         <div class="col-sm-6 mb-4">
-                            Amount
-                        </div>
-                        
-                        <div class="col-sm-6 mb-4">
-                            $1000
-                        </div>
-
-                        <div class="col-sm-6 mb-4">
                             Date
                         </div>
                         
                         <div class="col-sm-6 mb-4">
-                            12/6/2019
+                            {{ $date }}
                         </div>
 
                         <div class="col-sm-6 mb-4">
@@ -48,7 +40,12 @@
                         </div>
 
                         <div class="col-sm-6 mb-4">
-                            ACH
+                            <i class="fas fa-university mr-2"></i> {{ $bank_account->bank_name }}
+                            <span class="pl-3">******** {{ $bank_account->last4 }} </span>
+                        
+                            @if($bank_account->id == $customer->default_source)
+                                <span class="badge badge-primary">Default</span>
+                            @endif
                         </div>
 
                         <div class="col-sm-6 mb-4">
@@ -56,19 +53,45 @@
                         </div>
 
                         <div class="col-sm-6 mb-4">
-                            user@email.com
+                            {{ Auth::user()->email }}
+                        </div>
+
+                        <div class="col-sm-6 mb-4">
+                            Amount
+                        </div>
+                        
+                        <div class="col-sm-6 mb-4">
+                            ${{ $amount }}
+                        </div>
+
+                        <div class="col-sm-6 mb-4">
+                            Convenience Fee
+                        </div>
+                        
+                        <div class="col-sm-6 mb-4">
+                            + ${{ number_format( $convenience,2 ) }}
+                        </div>
+
+                        <div class="col-sm-6 mb-4">
+                            <span class="font-weight-bold">TOTAL</span>
+                        </div>
+                        
+                        <div class="col-sm-6 mb-4">
+                            <span class="text-success font-weight-bold">${{ $amount + number_format( $convenience,2 ) }}</span>
                         </div>
 
                     </div>
+
+                <form action="{{ route('tenants.billing.payRent') }}" method="post">
 
                     <div class="row">
 
                         <div class="col-12 mb-3">
 
                             <div class="custom-control custom-control-alternative custom-checkbox mb-3">
-                                <input class="custom-control-input" id="customCheck5" type="checkbox">
-                                <label class="custom-control-label " for="customCheck5">
-                                    I agree to pay and agree to pay the amount here.
+                                <input class="custom-control-input" id="agree" name="agree" value="1" type="checkbox" required>
+                                <label class="custom-control-label" for="agree">
+                                    I agree to pay and agree to pay the entered amount.
                                 </label>
                             </div>
 
@@ -76,14 +99,32 @@
 
                         <div class="col-12">
                             <a href="{{ route('tenants.billing.index') }}" class="btn btn-link">Cancel</a>
-                            <a href="#" class="btn btn-primary">Submit Payment</a>
+                            <button type="submit" class="btn btn-primary">Submit Payment</button>
                         </div>
 
                     </div>
+
+                    <input type="hidden" name="date" value="{{ $date }}">
+                    <input type="hidden" name="total" value="{{ $amount + number_format( $convenience,2 ) }}">
+                    <input type="hidden" name="rent" value="{{ $amount }}">
+                    <input type="hidden" name="source" value="{{ $bank_account->id }}">
+
+                    @csrf
+
+                </form>
 
                 </div>
             </div>
         </div>
     </div>
 </div>
+@endsection
+
+@section('otherJs')
+<script>
+    function myFunction() {
+        var x = document.getElementById("agree").required;
+        document.getElementById("demo").innerHTML = x;
+    }
+</script>
 @endsection
