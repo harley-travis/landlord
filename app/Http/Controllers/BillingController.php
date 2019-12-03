@@ -854,7 +854,6 @@ class BillingController extends Controller {
     }
 
     public function showExpressConnection() {
-        dd('hi');
         return view('settings.billing.express');
     }
 
