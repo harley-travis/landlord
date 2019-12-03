@@ -983,6 +983,8 @@ class BillingController extends Controller {
 
         // NEED TO RETURN WHAT PAYMENT METHOD
 
+        dd( $request->input('stripeToken') );
+
         $user = Auth::user();
         $customer = \Stripe\Customer::retrieve($user->stripe_id);
 
