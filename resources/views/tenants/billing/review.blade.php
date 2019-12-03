@@ -107,6 +107,7 @@
                     <input type="hidden" name="date" value="{{ $date }}">
                     <input type="hidden" name="total" value="{{ $amount + number_format( $convenience,2 ) }}">
                     <input type="hidden" name="rent" value="{{ $amount }}">
+                    <input type="hidden" name="convenience" value="{{ $convenience }}">
                     <input type="hidden" name="source" value="{{ $bank_account->id }}">
 
                     @csrf

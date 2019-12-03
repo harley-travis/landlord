@@ -1004,14 +1004,23 @@ class BillingController extends Controller {
             $request->input('source')
         );
 
+        /**
+         * I NEED TO TEST HOW IT WILL RESPOND IF THERE IS NOT AN 
+         * EVEN NUMBER. IF THERE ARE DECIMALS. 
+         */
+
+        $amount = $request->input('rent');
+        $convenience = ( $amount * 0.0025 ) + .25;
+        $total = $amount + $convenience;
+
         // transaction
         $charge = \Stripe\Charge::create([
-            'amount' => $request->input('total'), // total amount of rent and convience fee
+            'amount' => $total, // total amount of rent and convience fee
             'currency' => "usd",
             'source' => $bank_account, // capture the tenant payment method
             'customer' => $customer->id,
             'transfer_data' => [
-                'amount' => $request->input('rent'), 
+                'amount' => $amount, 
                 'destination' => $proprietor->stripe_account, // this is the proprietor stripe_account number
             ],
         ]);
