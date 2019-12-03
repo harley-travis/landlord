@@ -480,6 +480,11 @@ Route::group(['prefix' => 'settings/billing', 'middleware' => ['auth']], functio
     'as'	=> 'settings.billing.confirmation'
   ]);
 
+  Route::get('finishExpress', [
+    'uses'	=> "$c@showExpressConnection",
+    'as'	=> 'settings.billing.finishExpress'
+  ]);
+
   Route::post('expressConnection', [
     'uses'	=> "$c@completeExpressConnection",
     'as'	=> 'settings.billing.expressConnection'

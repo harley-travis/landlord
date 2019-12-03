@@ -853,6 +853,11 @@ class BillingController extends Controller {
 
     }
 
+    public function showExpressConnection() {
+        dd('hi');
+        return view('settings.billing.express');
+    }
+
     public function completeExpressConnection(Request $request) {
 
         $response = \Stripe\OAuth::token([
