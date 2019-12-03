@@ -1013,7 +1013,9 @@ class BillingController extends Controller {
 
         $amount = $request->input('rent');
         $convenience = ( $amount * 0.0025 ) + .25;
-        $total = $amount + $convenience;
+        $total = ( $amount + $convenience ) * 100;
+
+        //dd($amount * 100);
 
         //dd($proprietor->stripe_account);
 
@@ -1024,7 +1026,7 @@ class BillingController extends Controller {
             'source' => $bank_account, // capture the tenant payment method
             'customer' => $customer->id,
             'transfer_data' => [
-                'amount' => $amount, 
+                'amount' => $amount * 100, 
                 'destination' => $proprietor->stripe_account, // this is the proprietor stripe_account number
             ],
         ]);
