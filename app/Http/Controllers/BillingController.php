@@ -1013,7 +1013,7 @@ class BillingController extends Controller {
             'source' => $bank_account, 
             'customer' => $customer->id,
             'transfer_data' => [
-                'amount' => ( $total - $convenience ) * 100, 
+                'amount' => $total - $convenience, 
                 'destination' => $proprietor->stripe_account, 
             ],
         ]);
