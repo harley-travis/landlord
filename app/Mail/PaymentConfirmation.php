@@ -2,6 +2,7 @@
 
 namespace App\Mail;
 
+use App\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
@@ -11,14 +12,18 @@ class PaymentConfirmation extends Mailable
 {
     use Queueable, SerializesModels;
 
+    public $user;
+    public $total;
+
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(User $user)
     {
-        //
+        $this->user = $user;
+        $this->total = $total;
     }
 
     /**
@@ -28,6 +33,8 @@ class PaymentConfirmation extends Mailable
      */
     public function build()
     {
-        return $this->markdown('emails.payment.confirmation');
+        return $this->from('noreply@senrent.com')
+                    ->subject('Payment Successful!')
+                    ->markdown('emails.payment.confirmation');
     }
 }

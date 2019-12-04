@@ -13,6 +13,7 @@ use Carbon\Carbon;
 use Stripe_Error;
 use Illuminate\Http\Request;
 use App\Mail\UserCreated;
+use App\Mail\PaymentConfirmation;
 
 class BillingController extends Controller {
 
@@ -981,8 +982,6 @@ class BillingController extends Controller {
 
     public function payRent(Request $request) {
 
-        // NEED TO RETURN WHAT PAYMENT METHOD
-
         $user = Auth::user();
         $customer = \Stripe\Customer::retrieve($user->stripe_id);
 
@@ -1004,22 +1003,10 @@ class BillingController extends Controller {
             $request->input('source')
         );
 
-        /**
-         * I NEED TO TEST HOW IT WILL RESPOND IF THERE IS NOT AN 
-         * EVEN NUMBER. IF THERE ARE DECIMALS. 
-         */
-
-        //dd($proprietor);
-
         $amount = $request->input('rent');
         $convenience = ( $amount * 0.0025 ) + .25;
         $total = ( $amount + $convenience ) * 100;
 
-        //dd($amount * 100);
-
-        //dd($proprietor->stripe_account);
-
-        // transaction
         $charge = \Stripe\Charge::create([
             'amount' => $total, // total amount of rent and convience fee
             'currency' => "usd",
@@ -1031,9 +1018,10 @@ class BillingController extends Controller {
             ],
         ]);
 
-        // validation
 
-        // return view
+        Mail::to($user->email)->send(new PaymentConfirmation($user, $total));
+        
+
         return redirect()
             ->route('tenants.billing.confirmation')
             ->with('info', 'Your payment was successfully. You should see the amount withdrawn from your account within 1-3 business days.');

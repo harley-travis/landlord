@@ -1,12 +1,11 @@
 @component('mail::message')
-# Introduction
+# Thank {{ $user->name }},
 
-The body of your message.
+Your payment for {{ $total }} was sucessful. The funds will be withdrawn from your account in 1-3 business days. If you have any questions, please let us know.
 
-@component('mail::button', ['url' => ''])
-Button Text
-@endcomponent
+Thank you!<br>
 
-Thanks,<br>
-{{ config('app.name') }}
+The SenRent Team<br>
+support@senrent.com
+
 @endcomponent
