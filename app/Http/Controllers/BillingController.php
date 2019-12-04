@@ -1012,7 +1012,6 @@ class BillingController extends Controller {
             'currency' => "usd",
             'source' => $bank_account, 
             'customer' => $customer->id,
-            //'application_fee_amount' => $fee,
             'transfer_data' => [
                 'amount' => $amount * 100, 
                 'destination' => $proprietor->stripe_account, 
@@ -1025,7 +1024,7 @@ class BillingController extends Controller {
             "currency" => "usd",
             'source' => $bank_account, 
             "application_fee_amount" => $fee,
-          ], ["stripe_account" => $customer->id]);
+          ], ["stripe_account" => $proprietor->stripe_account]);
 
 
         Mail::to($user->email)->send(new PaymentConfirmation($user, $total));
