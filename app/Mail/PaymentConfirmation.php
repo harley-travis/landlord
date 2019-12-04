@@ -20,7 +20,7 @@ class PaymentConfirmation extends Mailable
      *
      * @return void
      */
-    public function __construct(User $user)
+    public function __construct(User $user, $total)
     {
         $this->user = $user;
         $this->total = $total;

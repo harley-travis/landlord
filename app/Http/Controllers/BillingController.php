@@ -1021,7 +1021,6 @@ class BillingController extends Controller {
 
         Mail::to($user->email)->send(new PaymentConfirmation($user, $total));
         
-
         return redirect()
             ->route('tenants.billing.confirmation')
             ->with('info', 'Your payment was successfully. You should see the amount withdrawn from your account within 1-3 business days.');
