@@ -1,7 +1,29 @@
 @extends('layouts.app', ['page_title' => "Make Payment"])
 
+@section('head')
+    <style>
+#loading{
+    position: fixed, 
+    top: 0; left: 0; 
+    width: 100%; height:100%; 
+    background-color: rgba(255, 255, 255, 0.6); 
+    z-index: 1000;
+    display:none;
+}
+#loading img {
+    position: absolute;
+    left: 50%;
+    width: 50px;
+    margin-left: -30px;
+    z-index: 99999999999999999;
+}
+    </style>
+@endsection
+
 @section('content')
 @include('layouts.headers.cards')
+
+<div id="loading"><img src="{{url('/img/loading/loading.gif')}}" /></div>
 
 <div class="container-fluid mt--9">
 
@@ -127,7 +149,7 @@
                     </div>
                     
                     <a href="{{ route('tenants.billing.index') }}" class="btn btn-link">Cancel</a>
-                    <button type="submit" class="btn btn-primary">Continue</button>
+                    <button id="submit" type="submit" class="btn btn-primary">Continue</button>
                    
                 </div>
             </div>
@@ -139,4 +161,18 @@
     </form>
 
 </div>
+@endsection
+
+
+@section('otherJs')
+
+<script>
+    $('#submit').on('click', function(e){
+
+        $('#loading').show();
+        //$('#form').submit();
+        console.log('heey')
+    });
+</script>
+
 @endsection
