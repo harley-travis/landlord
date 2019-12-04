@@ -953,7 +953,8 @@ class BillingController extends Controller {
         $date = $request->input('date');
         $source = $request->input('source');
         $amount = $request->input('amount');
-        $convenience = ( $amount * 0.0025 ) + .25;
+        $fee = .5;
+        $convenience = ( $amount * 0.0025 ) + .25 + $fee;
 
         /**
          * TO DO
@@ -972,8 +973,6 @@ class BillingController extends Controller {
             'customer' => $customer,
             'convenience' => $convenience,
         ]);
-
-
     }
 
     public function showPaymentConfirmation() {
@@ -1004,17 +1003,19 @@ class BillingController extends Controller {
         );
 
         $amount = $request->input('rent');
+        $fee = .5;
         $convenience = ( $amount * 0.0025 ) + .25;
         $total = ( $amount + $convenience ) * 100;
 
         $charge = \Stripe\Charge::create([
-            'amount' => $total, // total amount of rent and convience fee
+            'amount' => $total, 
             'currency' => "usd",
-            'source' => $bank_account, // capture the tenant payment method
+            'source' => $bank_account, 
             'customer' => $customer->id,
+            'application_fee_amount' => $fee,
             'transfer_data' => [
                 'amount' => $amount * 100, 
-                'destination' => $proprietor->stripe_account, // this is the proprietor stripe_account number
+                'destination' => $proprietor->stripe_account, 
             ],
         ]);
 
