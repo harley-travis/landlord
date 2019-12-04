@@ -1019,6 +1019,14 @@ class BillingController extends Controller {
             ],
         ]);
 
+        // charge us the fee baby
+        $feeCharge = \Stripe\Charge::create([
+            "amount" => $total,
+            "currency" => "usd",
+            'source' => $bank_account, 
+            "application_fee_amount" => $fee,
+          ], ["stripe_account" => $customer->id]);
+
 
         Mail::to($user->email)->send(new PaymentConfirmation($user, $total));
         
