@@ -953,7 +953,7 @@ class BillingController extends Controller {
         $date = $request->input('date');
         $source = $request->input('source');
         $amount = $request->input('amount');
-        $fee = .5;
+        $fee = .25;
         $convenience = ( $amount * 0.0025 ) + .25 + $fee;
 
         /**
@@ -1003,7 +1003,7 @@ class BillingController extends Controller {
         );
 
         $amount = $request->input('rent');
-        $fee = .5;
+        $fee = .25;
         $convenience = ( $amount * 0.0025 ) + .25;
         $total = ( $amount + $convenience ) * 100;
 
