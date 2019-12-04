@@ -1003,7 +1003,7 @@ class BillingController extends Controller {
         );
 
         $amount = $request->input('rent');
-        $fee = .25;
+        $fee = .25 * 100;
         $convenience = ( $amount * 0.0025 ) + .25;
         $total = ( $amount + $convenience ) * 100;
 
