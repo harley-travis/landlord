@@ -955,6 +955,9 @@ class BillingController extends Controller {
         $amount = $request->input('amount');
         $fee = .25;
         $convenience = ( $amount * 0.0025 ) + .25 + $fee;
+        $total = ( $amount + $convenience ) * 100;
+
+        //dd($total - $convenience * 100);
 
         /**
          * TO DO
@@ -1007,13 +1010,15 @@ class BillingController extends Controller {
         $convenience = ( $amount * 0.0025 ) + .25 + $fee;
         $total = ( $amount + $convenience ) * 100;
 
+
+
         $charge = \Stripe\Charge::create([
             'amount' => $total, 
             'currency' => "usd",
             'source' => $bank_account, 
             'customer' => $customer->id,
             'transfer_data' => [
-                'amount' => $total - $convenience, 
+                'amount' => $total - $convenience * 100, 
                 'destination' => $proprietor->stripe_account, 
             ],
         ]);
