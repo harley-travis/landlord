@@ -953,21 +953,8 @@ class BillingController extends Controller {
         $date = $request->input('date');
         $source = $request->input('source');
         $amount = $request->input('amount');
-        // $fee = .25;
-        // $convenience = ( $amount * 0.0025 ) + .25 + $fee;
         $convenience = 5;
         $total = $amount + $convenience;
-
-        //dd($total - $convenience * 100);
-
-        /**
-         * TO DO
-         * 
-         * Calculate the conv. fee based on payment method.
-         */
-        // the amount times the conv. fee
-        // $cc = ( $rent * 0.029 ) + 30; // 2.9% + 30 cents conv. fee
-        //$ach = ( $rent * 0.0025 ) + 225; //0.25% + 2.25
 
         return view('tenants.billing.review', [
             'date' => $date,
@@ -1000,15 +987,12 @@ class BillingController extends Controller {
                             ->where('role', '=', '3')
                             ->first();
 
-
         $bank_account = \Stripe\Customer::retrieveSource(
             $user->stripe_id,
             $request->input('source')
         );
 
         $amount = $request->input('rent') * 100;
-        // $fee = .25;
-        // $convenience = ( $amount * 0.0025 ) + .25 + $fee;
         $convenience = 500;
         $total = $amount + $convenience;
 
@@ -1022,15 +1006,6 @@ class BillingController extends Controller {
                 'destination' => $proprietor->stripe_account, 
             ],
         ]);
-
-        // $charge = \Stripe\Charge::create([
-        //     'amount' => $total, 
-        //     'currency' => 'usd',
-        //     'source' => $bank_account, 
-        //     'transfer_data' => [
-        //       'destination' => $proprietor->stripe_account,
-        //     ],
-        // ]);
 
         Mail::to($user->email)->send(new PaymentConfirmation($user, $total));
         
