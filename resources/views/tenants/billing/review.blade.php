@@ -113,7 +113,7 @@
                             <div class="custom-control custom-control-alternative custom-checkbox mb-3">
                                 <input class="custom-control-input" id="agree" name="agree" value="1" type="checkbox" required>
                                 <label class="custom-control-label" for="agree">
-                                    I agree to pay and agree to pay the entered amount.
+                                    I agree to pay the amount shown above.
                                 </label>
                             </div>
 
