@@ -1006,11 +1006,11 @@ class BillingController extends Controller {
             $request->input('source')
         );
 
-        $amount = $request->input('rent');
+        $amount = $request->input('rent') * 100;
         // $fee = .25;
         // $convenience = ( $amount * 0.0025 ) + .25 + $fee;
         $convenience = 500;
-        $total = $amount + $convenience * 100;
+        $total = $amount + $convenience;
 
         $charge = \Stripe\Charge::create([
             'amount' => $total, 
