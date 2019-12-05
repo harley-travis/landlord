@@ -1015,25 +1015,25 @@ class BillingController extends Controller {
         $convenience = 5;
         $total = $amount + $convenience;
 
-        // $charge = \Stripe\Charge::create([
-        //     'amount' => $total, 
-        //     'currency' => "usd",
-        //     'source' => $bank_account, 
-        //     'customer' => $customer->id,
-        //     'transfer_data' => [
-        //         'amount' => $total - $convenience * 100, 
-        //         'destination' => $proprietor->stripe_account, 
-        //     ],
-        // ]);
-
         $charge = \Stripe\Charge::create([
             'amount' => $total, 
-            'currency' => 'usd',
+            'currency' => "usd",
             'source' => $bank_account, 
+            'customer' => $customer->id,
             'transfer_data' => [
-              'destination' => $proprietor->stripe_account,
+                'amount' => $total, 
+                'destination' => $proprietor->stripe_account, 
             ],
         ]);
+
+        // $charge = \Stripe\Charge::create([
+        //     'amount' => $total, 
+        //     'currency' => 'usd',
+        //     'source' => $bank_account, 
+        //     'transfer_data' => [
+        //       'destination' => $proprietor->stripe_account,
+        //     ],
+        // ]);
 
         Mail::to($user->email)->send(new PaymentConfirmation($user, $total));
         
