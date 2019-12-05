@@ -953,9 +953,10 @@ class BillingController extends Controller {
         $date = $request->input('date');
         $source = $request->input('source');
         $amount = $request->input('amount');
-        $fee = .25;
-        $convenience = ( $amount * 0.0025 ) + .25 + $fee;
-        $total = ( $amount + $convenience ) * 100;
+        // $fee = .25;
+        // $convenience = ( $amount * 0.0025 ) + .25 + $fee;
+        $convenience = 5;
+        $total = $amount + $convenience;
 
         //dd($total - $convenience * 100);
 
@@ -1006,23 +1007,30 @@ class BillingController extends Controller {
         );
 
         $amount = $request->input('rent');
-        $fee = .25;
-        $convenience = ( $amount * 0.0025 ) + .25 + $fee;
-        $total = ( $amount + $convenience ) * 100;
+        // $fee = .25;
+        // $convenience = ( $amount * 0.0025 ) + .25 + $fee;
+        $convenience = 5;
+        $total = $amount + $convenience;
 
-
+        // $charge = \Stripe\Charge::create([
+        //     'amount' => $total, 
+        //     'currency' => "usd",
+        //     'source' => $bank_account, 
+        //     'customer' => $customer->id,
+        //     'transfer_data' => [
+        //         'amount' => $total - $convenience * 100, 
+        //         'destination' => $proprietor->stripe_account, 
+        //     ],
+        // ]);
 
         $charge = \Stripe\Charge::create([
             'amount' => $total, 
-            'currency' => "usd",
+            'currency' => 'usd',
             'source' => $bank_account, 
-            'customer' => $customer->id,
             'transfer_data' => [
-                'amount' => $total - $convenience * 100, 
-                'destination' => $proprietor->stripe_account, 
+              'destination' => $proprietor->stripe_account,
             ],
         ]);
-
 
         Mail::to($user->email)->send(new PaymentConfirmation($user, $total));
         
