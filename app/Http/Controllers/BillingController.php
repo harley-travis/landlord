@@ -1010,7 +1010,7 @@ class BillingController extends Controller {
         // $fee = .25;
         // $convenience = ( $amount * 0.0025 ) + .25 + $fee;
         $convenience = 5;
-        $total = $amount + $convenience;
+        $total = $amount + $convenience * 100;
 
         $charge = \Stripe\Charge::create([
             'amount' => $total, 
