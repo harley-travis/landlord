@@ -1006,9 +1006,6 @@ class BillingController extends Controller {
             $request->input('source')
         );
 
-
-        dd($bank_account);
-
         $amount = $request->input('rent');
         // $fee = .25;
         // $convenience = ( $amount * 0.0025 ) + .25 + $fee;
