@@ -114,6 +114,8 @@ class PropertyController extends Controller {
             'account_number' => $request->input('account_number'),
             'hoa_amount' => $request->input('hoa_amount'),
             'property_id' => $property->id,
+            'isPastDue' => 0,
+            'paid' => 0,
         ]);
         $rent->save();
 

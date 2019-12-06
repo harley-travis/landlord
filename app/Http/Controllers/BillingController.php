@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Mail;
 use App\User;
 use App\Tenant;
+use App\Rent;
 use App\Property;
 use App\Company;
 use Auth;
@@ -1006,6 +1007,17 @@ class BillingController extends Controller {
                 'destination' => $proprietor->stripe_account, 
             ],
         ]);
+
+        $startDate = Carbon::now();
+        $firstDay = $startDay->firstOfMonth();
+
+        // validate
+        // if it's successful, then update the rents table
+        $rent = Rent::where('property_id', '=', $tenant->property_id);
+        $rent->paid = 1; 
+        $rent->last_date_paid = Carbon::now();
+        $rent->next_due_date = $firstDay;
+        $rent->save();
 
         Mail::to($user->email)->send(new PaymentConfirmation($user, $total));
         

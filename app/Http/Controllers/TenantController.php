@@ -114,8 +114,6 @@ class TenantController extends Controller {
 
         // create tenant as a stripe customner
         $u->createAsStripeCustomer();
-        
-
 
         /**
          * this property is used for other email testing
