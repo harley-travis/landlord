@@ -31,7 +31,10 @@
 
                     @if( $property->paid === 0 && \Carbon\Carbon::now() > $property->last_date_paid && $property->isPastDue == 0 ) 
                         <h2 class="display-2 text-success mb-5">$0.00</h2>
-                    @else 
+                    @else if ( $property->paid === 2 ) 
+                        <h2 class="display-2 text-danger mb-5">${{ $property->rent_amount + $property->late_fee }}</h2>
+                        <p>Payment due {{ \Carbon\Carbon::now()->addMonth()->format('F') }} 1, {{ \Carbon\Carbon::now()->year }}</p>
+                    @else
                         <h2 class="display-2 text-danger mb-5">${{ $property->rent_amount }}</h2>
                         <p>Payment due {{ \Carbon\Carbon::now()->addMonth()->format('F') }} 1, {{ \Carbon\Carbon::now()->year }}</p>
                     @endif
