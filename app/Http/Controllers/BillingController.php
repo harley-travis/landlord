@@ -1018,7 +1018,7 @@ class BillingController extends Controller {
         ]);
 
         $startDate = Carbon::now();
-        $firstDay = $startDay->firstOfMonth();
+        $firstDay = $startDate->firstOfMonth();
 
         // find out if the user paid the amount in full 
         $paidInFull = '';
