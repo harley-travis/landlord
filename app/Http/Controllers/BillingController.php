@@ -1044,6 +1044,8 @@ class BillingController extends Controller {
         $rent->next_due_date = $firstDay;
         $rent->save();
 
+        dd($charge->payment_method_details->type);
+
         // update the transactions table
         $transaction = new Transaction([
             'tenant_id' => $tenant->id,
