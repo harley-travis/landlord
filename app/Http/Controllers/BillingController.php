@@ -1040,7 +1040,7 @@ class BillingController extends Controller {
         // if it's successful, then update the rents table
         $rent = Rent::where('property_id', '=', $tenant->property_id);
         $rent->paid = 1; 
-        $rent->last_date_paid = Carbon::now();
+        $rent->date_last_paid = Carbon::now();
         $rent->next_due_date = $firstDay;
         $rent->save();
 
