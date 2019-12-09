@@ -149,7 +149,7 @@ Route::group(['prefix' => 'tenants', 'middleware' => ['auth', 'trial']], functio
       'as' => 'tenants.billing.index'
     ]);
 
-    Route::get('billing/pay', [
+    Route::post('billing/pay', [
       'uses' => "$bc@showPay",
       'as' => 'tenants.billing.pay'
     ]);

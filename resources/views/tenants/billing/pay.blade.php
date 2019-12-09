@@ -38,8 +38,8 @@
                             <h3 class="mb-0">Payment Amount</h3>
                         </div>
                         <div class="col-4 text-right">
-                            <span class="text-success font-weight-bold display-4">${{ $property->rent_amount }}</span>
-                            <input type="hidden" name="amount" value="{{ $property->rent_amount }}">
+                            <span class="text-success font-weight-bold display-4">${{ $amount }}</span>
+                            <input type="hidden" name="amount" value="{{ $amount }}">
                         </div>
                     </div>
                 </div>

@@ -29,21 +29,40 @@
                         <span class="text-danger font-weight-bold">Your landlord has not assigned you to a property yet. Contact them if you don't see your property in a day or two.</span>
                     @else
 
-                    @if( $property->paid === 0 && \Carbon\Carbon::now() > $property->last_date_paid && $property->isPastDue == 0 ) 
-                        <h2 class="display-2 text-success mb-5">$0.00</h2>
-                    @else if ( $property->paid === 2 ) 
-                        <h2 class="display-2 text-danger mb-5">${{ $property->rent_amount + $property->late_fee }}</h2>
-                        <p>Payment due {{ \Carbon\Carbon::now()->addMonth()->format('F') }} 1, {{ \Carbon\Carbon::now()->year }}</p>
-                    @else
-                        <h2 class="display-2 text-danger mb-5">${{ $property->rent_amount }}</h2>
-                        <p>Payment due {{ \Carbon\Carbon::now()->addMonth()->format('F') }} 1, {{ \Carbon\Carbon::now()->year }}</p>
-                    @endif
+                    <!-- CREATE A FORM, AND PASS THIS DATA TO THE NEXT VIEW. THAT WAY 
+                        WE CAN CAPTURE THE LATE FEE. THEY WILL PAY ON THAT AMOUNT.
+                        
+                        I SHOULD GIVE THEM THE OPTION OF ENTERING THE AMOUNT THEY WOULD 
+                        LIKE TO PAY.  -->
 
-                    <p>Payment late will be late on {{ \Carbon\Carbon::now()->addMonth()->format('F') }} 15, {{ \Carbon\Carbon::now()->year }}</p>
+                    <form action="{{ route('tenants.billing.pay') }}" method="post">
 
-                    <br><a href="{{ route('tenants.billing.pay') }}" class="btn btn-primary">Make a Payment</a>
+                    
+                        @if( $property->paid === 1 && Carbon\Carbon::now()->gte(Carbon\Carbon::parse($property->last_date_paid)) && $property->isPastDue == 0 ) 
+                            <h2 class="display-2 text-success mb-5">$0.00</h2>
+
+                        @elseif ( Carbon\Carbon::now()->gte(Carbon\Carbon::parse($property->late_date)) || Carbon\Carbon::now()->gte(Carbon\Carbon::parse(15)) ) 
+                            <h2 class="display-2 text-danger mb-5">${{ $property->rent_amount + $property->late_fee }}</h2>
+                            <p>Payment due {{ \Carbon\Carbon::now()->addMonth()->format('F') }} 1, {{ \Carbon\Carbon::now()->year }}</p>
+                            <p class="text-danger font-weight-bold">Added late fee: ${{ $property->late_fee }}</p>
+
+                            <input type="hidden" name="amount" value="{{ $property->rent_amount + $property->late_fee }}">
+                        @else
+                            <h2 class="display-2 text-danger mb-5">${{ $property->rent_amount }}</h2>
+                            <p>Payment due {{ \Carbon\Carbon::now()->addMonth()->format('F') }} 1, {{ \Carbon\Carbon::now()->year }}</p>
+                            
+                            <input type="hidden" name="amount" value="{{ $property->rent_amount }}">
+                        @endif
+
+                        <p>If the full amount is not paid by the <span class="text-danger">{{ \Carbon\Carbon::now()->addMonth()->format('F') }} @if( $property->late_date === null || $property->late_date == '' ) 15 @else {{ $property->late_date }},@endif {{ \Carbon\Carbon::now()->year }}</span>, then a late fee of <span class="text-danger">${{ $property->late_fee }}</span> taxed on.</p>
+
+                            @csrf
+
+                        <br><button type="submit" class="btn btn-primary">Make a Payment</a>
                    
                     @endif
+
+                    </form>
                 </div>
             </div>
         </div>

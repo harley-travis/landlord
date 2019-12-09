@@ -198,8 +198,8 @@ class PropertyController extends Controller {
         $rent->pet_deposit_amount = $request->input('pet_deposit_amount');
         $rent->amount_refundable = $request->input('amount_refundable');
         $rent->lease_length = $request->input('lease_length');
-        $rent->account_number = $request->input('late_date');
-        $rent->account_number = $request->input('late_fee');
+        $rent->late_date = $request->input('late_date');
+        $rent->late_fee = $request->input('late_fee');
         $rent->account_number = $request->input('account_number');
         $rent->hoa_amount = $request->input('hoa_amount');
         $rent->save();

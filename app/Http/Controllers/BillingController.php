@@ -9,6 +9,7 @@ use App\Rent;
 use App\Property;
 use App\Company;
 use Auth;
+use App\Transaction;
 use DB;
 use Carbon\Carbon;
 use Stripe_Error;
@@ -913,7 +914,7 @@ class BillingController extends Controller {
         ]);
     }
 
-    public function showPay() {
+    public function showPay(Request $request) {
        
         $user = Auth::user();
 
@@ -932,11 +933,14 @@ class BillingController extends Controller {
                 ]
         );
 
+        $amount = $request->input('amount');
+
         return view('tenants.billing.pay', [
                     'tenant' => $tenant,
                     'property' => $property,
                     'bank_accounts' => $bank_accounts,
                     'customer' => $customer,
+                    'amount' => $amount,
         ]);
         
     }
@@ -967,10 +971,6 @@ class BillingController extends Controller {
         ]);
     }
 
-    public function showPaymentConfirmation() {
-        return view('tenants.billing.confirmation');
-    }
-
     public function payRent(Request $request) {
 
         $user = Auth::user();
@@ -994,14 +994,23 @@ class BillingController extends Controller {
         );
 
         $amount = $request->input('rent') * 100;
+
+        $setAmount = $property->rent_amount * 100;
+        $findLateFeeAmount = $amount - $setAmount;
+
         $convenience = 500;
         $total = $amount + $convenience;
+
+        $confirmationNumber = str_random(10);
 
         $charge = \Stripe\Charge::create([
             'amount' => $total, 
             'currency' => "usd",
             'source' => $bank_account, 
             'customer' => $customer->id,
+            'metadata' => [
+                'Confirmation Number' => $confirmationNumber
+            ],
             'transfer_data' => [
                 'amount' => $total, 
                 'destination' => $proprietor->stripe_account, 
@@ -1011,6 +1020,22 @@ class BillingController extends Controller {
         $startDate = Carbon::now();
         $firstDay = $startDay->firstOfMonth();
 
+        // find out if the user paid the amount in full 
+        $paidInFull = '';
+
+        if( $charge->amount === $total ) {
+            $paidInFull = 1; 
+        } else {
+            $paidInFull = 0; 
+        }
+
+        // find out wither or not the user had a late fee 
+        // in order to do this i need to set teh first view to pass that data
+        $lateFee = 0;
+        if( $amount > $setAmount ) {
+            $lateFee = $findLateFeeAmount;
+        }
+
         // validate
         // if it's successful, then update the rents table
         $rent = Rent::where('property_id', '=', $tenant->property_id);
@@ -1019,12 +1044,29 @@ class BillingController extends Controller {
         $rent->next_due_date = $firstDay;
         $rent->save();
 
+        // update the transactions table
+        $transaction = new Transaction([
+            'tenant_id' => $tenant->id,
+            'landlord_id' => $proprietor->id,
+            'property_id' => $property->id,
+            'amount_paid' => $charge->amount,
+            'payment_method' => $charge->source_type,
+            'paid_in_full' => $paidInFull,
+            'late_fee_amount' => $lateFee,
+            'confirmation' => $confirmationNumber,
+        ]);
+        $transaction->save();
+    
         Mail::to($user->email)->send(new PaymentConfirmation($user, $total));
         
         return redirect()
             ->route('tenants.billing.confirmation')
             ->with('info', 'Your payment was successfully. You should see the amount withdrawn from your account within 1-3 business days.');
 
+    }
+
+    public function showPaymentConfirmation() {
+        return view('tenants.billing.confirmation');
     }
 
 }

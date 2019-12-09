@@ -136,7 +136,7 @@
                     </li>   
                     <li class="nav-item">
                         <a class="nav-link" href="#tenants" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="tenants">
-                            <i class="fas fa-wrench text-info"></i>
+                            <i class="fas fa-users text-info"></i>
                             <span class="">Tenants</span>
                         </a>
                         <div class="collapse" id="tenants">
@@ -183,7 +183,7 @@
                     </li>   
                     <li class="nav-item">
                         <a class="nav-link" href="#tenants" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="tenants">
-                            <i class="fas fa-wrench text-info"></i>
+                            <i class="fas fa-users text-info"></i>
                             <span class="">Tenants</span>
                         </a>
                         <div class="collapse" id="tenants">
@@ -242,7 +242,7 @@
                     </li> 
                     <li class="nav-item">
                         <a class="nav-link" href="#tenants" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="tenants">
-                            <i class="fas fa-wrench text-info"></i>
+                            <i class="fas fa-users text-info"></i>
                             <span class="">Tenants</span>
                         </a>
                         <div class="collapse" id="tenants">
@@ -287,7 +287,7 @@
 
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('tenants.billing.index') }}">
-                        <i class="ni ni-planet text-blue"></i> Pay Rent
+                        <i class="ni ni-credit-card text-green"></i> Pay Rent
                     </a>
                 </li>
                 <li class="nav-item">
@@ -307,7 +307,7 @@
                     </li> 
                     <li class="nav-item">
                         <a class="nav-link" href="#tenants" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="tenants">
-                            <i class="fas fa-wrench text-info"></i>
+                            <i class="fas fa-users text-info"></i>
                             <span class="">Tenants</span>
                         </a>
                         <div class="collapse" id="tenants">
