@@ -1050,7 +1050,7 @@ class BillingController extends Controller {
             'landlord_id' => $proprietor->id,
             'property_id' => $property->id,
             'amount_paid' => $charge->amount,
-            'payment_method' => $charge->source_type,
+            'payment_method' => $charge->payment_method_details->type,
             'paid_in_full' => $paidInFull,
             'late_fee_amount' => $lateFee,
             'confirmation' => $confirmationNumber,
