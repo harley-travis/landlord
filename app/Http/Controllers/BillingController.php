@@ -1021,13 +1021,11 @@ class BillingController extends Controller {
         $firstDay = $startDate->firstOfMonth();
 
         // find out if the user paid the amount in full 
-        $paidInFull = '';
+        $paidInFull = 0;
 
         if( $charge->amount === $total ) {
             $paidInFull = 1; 
-        } else {
-            $paidInFull = 0; 
-        }
+        } 
 
         // find out wither or not the user had a late fee 
         // in order to do this i need to set teh first view to pass that data
@@ -1044,7 +1042,7 @@ class BillingController extends Controller {
         $rent->next_due_date = $firstDay;
         $rent->save();
 
-        dd($charge->payment_method_details->type);
+        //dd($charge->payment_method_details->type);
 
         // update the transactions table
         $transaction = new Transaction([
