@@ -9,7 +9,7 @@ class Rent extends Model {
     protected $fillable = [
 
         'paid',
-        'date_last_paid',
+        'last_date_paid',
         'isPastDue',
         'next_due_date',
         'rent_amount',
