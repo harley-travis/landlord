@@ -85,7 +85,7 @@
 							</div>
 							<div class="form-group">
 								<label for="routing_number">Routing Number</label>
-								<input type="password" class="form-control" placeholder="routing number" name="routing_number">
+								<input type="text" class="form-control" placeholder="routing number" name="routing_number">
 							</div>
 							<div class="form-group">
 								<label for="">Account Number</label>

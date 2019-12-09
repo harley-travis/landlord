@@ -22,7 +22,7 @@ class CreateTransactionsTable extends Migration
             $table->string('payment_method');
             $table->integer('paid_in_full')->comment('0=no 1=yes');
             $table->integer('late_fee_amount')->comment('0=no late fee');
-            $table->integer('confirmation');
+            $table->string('confirmation');
             $table->timestamps();
 
             $table->foreign('tenant_id')->references('id')->on('tenants');
