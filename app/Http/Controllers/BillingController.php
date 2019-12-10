@@ -975,7 +975,6 @@ class BillingController extends Controller {
 
         $user = Auth::user();
         $customer = \Stripe\Customer::retrieve($user->stripe_id);
-
         $tenant = Tenant::where('user_id', '=', Auth::user()->id)->first();
 
         $property = Property::join('rents', 'rents.property_id', '=', 'properties.id')
@@ -994,13 +993,10 @@ class BillingController extends Controller {
         );
 
         $amount = $request->input('rent') * 100;
-
         $setAmount = $property->rent_amount * 100;
         $findLateFeeAmount = $amount - $setAmount;
-
         $convenience = 500;
         $total = $amount + $convenience;
-
         $confirmationNumber = str_random(10);
 
         $charge = \Stripe\Charge::create([
@@ -1020,15 +1016,11 @@ class BillingController extends Controller {
         $startDate = Carbon::now();
         $firstDay = $startDate->firstOfMonth();
 
-        // find out if the user paid the amount in full 
         $paidInFull = 0;
-
         if( $charge->amount === $total ) {
             $paidInFull = 1; 
         } 
 
-        // find out wither or not the user had a late fee 
-        // in order to do this i need to set teh first view to pass that data
         $lateFee = 0;
         if( $amount > $setAmount ) {
             $lateFee = $findLateFeeAmount;
@@ -1042,9 +1034,6 @@ class BillingController extends Controller {
         $rent->next_due_date = $firstDay;
         $rent->save();
 
-        //dd($charge->payment_method_details->type);
-
-        // update the transactions table
         $transaction = new Transaction([
             'tenant_id' => $tenant->id,
             'landlord_id' => $proprietor->id,
@@ -1059,9 +1048,13 @@ class BillingController extends Controller {
     
         Mail::to($user->email)->send(new PaymentConfirmation($user, $total));
         
-        return redirect()
-            ->route('tenants.billing.confirmation')
-            ->with('info', 'Your payment was successfully. You should see the amount withdrawn from your account within 1-3 business days.');
+
+        return view('tenants.billing.confirmation', [
+            'confirmation_number' => $confirmationNumber,
+            'amount' => $charge->amount,
+            'payment_method' => $charge->payment_method_details->type,
+            'date' => $transaction->created_at,
+        ]);
 
     }
 

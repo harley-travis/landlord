@@ -19,10 +19,37 @@
                     </div>
                 </div>
                 <div class="card-body pb-5 pt-5">
-                
-         
-                    <i class="ni ni-check-bold text-success mr-3"></i>Thank you for your payment! You will see the funds withdrawn from your account in 1-3 business days.
-           
+
+                    <p><i class="ni ni-check-bold text-success mr-3"></i>Thank you for your payment! You will see the funds withdrawn from your account in 1-3 business days.</p>
+                    <p>An email confirmation has been sent to you at {{ Auth::user()->email }}</p>
+                    <p>Please print this page for your records.</p>
+
+
+                    <h3<>Payment Details</h3>
+                    <div class="table-responsive">
+                        <table class="table borderless">
+                            <tr>
+                                <td>Confirmation Number</td>
+                                <td>{{ $confirmation_number }}</td>
+                            </tr>
+                            <tr>
+                                <td>Payment Amount</td>
+                                <td>{{ $amount }}</td>
+                            </tr>
+                            <tr>
+                                <td>Payment Method</td>
+                                <td>{{ $payment_method }}</td>
+                            </tr>
+                            <tr>
+                                <td>Payment Date</td>
+                                <td>{{ $date }}</td>
+                            </tr>
+                            <tr>
+                                <td>Payment Submitted</td>
+                                <td>{{ $date }}</td>
+                            </tr>
+                        </table>
+                    </div>
            
                 </div>
             </div>
