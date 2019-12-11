@@ -26,7 +26,8 @@ class Kernel extends ConsoleKernel
     {
 
         $schedule->command('month:update')
-            ->monthlyOn(24, '15:00');
+            //->monthlyOn(24, '15:00');
+            ->everyMinute();
     }
 
     /**
