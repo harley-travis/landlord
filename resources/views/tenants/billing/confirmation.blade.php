@@ -30,7 +30,7 @@
                         <table class="table borderless">
                             <tr>
                                 <td>Confirmation Number</td>
-                                <td>{{ $confirmation_number }}</td>
+                                <td class="text-uppercase">{{ $confirmation_number }}</td>
                             </tr>
                             <tr>
                                 <td>Payment Amount</td>

@@ -29,12 +29,6 @@
                         <span class="text-danger font-weight-bold">Your landlord has not assigned you to a property yet. Contact them if you don't see your property in a day or two.</span>
                     @else
 
-                    <!-- CREATE A FORM, AND PASS THIS DATA TO THE NEXT VIEW. THAT WAY 
-                        WE CAN CAPTURE THE LATE FEE. THEY WILL PAY ON THAT AMOUNT.
-                        
-                        I SHOULD GIVE THEM THE OPTION OF ENTERING THE AMOUNT THEY WOULD 
-                        LIKE TO PAY.  -->
-
                     <form action="{{ route('tenants.billing.pay') }}" method="post">
 
                     
