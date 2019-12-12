@@ -44,7 +44,9 @@ class BillingController extends Controller {
             [
               'object' => 'bank_account',
             ]
-          );
+        );
+
+        $balance = $this->calculateRentBalance();
 
         return view('settings.billing.index', [
             'user' => $user,
@@ -52,7 +54,7 @@ class BillingController extends Controller {
             'invoices' => $invoices,
             'customer' => $customer, 
             'intent' => $user->createSetupIntent(),
-            'balance' => $this->calculateRentBalance(),
+            'balance' => $balance ,
         ]);
 
     }
