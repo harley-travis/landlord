@@ -36,13 +36,13 @@
                             <h2 class="display-2 text-success mb-5">$0.00</h2>
 
                         @elseif ( $property->isPastDue == 1 ) 
-                            <h2 class="display-2 text-danger mb-5">${{ $property->rent_amount + $property->late_fee }}</h2>
+                            <h2 class="display-2 text-danger mb-5">${{ $property->rent_amount + $property->late_fee + $balance }}</h2>
                             <p>Payment due {{ \Carbon\Carbon::now()->addMonth()->format('F') }} 1, {{ \Carbon\Carbon::now()->year }}</p>
                             <p class="text-danger font-weight-bold">Added late fee: ${{ $property->late_fee }}</p>
 
                             <input type="hidden" name="amount" value="{{ $property->rent_amount + $property->late_fee + $balance }}">
                         @else
-                            <h2 class="display-2 text-danger mb-5">${{ $property->rent_amount }}</h2>
+                            <h2 class="display-2 text-danger mb-5">${{ $property->rent_amount + $balance }}</h2>
                             <p>Payment due {{ \Carbon\Carbon::now()->addMonth()->format('F') }} 1, {{ \Carbon\Carbon::now()->year }}</p>
                             
                             <input type="hidden" name="amount" value="{{ $property->rent_amount + $balance }}">

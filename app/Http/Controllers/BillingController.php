@@ -53,8 +53,8 @@ class BillingController extends Controller {
             'bank_accounts' => $bank_accounts, 
             'invoices' => $invoices,
             'customer' => $customer, 
+            'balance' => $balance,
             'intent' => $user->createSetupIntent(),
-            'balance' => $balance ,
         ]);
 
     }
