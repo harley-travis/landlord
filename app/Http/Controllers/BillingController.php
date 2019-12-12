@@ -1073,17 +1073,23 @@ class BillingController extends Controller {
 
     public function calculateRentBalance() {
 
-        $balanceAmount = Transaction::where('tenant_id', '=', Auth::user()->id)->get();
+        $id = User::join('tenants', 'tenants.user_id', '=', 'users.id')->where('tenants.user_id', '=', Auth::user()->id)->first();
 
-        if( count($balanceAmount) === 0 || count($balanceAmount) === null ) {
+        $balanceAmount = Transaction::where('tenant_id', '=', $id->id)->get();
+
+        if( count($balanceAmount) === 0 ) {
             return 0;
+        } else {
+
+            $b = 0;
+
+            foreach ( $balanceAmount as $value ) {
+                $b += $value->balance;
+            }
+            
         }
 
-        foreach ( $balanceAmount as $value ) {
-            $balance += $value->balance;
-        }
-
-        return $balance;
+        return $b;
     }
 
     public function showPaymentConfirmation() {
