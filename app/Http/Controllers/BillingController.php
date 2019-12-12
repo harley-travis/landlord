@@ -46,14 +46,11 @@ class BillingController extends Controller {
             ]
         );
 
-        $balance = $this->calculateRentBalance();
-
         return view('settings.billing.index', [
             'user' => $user,
             'bank_accounts' => $bank_accounts, 
             'invoices' => $invoices,
             'customer' => $customer, 
-            'balance' => $balance,
             'intent' => $user->createSetupIntent(),
         ]);
 
@@ -910,10 +907,13 @@ class BillingController extends Controller {
         $property = Property::join('rents', 'rents.property_id', '=', 'properties.id')
                             ->where('properties.id', '=', $tenant->property_id)
                             ->first();
+        
+        $balance = $this->calculateRentBalance();
 
         return view('tenants.billing.index', [
                     'tenant' => $tenant,
                     'property' => $property,
+                    'balance' => $balance,
         ]);
     }
 
