@@ -11,6 +11,7 @@ class Transaction extends Model {
         'landlord_id',
         'property_id',
         'amount_paid',
+        'balance',
         'payment_method',
         'paid_in_full',
         'late_fee_amount',

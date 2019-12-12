@@ -51,7 +51,8 @@ class BillingController extends Controller {
             'bank_accounts' => $bank_accounts, 
             'invoices' => $invoices,
             'customer' => $customer, 
-            'intent' => $user->createSetupIntent()
+            'intent' => $user->createSetupIntent(),
+            'balance' => $this->calculateRentBalance(),
         ]);
 
     }
@@ -1013,11 +1014,20 @@ class BillingController extends Controller {
             ],
         ]);
 
+        // calculate the new balance
+        $currentBalance = $this->calculateRentBalance();
+        $newBalance = ( $request->input('rent') + $currentBalance ) - $currentBalance;
+
         $startDate = Carbon::now();
         $firstDay = $startDate->firstOfMonth();
 
+        /**
+         * revise this to meet the balance transaction feature
+         * 0 = no 
+         * 1 = yes
+         */
         $paidInFull = 0;
-        if( $charge->amount === $total ) {
+        if( $newBalance === 0 ) {
             $paidInFull = 1; 
         } 
 
@@ -1029,8 +1039,9 @@ class BillingController extends Controller {
         // validate
         // if it's successful, then update the rents table
         $rent = Rent::where('property_id', '=', $tenant->property_id)->first();
-        $rent->paid = 1; 
+        $rent->paid = $paidInFull; 
         $rent->last_date_paid = Carbon::now();
+        $rent->isPastDue = 0; // need to find a way to calculate the date on this. for now just have it say no
         $rent->next_due_date = $firstDay;
         $rent->save();
 
@@ -1039,6 +1050,7 @@ class BillingController extends Controller {
             'landlord_id' => $proprietor->id,
             'property_id' => $property->id,
             'amount_paid' => $charge->amount,
+            'balance' => $newBalance,
             'payment_method' => $charge->payment_method_details->type,
             'paid_in_full' => $paidInFull,
             'late_fee_amount' => $lateFee,
@@ -1048,7 +1060,6 @@ class BillingController extends Controller {
     
         Mail::to($user->email)->send(new PaymentConfirmation($user, $total));
         
-
         return view('tenants.billing.confirmation', [
             'confirmation_number' => $confirmationNumber,
             'amount' => $charge->amount,
@@ -1056,6 +1067,21 @@ class BillingController extends Controller {
             'date' => $transaction->created_at,
         ]);
 
+    }
+
+    public function calculateRentBalance() {
+
+        $balanceAmount = Transaction::where('tenant_id', '=', Auth::user()->id)->get();
+
+        if( count($balanceAmount) === 0 || count($balanceAmount) === null ) {
+            return 0;
+        }
+
+        foreach ( $balanceAmount as $value ) {
+            $balance += $value->balance;
+        }
+
+        return $balance;
     }
 
     public function showPaymentConfirmation() {
