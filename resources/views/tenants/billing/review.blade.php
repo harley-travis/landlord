@@ -87,7 +87,7 @@
                         </div>
 
                         <div class="col-sm-6 mb-4">
-                            Convenience Fee
+                            Processing Fee
                         </div>
                         
                         <div class="col-sm-6 mb-4">

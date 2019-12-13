@@ -22,8 +22,6 @@ class CreateRentsTable extends Migration
 
             $table->bigIncrements('id');
             $table->unsignedBigInteger('property_id');
-            $table->integer('paid')->comment('0=no 1=yes');
-            $table->integer('isPastDue')->comment('0=no 1=yes');
             $table->date('last_date_paid')->nullable();
             $table->date('next_due_date')->nullable();
             $table->integer('rent_amount')->nullable();

@@ -8,8 +8,6 @@ use Faker\Generator as Faker;
 $factory->define(Rent::class, function (Faker $faker) {
     return [
 
-        'paid' => $faker->numberBetween(0,1),
-        'isPastDue' => 0,
         'last_date_paid' => now()->subDay(15),
         'next_due_date' => null,
         'rent_amount' => $faker->numberBetween(900, 5000),

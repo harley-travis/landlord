@@ -30,14 +30,13 @@
                     @else
 
                     <form action="{{ route('tenants.billing.pay') }}" method="post">
-
-                    
-                        @if( $property->paid === 1 && Carbon\Carbon::now()->gte(Carbon\Carbon::parse($property->last_date_paid) ) && $property->isPastDue == 0 ) 
+                                                       
+                        @if( $balance === 0 ) 
                             <h2 class="display-2 text-success mb-5">$0.00</h2>
 
-                        @elseif ( $property->isPastDue == 1 ) 
+                        @elseif ( $betweenDates === true ) 
                             <h2 class="display-2 text-danger mb-5">${{ $property->rent_amount + $property->late_fee + $balance }}</h2>
-                            <p>Payment due {{ \Carbon\Carbon::now()->addMonth()->format('F') }} 1, {{ \Carbon\Carbon::now()->year }}</p>
+                            <p>Payment was due {{ \Carbon\Carbon::now()->addMonth()->format('F') }} 1, {{ \Carbon\Carbon::now()->year }}</p>
                             <p class="text-danger font-weight-bold">Added late fee: ${{ $property->late_fee }}</p>
 
                             <input type="hidden" name="amount" value="{{ $property->rent_amount + $property->late_fee + $balance }}">
@@ -48,7 +47,7 @@
                             <input type="hidden" name="amount" value="{{ $property->rent_amount + $balance }}">
                         @endif
 
-                        <p>If the full amount is not paid by the <span class="text-danger">{{ \Carbon\Carbon::now()->addMonth()->format('F') }} @if( $property->late_date === null || $property->late_date == '' ) 15 @else {{ $property->late_date }},@endif {{ \Carbon\Carbon::now()->year }}</span>, then a late fee of <span class="text-danger">${{ $property->late_fee }}</span> taxed on.</p>
+                        <p>If the full amount is not paid by the <span class="text-danger">{{ \Carbon\Carbon::now()->addMonth()->format('F') }} @if( $property->late_date === null || $property->late_date == '' ) 17 @else {{ $property->late_date }},@endif {{ \Carbon\Carbon::now()->year }}</span>, then a late fee of <span class="text-danger">${{ $property->late_fee }}</span> taxed on.</p>
 
                             @csrf
 

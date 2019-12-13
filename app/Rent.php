@@ -7,10 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Rent extends Model {
     
     protected $fillable = [
-
-        'paid',
         'last_date_paid',
-        'isPastDue',
         'next_due_date',
         'rent_amount',
         'deposit_amount',
@@ -22,7 +19,6 @@ class Rent extends Model {
         'account_number',
         'hoa_amount',
         'property_id',
-
     ];
 
     public function property() {

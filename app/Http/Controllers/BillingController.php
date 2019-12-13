@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use DB;
+use Auth;
 use Mail;
 use App\User;
 use App\Tenant;
 use App\Rent;
 use App\Property;
 use App\Company;
-use Auth;
 use App\Transaction;
-use DB;
 use Carbon\Carbon;
 use Stripe_Error;
 use Illuminate\Http\Request;
@@ -26,31 +26,58 @@ class BillingController extends Controller {
     public function __construct() {
         \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
     }
-    
-    public function index() {
 
+    public function getUser() {
         $user = User::find(Auth::user()->id);
-        $customer = \Stripe\Customer::retrieve($user->stripe_id);
 
+        return $user;
+    }
+
+    public function getCustomer() {
+        $customer = \Stripe\Customer::retrieve($this->getUser()->stripe_id);
+
+        return $customer;
+    }
+
+    public function getTenant() {
+        $tenant = Tenant::where('user_id', '=', Auth::user()->id)->first();
+        
+        return $tenant;
+    }
+
+    public function getInvoices() {
         $invoices = \Stripe\Invoice::all(
             [
                  // 'limit' => 12,
-                "customer" => $user->stripe_id,
+                "customer" => $this->getUser()->stripe_id,
             ]
         );
 
+        return $invoices;
+    }
+
+    private function getBankAccounts() {
+
         $bank_accounts = \Stripe\Customer::allSources(
-            $user->stripe_id,
+            $this->getUser()->stripe_id,
             [
               'object' => 'bank_account',
             ]
         );
 
+        return $bank_accounts;
+
+    }
+    
+    public function index() {
+
+        $user = User::find(Auth::user()->id);
+
         return view('settings.billing.index', [
-            'user' => $user,
-            'bank_accounts' => $bank_accounts, 
-            'invoices' => $invoices,
-            'customer' => $customer, 
+            'user' => $this->getUser(),
+            'bank_accounts' => $this->getBankAccounts(), 
+            'invoices' => $this->getInvoices(),
+            'customer' => $this->getCustomer(), 
             'intent' => $user->createSetupIntent(),
         ]);
 
@@ -79,9 +106,6 @@ class BillingController extends Controller {
     }
 
     public function store(Request $request) {
-        ///dd('hi');
-
-        //$user = User::find(Auth::user()->id);
 
         $user = auth()->user();
 
@@ -285,15 +309,6 @@ class BillingController extends Controller {
           ]
         );
 
-        $customer = \Stripe\Customer::retrieve($user->stripe_id);
-
-        $bank_accounts = \Stripe\Customer::allSources(
-            $user->stripe_id,
-            [
-                'limit' => 3,
-                'object' => 'bank_account',
-            ]
-        );
 
         /**
          * MOVED THIS TO IT'S OWN FUNCTION
@@ -312,18 +327,11 @@ class BillingController extends Controller {
         $user->trial_ends_at = null;
         $user->save();
 
-        $invoices = \Stripe\Invoice::all(
-            [
-                 // 'limit' => 12,
-                "customer" => $user->stripe_id,
-            ]
-        );       
-
         return redirect()
             ->route('settings.billing.index', [
-                'bank_accounts' => $bank_accounts, 
-                'customer' => $customer, 
-                'invoices' => $invoices,
+                'bank_accounts' => $this->getBankAccounts(), 
+                'customer' => $this->getCustomer(), 
+                'invoices' => $this->getInvoices(),
             ])->with('info', 'Your account was successfully added. Check your account in 1-2 business days to see 2 small deposits. Verify you account by entering in those deposit amounts. Deposits take 1-3 business days.');
 
     }
@@ -535,52 +543,31 @@ class BillingController extends Controller {
                 ->back()
                 ->with('danger',  $e->getError()->message);
 
-          }
-
-            
+          }  
     }
 
     public function destroyACH($id) {
 
-        $user = User::find(Auth::user()->id);
-
-        $customer = \Stripe\Customer::retrieve($user->stripe_id);
-
-        $bank_accounts = \Stripe\Customer::allSources(
-            $user->stripe_id,
-            [
-                'limit' => 3,
-                'object' => 'bank_account',
-            ]
-        );
-
-        $invoices = \Stripe\Invoice::all(
-            [
-                 // 'limit' => 12,
-                "customer" => $user->stripe_id,
-            ]
-        );
-
-        if( count($bank_accounts->data) <= 1 ) { 
+        if( count($this->getBankAccounts()->data) <= 1 ) { 
 
             return redirect()
             ->route('settings.billing.index', [
-                'bank_accounts' => $bank_accounts, 
-                'customer' => $customer, 
+                'bank_accounts' => $this->getBankAccounts(), 
+                'customer' => $this->getCustomer(), 
             ])->with('danger', 'You are not able to remove an ACH account if there is no other account on file. Please add an ACH account then remove this account after. If you have any problems, please contact support for help');
 
         } else {
 
             \Stripe\Customer::deleteSource(
-                $user->stripe_id,
+                $this->getUser()->stripe_id,
                 $id
             );
 
             return redirect()
             ->route('settings.billing.index', [
-                'bank_accounts' => $bank_accounts, 
-                'customer' => $customer, 
-                'invoices' => $invoices,
+                'bank_accounts' => $this->getBankAccounts(), 
+                'customer' => $this->getCustomer(), 
+                'invoices' => $this->getInvoices(),
             ])->with('info', 'Your account was successfully deleted.');
 
         }
@@ -783,38 +770,11 @@ class BillingController extends Controller {
                 ])->with('danger',  $e->getError()->message);
 
           }
-  
-
-
-        // $product = \Stripe\Product::create([
-        //     'name' => 'Monthly Home Owner Service',
-        //     'type' => 'service',
-        // ]);
-
-        
-
-        /**
-         * this came from laravael docs might be useful to use
-         * https://laravel.com/docs/5.8/billing#without-payment-method-up-front
-         */
-        //$user->newSubscription('main', 'monthly')->create($paymentMethod);
-
-        // $subscription = \Stripe\Subscription::create([
-        //     "customer" => $user->stripe_id,
-        //     "items" => [
-        //         [
-        //             "plan" => $plan->id,
-        //         ],
-        //     ],
-        // ]);
-
-
     }
 
     public function calculateUsage() {
 
-        $user = User::find(Auth::user()->id);
-        $amount = DB::table('company_tenant')->where('company_id', '=', $user->company_id)->count();
+        $amount = DB::table('company_tenant')->where('company_id', '=', $this->getUser()->company_id)->count();
 
         return $amount;
 
@@ -822,36 +782,18 @@ class BillingController extends Controller {
 
     public function setDefaultPaymentMethod($payment) {
 
-        $user = User::find(Auth::user()->id);
-        $customer = \Stripe\Customer::retrieve($user->stripe_id);
-
         $update = \Stripe\Customer::update(
-            $user->stripe_id,
+            $this->getUser()->stripe_id,
             [
               'default_source' => $payment,
             ]
         );
 
-        $bank_accounts = \Stripe\Customer::allSources(
-            $user->stripe_id,
-            [
-                'limit' => 3,
-                'object' => 'bank_account',
-            ]
-        );
-
-        $invoices = \Stripe\Invoice::all(
-            [
-                 // 'limit' => 12,
-                "customer" => $user->stripe_id,
-            ]
-        );
-
         return redirect()
             ->route('settings.billing.index', [
-            'bank_accounts' => $bank_accounts, 
-            'customer' => $customer, 
-            'invoices' => $invoices,
+            'bank_accounts' => $this->getBankAccounts(), 
+            'customer' => $this->getCustomer(), 
+            'invoices' => $this->getInvoices(),
         ])->with('info', 'Your default payment has be set successfully!');
 
     }
@@ -874,89 +816,72 @@ class BillingController extends Controller {
         $user->stripe_account = $response->stripe_user_id;
         $user->save();
 
-        $bank_accounts = \Stripe\Customer::allSources(
-            $user->stripe_id,
-            [
-                'limit' => 3,
-                'object' => 'bank_account',
-            ]
-        );
-
-        $invoices = \Stripe\Invoice::all(
-            [
-                 // 'limit' => 12,
-                "customer" => $user->stripe_id,
-            ]
-        );
-
-        $customer = \Stripe\Customer::retrieve($user->stripe_id);
-
         return redirect()
             ->route('settings.billing.index', [
-            'bank_accounts' => $bank_accounts, 
-            'customer' => $customer, 
-            'invoices' => $invoices,
+            'bank_accounts' => $this->getBankAccounts(), 
+            'customer' => $this->getCustomer(), 
+            'invoices' => $this->getInvoices(),
         ])->with('info', 'You have successfully completed the onboarding process! Have fun!');
+
+    }
+
+    public function calculateRentDueDate() {
+
+        $property = Property::join('rents', 'rents.property_id', '=', 'properties.id')
+                            ->where('properties.id', '=', $this->getTenant()->property_id)
+                            ->first();
+
+        if( $property->late_date === null || $property->late_date === 0 ) {
+            $late_date = 17;
+        } else {
+            $late_date = $property->late_date;
+        }
+
+        $begin = Carbon::create(Carbon::now()->year, Carbon::now()->month, $late_date);
+        $end = Carbon::create(Carbon::now()->year, Carbon::now()->month, Carbon::now()->daysInMonth);
+
+        $comparison = Carbon::now()->isBetween(Carbon::now(), $begin, $end);
+
+        return $comparison;
 
     }
 
     public function showPayIndex() {
 
-        $tenant = Tenant::where('user_id', '=', Auth::user()->id)->first();
-
         $property = Property::join('rents', 'rents.property_id', '=', 'properties.id')
-                            ->where('properties.id', '=', $tenant->property_id)
+                            ->where('properties.id', '=', $this->getTenant()->property_id)
                             ->first();
         
         $balance = $this->calculateRentBalance();
-
+        $betweenDates = $this->calculateRentDueDate();
+       
         return view('tenants.billing.index', [
-                    'tenant' => $tenant,
+                    'tenant' => $this->getTenant(),
                     'property' => $property,
                     'balance' => $balance,
+                    'betweenDates' => $betweenDates,
         ]);
     }
 
     public function showPay(Request $request) {
        
-        $user = Auth::user();
-
-        $tenant = Tenant::where('user_id', '=', Auth::user()->id)->first();
-
         $property = Property::join('rents', 'rents.property_id', '=', 'properties.id')
-                            ->where('properties.id', '=', $tenant->property_id)
+                            ->where('properties.id', '=', $this->getTenant()->property_id)
                             ->first();
-
-        $customer = \Stripe\Customer::retrieve($user->stripe_id);
-
-        $bank_accounts = \Stripe\Customer::allSources(
-            $user->stripe_id,
-                [
-                    'object' => 'bank_account',
-                ]
-        );
 
         $amount = $request->input('amount');
 
         return view('tenants.billing.pay', [
-                    'tenant' => $tenant,
+                    'tenant' => $this->getTenant(),
                     'property' => $property,
-                    'bank_accounts' => $bank_accounts,
-                    'customer' => $customer,
+                    'bank_accounts' => $this->getBankAccounts(),
+                    'customer' => $this->getCustomer(),
                     'amount' => $amount,
         ]);
         
     }
 
     public function storePayReview(Request $request) {
-
-        $user = Auth::user();
-        $customer = \Stripe\Customer::retrieve($user->stripe_id);
-
-        $bank_account = \Stripe\Customer::retrieveSource(
-            $user->stripe_id,
-            $request->input('source')
-        );
 
         $date = $request->input('date');
         $source = $request->input('source');
@@ -968,20 +893,20 @@ class BillingController extends Controller {
             'date' => $date,
             'source' => $source,
             'amount' => $amount,
-            'bank_account' => $bank_account,
-            'customer' => $customer,
+            'bank_account' => $this->getBankAccounts(),
+            'customer' => $this->getCustomer(),
             'convenience' => $convenience,
         ]);
     }
 
     public function payRent(Request $request) {
 
-        $user = Auth::user();
-        $customer = \Stripe\Customer::retrieve($user->stripe_id);
-        $tenant = Tenant::where('user_id', '=', Auth::user()->id)->first();
+        // $user = Auth::user();
+        // $customer = \Stripe\Customer::retrieve($user->stripe_id);
+        // $tenant = Tenant::where('user_id', '=', Auth::user()->id)->first();
 
         $property = Property::join('rents', 'rents.property_id', '=', 'properties.id')
-                            ->where('properties.id', '=', $tenant->property_id)
+                            ->where('properties.id', '=', $this->getTenant()->property_id)
                             ->first();
 
         $company = Company::where('id', '=', Auth::user()->company_id);
@@ -990,10 +915,10 @@ class BillingController extends Controller {
                             ->where('role', '=', '3')
                             ->first();
 
-        $bank_account = \Stripe\Customer::retrieveSource(
-            $user->stripe_id,
-            $request->input('source')
-        );
+        // $bank_account = \Stripe\Customer::retrieveSource(
+        //     $user->stripe_id,
+        //     $request->input('source')
+        // );
 
         $amount = $request->input('rent') * 100;
         $setAmount = $property->rent_amount * 100;
@@ -1005,7 +930,7 @@ class BillingController extends Controller {
         $charge = \Stripe\Charge::create([
             'amount' => $total, 
             'currency' => "usd",
-            'source' => $bank_account, 
+            'source' => $this->getBankAccounts(), 
             'customer' => $customer->id,
             'metadata' => [
                 'Confirmation Number' => $confirmationNumber
@@ -1023,16 +948,6 @@ class BillingController extends Controller {
         $startDate = Carbon::now();
         $firstDay = $startDate->firstOfMonth();
 
-        /**
-         * revise this to meet the balance transaction feature
-         * 0 = no 
-         * 1 = yes
-         */
-        $paidInFull = 0;
-        if( $newBalance === 0 ) {
-            $paidInFull = 1; 
-        } 
-
         $lateFee = 0;
         if( $amount > $setAmount ) {
             $lateFee = $findLateFeeAmount;
@@ -1041,7 +956,7 @@ class BillingController extends Controller {
         // validate
         // if it's successful, then update the rents table
         $rent = Rent::where('property_id', '=', $tenant->property_id)->first();
-        $rent->paid = $paidInFull; 
+        $rent->showNewAmount = 1; 
         $rent->last_date_paid = Carbon::now();
         $rent->isPastDue = 0; // need to find a way to calculate the date on this. for now just have it say no
         $rent->next_due_date = $firstDay;
@@ -1073,8 +988,10 @@ class BillingController extends Controller {
 
     public function calculateRentBalance() {
 
-        $id = User::join('tenants', 'tenants.user_id', '=', 'users.id')->where('tenants.user_id', '=', Auth::user()->id)->first();
-
+        $id = User::join('tenants', 'tenants.user_id', '=', 'users.id')
+                ->where('tenants.user_id', '=', Auth::user()->id)
+                ->first();
+                
         $balanceAmount = Transaction::where('tenant_id', '=', $id->id)->get();
 
         if( count($balanceAmount) === 0 ) {
@@ -1082,7 +999,6 @@ class BillingController extends Controller {
         } else {
 
             $b = 0;
-
             foreach ( $balanceAmount as $value ) {
                 $b += $value->balance;
             }

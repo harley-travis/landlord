@@ -46,23 +46,6 @@ class everyMonth extends Command
         */
 
         $isPaid = DB::table('rents')->where('paid', 1)->update(['paid' => 0]);
-
-        /**
-         * Mark all the isPastDue's to past due if the payment is past the 15th
-         * 
-         * if the dates are inbetween the 15th and the 1st then update it as late (need to figure out how to pass variable to indicate late date for user)
-         * 
-         * and if the status is not paid 
-         */
-
-        $isLate = DB::table('rents')->where('isPastDue', 0)->update(['paid' => 1]);
-
-        if( Carbon::now()->gte(15) && Carbon::now()->lte(1) ) {
-
-        }
-
-        $isLate = DB::table('rents')->where('isPastDue', 0)->update(['paid' => 1]);
-
         echo "we updated the paid values";
 
     }
