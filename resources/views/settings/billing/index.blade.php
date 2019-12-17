@@ -112,7 +112,7 @@
     </div> -->
     @endif
 
-    @if($user->role === 3 )
+    @if( $user->role === 3 && isset($connect_accounts) )
     <div class="row">
         <div class="col">
             <div class="card shadow">
@@ -130,7 +130,7 @@
                 <div class="card-body">
 
                     <ul class="list-group">
-                        @if( isset($connect_accounts) )
+                       
                         @foreach($connect_accounts->external_accounts->data as $b)
 
 						<li class="list-group-item">
@@ -145,9 +145,7 @@
                                 </div>
 							</span>
 						</li>
-
                         @endforeach
-                        @endif
 	
 					</ul>
      
@@ -156,8 +154,6 @@
         </div> <!-- col -->
     </div> <!-- row -->
     @endif
-
-    
 
     @if($user->role != 3 )
     <div class="row">
