@@ -120,11 +120,11 @@
 
                     <ul class="list-group">
 
-                        @foreach($connect_accounts->external_accounts as $b)
+                        @foreach($connect_accounts->external_accounts->data as $b)
 
 						<li class="list-group-item">
 							<span class="col-6"> 
-                                <i class="fas fa-university mr-2"></i> {{ $b->data->bank_name }} 
+                                <i class="fas fa-university mr-2"></i> {{ $b->bank_name }} 
                                 <span class="pl-3">********  </span>
                             
      
