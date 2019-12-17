@@ -127,8 +127,7 @@
 						<li class="list-group-item">
 							<span class="col-6"> 
                                 <i class="fas fa-university mr-2"></i> @if( !isset($bank_account->bank_name) ) {{ $bank_account }} @else {{ $bank_account->bank_name }} @endif
-                                <span class="pl-3">********                    
-                                    @endif
+                                <span class="pl-3">******** 
 
                                     <a href="#" class="btn btn-outline-danger" data-toggle="modal" data-target="#deleteACH"><i class="far fa-trash-alt pr-2"></i> Delete Account</a>
 
