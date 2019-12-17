@@ -125,7 +125,7 @@
 						<li class="list-group-item">
 							<span class="col-6"> 
                                 <i class="fas fa-university mr-2"></i> {{ $b->bank_name }} 
-                                <span class="pl-3">********  </span>
+                                <span class="pl-3">********  {{ $b->last4 }}</span>
                             
      
                             </span>
