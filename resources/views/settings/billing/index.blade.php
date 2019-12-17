@@ -127,7 +127,7 @@
 						<li class="list-group-item">
 							<span class="col-6"> 
                                 <i class="fas fa-university mr-2"></i> @if( !isset($bank_account->bank_name) ) {{ $bank_account }} @else {{ $bank_account->bank_name }} @endif
-                                <span class="pl-3">******** @if( !isset($bank_account->last4) ) {{ $bank_account->external_accounts->data->last4 }} @else {{ $bank_account->last4 }} @endif </span>
+                                <span class="pl-3">********  </span>
                             
                                 @if($bank_account->id == $customer->default_source)
                                     <span class="badge badge-primary">Default</span>
