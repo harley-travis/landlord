@@ -112,7 +112,7 @@
     </div> -->
     @endif
 
-    @if( $user->role === 3 && isset($connect_accounts) )
+    @if( $user->role === 3 )
     <div class="row">
         <div class="col">
             <div class="card shadow">
@@ -128,6 +128,12 @@
                 </div>
 
                 <div class="card-body">
+
+                @if( !isset($connect_accounts) )
+
+                    <p>Please complete onboarding to accept payments</p>
+
+                @else
 
                     <ul class="list-group">
                        
@@ -149,6 +155,8 @@
 	
 					</ul>
      
+                    @endif
+
                 </div>
             </div> <!-- card -->
         </div> <!-- col -->
