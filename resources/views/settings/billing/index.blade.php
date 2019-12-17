@@ -59,7 +59,7 @@
     @endif
 
     @if($user->role != 0 )
-    <div class="row mb-3">
+    <!-- <div class="row mb-3">
         <div class="col">
             <div class="card shadow">
                 <div class="card-header border-0">
@@ -74,10 +74,10 @@
                 <div class="card-body">
 
                     
-                    <input placeholder="Card Holder Name" class="form-control mb-2" id="card-holder-name" type="text">
+                    <input placeholder="Card Holder Name" class="form-control mb-2" id="card-holder-name" type="text"> -->
 
                     <!-- Stripe Elements Placeholder -->
-                    <div id="card-element"></div>
+                    <!-- <div id="card-element"></div>
 
                     <button class="mt-3 btn btn-primary" id="card-button" data-secret="{{ $intent->client_secret }}">
                         Add Credit Card and Subscribe
@@ -86,9 +86,10 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
     @endif
 
+    @if($user->role === 0 || $user->role >= 4 )
     <div class="row">
         <div class="col">
             <div class="card shadow">
@@ -207,6 +208,7 @@
             </div> <!-- card -->
         </div> <!-- col -->
     </div> <!-- row -->
+    @endif
 
     <div class="row mt-3">
         <div class="col">

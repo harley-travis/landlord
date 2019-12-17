@@ -97,10 +97,12 @@
 							</div>
 							<div class="form-group">
 								<label for="account_holder_type">Account Holder Type</label>
-								<input type="text" class="form-control" placeholder="account holder type: IE: company" name="account_holder_type">
+								<select id="account_holder_type" name="account_holder_type" class="form-control">
+									<option value="individual">Individual</option>
+									<option value="company">Company</option>
+								</select>
 							</div>
 						</div>
-
 
 						@csrf
 
