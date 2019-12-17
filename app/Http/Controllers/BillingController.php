@@ -68,10 +68,22 @@ class BillingController extends Controller {
         return $bank_accounts;
 
     }
+
+    public function getStripeAccount() {
+
+        $connect_bank_account = \Stripe\Account::retrieve(
+            $this->getUser()->stripe_account
+        );
+
+        return $connect_bank_account;
+
+    }
     
     public function index() {
 
         $user = User::find(Auth::user()->id);
+
+        dd($this->getStripeAccount());
 
         return view('settings.billing.index', [
             'user' => $this->getUser(),
@@ -79,6 +91,7 @@ class BillingController extends Controller {
             'invoices' => $this->getInvoices(),
             'customer' => $this->getCustomer(), 
             'intent' => $user->createSetupIntent(),
+            'bank_accounts' => $this->getStripeAccount(),
         ]);
 
     }

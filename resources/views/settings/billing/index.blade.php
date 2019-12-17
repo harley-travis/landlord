@@ -89,7 +89,9 @@
     </div> -->
     @endif
 
-    @if($user->role === 0 || $user->role >= 4 )
+    
+
+    @if($user->role > 0 )
     <div class="row">
         <div class="col">
             <div class="card shadow">
@@ -123,8 +125,8 @@
                     <ul class="list-group">
 					    @foreach( $bank_accounts as $bank_account )
 						<li class="list-group-item">
-							<span class="col-6">
-                                <i class="fas fa-university mr-2"></i> {{ $bank_account->bank_name }}
+							<span class="col-6"> 
+                                <i class="fas fa-university mr-2"></i> @if( !isset($bank_account->bank_name) ) {{ $bank_account}} @else {{ $bank_account->bank_name }} @endif
                                 <span class="pl-3">******** {{ $bank_account->last4 }} </span>
                             
                                 @if($bank_account->id == $customer->default_source)
