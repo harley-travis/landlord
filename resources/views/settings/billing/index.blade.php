@@ -129,7 +129,33 @@
 
                 <div class="card-body">
 
-               {{ $connect_accounts }}
+                @if( !isset($connect_accounts->external_accounts) || $connect_accounts === 0 || $connect_accounts === null )
+
+                    <p>Please complete onboarding to accept payments</p>
+
+                @else
+
+                    <ul class="list-group">
+                       
+                        @foreach($connect_accounts->external_accounts->data as $b)
+
+						<li class="list-group-item">
+							<span class="col-6"> 
+                                <i class="fas fa-university mr-2"></i> {{ $b->bank_name }} 
+                                <span class="pl-3">********  {{ $b->last4 }}</span>
+                            </span>
+
+							<span class="col-6">
+                                <div class="float-right">
+
+                                </div>
+							</span>
+						</li>
+                        @endforeach
+	
+					</ul>
+     
+                @endif
 
                 </div>
             </div> <!-- card -->
