@@ -89,7 +89,7 @@
     </div> -->
     @endif
 
-    @if($user->role === 1 )
+    @if($user->role === 3 )
     <div class="row">
         <div class="col">
             <div class="card shadow">
@@ -144,7 +144,7 @@
 
     
 
-    @if($user->role != 1 )
+    @if($user->role != 3 )
     <div class="row">
         <div class="col">
             <div class="card shadow">
