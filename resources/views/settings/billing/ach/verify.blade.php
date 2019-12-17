@@ -4,6 +4,30 @@
 @include('layouts.headers.cards')
 
 <div class="container-fluid mt--9">
+
+    <div class="row">
+        <div class="col">
+            @if(Session::has('info'))
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <h4 class="alert-heading">Success!</h4>
+                    <p>{{ Session::get('info') }}</p>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            @endif
+
+            @if (session('danger'))
+                <div class="alert alert-danger shadow-sm alert-dismissible fade show" role="alert">
+                    <i class="fas fa-exclamation-circle pr-2"></i>{{ session('danger') }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            @endif
+        </div>
+    </div>
+
     <div class="row">
         <div class="col">
             <div class="card shadow">
@@ -18,18 +42,6 @@
                     </div>
                 </div>
                 <div class="card-body">
-                @if (session('info'))
-                    <div class="alert alert-success shadow-sm" role="alert">
-                        <i class="fas fa-info-circle pr-2"></i>{{ session('info') }}
-                    </div>
-                @endif
-
-                @if (session('danger'))
-                    <div class="alert alert-danger shadow-sm" role="alert">
-                        <i class="fas fa-exclamation-circle pr-2"></i>{{ session('danger') }}
-                    </div>
-                @endif
-
 
                     <div class="alert alert-warning" role="alert">
                         <b>NOTE</b> This information is just for testing purposes. Will remove this when we go live. <br><br>
@@ -78,7 +90,6 @@
                         <button type="submit" class="btn btn-success shadow"><i class="fas fa-check pr-2"></i> Verify and Authorize</button>
 
                     </form>
-
 
                 </div>
             </div>

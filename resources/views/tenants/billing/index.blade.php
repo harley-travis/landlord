@@ -5,6 +5,20 @@
 
 <div class="container-fluid mt--9">
 
+    <div class="row">
+        <div class="col">
+            @if(Session::has('info'))
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <h4 class="alert-heading">Success!</h4>
+                    <p>{{ Session::get('info') }}</p>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            @endif
+        </div>
+    </div>
+
     <div class="row mb-3">
         <div class="col">
             <div class="card shadow">
@@ -19,11 +33,6 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    @if (session('status'))
-                        <div class="alert alert-success" role="alert">
-                            {{ session('status') }}
-                        </div>
-                    @endif
 
                     @if( $tenant->property_id === null )
                         <span class="text-danger font-weight-bold">Your landlord has not assigned you to a property yet. Contact them if you don't see your property in a day or two.</span>

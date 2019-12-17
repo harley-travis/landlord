@@ -4,6 +4,30 @@
 @include('layouts.headers.cards')
 
 <div class="container-fluid mt--9">
+
+	<div class="row">
+        <div class="col">
+            @if(Session::has('status'))
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <h4 class="alert-heading">Success!</h4>
+                    <p>{{ Session::get('status') }}</p>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            @endif
+
+			@if (session('danger'))
+				<div class="alert alert-danger alert-dismissible fade show" role="alert">
+					<p>{{ session('danger') }}</p>
+					<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+				</div>
+			@endif
+        </div>
+    </div>
+
     <div class="row">
         <div class="col">
             <div class="card shadow">
@@ -19,17 +43,6 @@
                 </div>
 
                 <div class="card-body">
-                    @if (session('status'))
-                        <div class="alert alert-success" role="alert">
-                            {{ session('status') }}
-                        </div>
-                    @endif
-
-					@if (session('danger'))
-                        <div class="alert alert-danger" role="alert">
-                            {{ session('danger') }}
-                        </div>
-                    @endif
 
 					<div class="alert alert-warning" role="alert">
                         <b>NOTE</b> This information is just for testing purposes. Will remove this when we go live. <br><br>
