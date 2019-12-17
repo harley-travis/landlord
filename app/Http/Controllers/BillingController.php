@@ -83,7 +83,7 @@ class BillingController extends Controller {
 
         $user = User::find(Auth::user()->id);
 
-       // dd($this->getStripeAccount());
+        //dd($this->getStripeAccount());
 
         return view('settings.billing.index', [
             'user' => $this->getUser(),
@@ -91,7 +91,7 @@ class BillingController extends Controller {
             'invoices' => $this->getInvoices(),
             'customer' => $this->getCustomer(), 
             'intent' => $user->createSetupIntent(),
-            'bank_accounts' => $this->getStripeAccount(),
+            'connect_accounts' => $this->getStripeAccount(),
         ]);
 
     }
@@ -1004,7 +1004,7 @@ class BillingController extends Controller {
         $id = User::join('tenants', 'tenants.user_id', '=', 'users.id')
                 ->where('tenants.user_id', '=', Auth::user()->id)
                 ->first();
-                
+
         $balanceAmount = Transaction::where('tenant_id', '=', $id->id)->get();
 
         if( count($balanceAmount) === 0 ) {
