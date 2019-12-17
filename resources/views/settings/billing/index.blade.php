@@ -131,7 +131,7 @@
 
                 @if( !isset($connect_accounts->external_accounts) || $connect_accounts === 0 || $connect_accounts === null )
 
-                    <p>Please complete onboarding to accept payments</p>
+                    <p class="text-center">Please complete onboarding to accept payments</p>
 
                 @else
 
