@@ -127,7 +127,45 @@
 						<li class="list-group-item">
 							<span class="col-6"> 
                                 <i class="fas fa-university mr-2"></i> @if( !isset($bank_account->bank_name) ) {{ $bank_account }} @else {{ $bank_account->bank_name }} @endif
-                                <span class="pl-3">******** 
+                                <span class="pl-3">******** @if( !isset($bank_account->last4) ) {{ $bank_account->external_accounts->data->last4 }} @else {{ $bank_account->last4 }} @endif </span>
+                            
+                                @if($bank_account->id == $customer->default_source)
+                                    <span class="badge badge-primary">Default</span>
+                                @endif
+                            </span>
+
+							<span class="col-6">
+                                <div class="float-right">
+
+                                    @if( $bank_account->id != $customer->default_source )
+                                    <a href="#" class="btn btn-link" data-toggle="modal" data-target="#setDefault">Set Default</a>
+
+                                    <!-- Authorize ACH Modal -->
+                                    <div class="modal fade" id="setDefault" tabindex="-1" role="dialog" aria-labelledby="setDefaultLabel" aria-hidden="true">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="setDefaultLabel">Are you sure you want to authorize this ACH account?</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p>In order to process your payment, you need to authorize SenRent to charge this account on file. Authorizing payment will auto enroll into our monthly payment program of $15/month for 5 properties and an additional $2 charge per additional property.</p>
+                                                <p>Each month may vary the cost, depending on how many properties you added this month.</p>
+                                                <p>By clicking, 'Authorize Payment', you agree to our Terms and Conditions and authorize SenRent to charge the account on file.
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Cancel</button>
+                                                <a href="{{ route('settings.billing.setDefault', ['id' => $bank_account->id ]) }}" class="btn btn-success shadow">Set Default and Authorize</a> 
+                                   
+                                            </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    
+                                    @endif
 
                                     <a href="#" class="btn btn-outline-danger" data-toggle="modal" data-target="#deleteACH"><i class="far fa-trash-alt pr-2"></i> Delete Account</a>
 
