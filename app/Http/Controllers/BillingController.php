@@ -83,7 +83,7 @@ class BillingController extends Controller {
 
         $user = User::find(Auth::user()->id);
 
-        //dd($this->getStripeAccount());
+        dd($this->getStripeAccount());
 
         return view('settings.billing.index', [
             'user' => $this->getUser(),
