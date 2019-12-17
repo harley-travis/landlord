@@ -121,7 +121,7 @@
                     <ul class="list-group">
 						<li class="list-group-item">
 							<span class="col-6"> 
-                                <i class="fas fa-university mr-2"></i> {{ $connect_accounts }} 
+                                <i class="fas fa-university mr-2"></i> {{ $connect_accounts->external_accounts->data->bank_name }} 
                                 <span class="pl-3">********  </span>
                             
      
