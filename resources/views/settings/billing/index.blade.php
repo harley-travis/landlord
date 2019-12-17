@@ -89,9 +89,62 @@
     </div> -->
     @endif
 
+    @if($user->role === 1 )
+    <div class="row">
+        <div class="col">
+            <div class="card shadow">
+                <div class="card-header border-0">
+                    <div class="row align-items-center">
+                        <div class="col-8">
+                            <h3 class="mb-0">ACH Accounts</h3>
+                        </div>
+                        <div class="col-4 text-right">
+                          
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-body">
+
+                    @if (session('info'))
+                        <div class="alert alert-success shadow-sm" role="alert">
+                            <i class="fas fa-info-circle pr-2"></i>{{ session('info') }}
+                        </div>
+                    @endif
+
+                    @if (session('danger'))
+                        <div class="alert alert-danger shadow-sm" role="alert">
+                            <i class="fas fa-exclamation-circle pr-2"></i>{{ session('danger') }}
+                        </div>
+                    @endif
+
+                    <ul class="list-group">
+						<li class="list-group-item">
+							<span class="col-6"> 
+                                <i class="fas fa-university mr-2"></i> {{ $bank_account }} 
+                                <span class="pl-3">********  </span>
+                            
+     
+                            </span>
+
+							<span class="col-6">
+                                <div class="float-right">
+
+                                </div>
+							</span>
+						</li>
+				
+					</ul>
+     
+                </div>
+            </div> <!-- card -->
+        </div> <!-- col -->
+    </div> <!-- row -->
+    @endif
+
     
 
-    @if($user->role > 0 )
+    @if($user->role != 1 )
     <div class="row">
         <div class="col">
             <div class="card shadow">
@@ -126,8 +179,8 @@
 					    @foreach( $bank_accounts as $bank_account )
 						<li class="list-group-item">
 							<span class="col-6"> 
-                                <i class="fas fa-university mr-2"></i> @if( !isset($bank_account->bank_name) ) {{ $bank_account }} @else {{ $bank_account->bank_name }} @endif
-                                <span class="pl-3">******** @if( !isset($bank_account->last4) ) {{ $bank_account->external_accounts->data->last4 }} @else {{ $bank_account->last4 }} @endif </span>
+                                <i class="fas fa-university mr-2"></i> {{ $bank_account->bank_name }} 
+                                <span class="pl-3">********{{ $bank_account->last4 }}</span>
                             
                                 @if($bank_account->id == $customer->default_source)
                                     <span class="badge badge-primary">Default</span>
