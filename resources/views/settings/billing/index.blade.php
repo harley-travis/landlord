@@ -130,15 +130,13 @@
                 <div class="card-body">
 
                     <ul class="list-group">
-
+                        @if( !isset($connect_accounts) )
                         @foreach($connect_accounts->external_accounts->data as $b)
 
 						<li class="list-group-item">
 							<span class="col-6"> 
                                 <i class="fas fa-university mr-2"></i> {{ $b->bank_name }} 
                                 <span class="pl-3">********  {{ $b->last4 }}</span>
-                            
-     
                             </span>
 
 							<span class="col-6">
@@ -149,7 +147,8 @@
 						</li>
 
                         @endforeach
-				
+                        @endif
+	
 					</ul>
      
                 </div>
