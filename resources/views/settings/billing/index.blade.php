@@ -130,7 +130,7 @@
                 <div class="card-body">
 
                     <ul class="list-group">
-                        @if( !isset($connect_accounts) )
+                        @if( isset($connect_accounts) )
                         @foreach($connect_accounts->external_accounts->data as $b)
 
 						<li class="list-group-item">
