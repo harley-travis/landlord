@@ -49,11 +49,11 @@
 
                         <p>If the full amount is not paid by the <span class="text-danger">{{ \Carbon\Carbon::now()->addMonth()->format('F') }} @if( $property->late_date === null || $property->late_date == '' ) 17 @else {{ $property->late_date }},@endif {{ \Carbon\Carbon::now()->year }}</span>, then a late fee of <span class="text-danger">${{ $property->late_fee }}</span> taxed on.</p>
 
-                            @csrf
+                        @csrf
 
                         <br><button type="submit" class="btn btn-primary">Make a Payment</a>
                    
-                    @endif
+                        @endif
 
                     </form>
                 </div>
