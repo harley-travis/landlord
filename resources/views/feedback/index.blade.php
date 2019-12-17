@@ -7,6 +7,20 @@
 
     <div class="row">
         <div class="col">
+            @if(Session::has('info'))
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <h4 class="alert-heading">Success!</h4>
+                    <p>{{ Session::get('info') }}</p>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            @endif
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
          @if(Auth::user()->role >= 4)
             <div class="card shadow">
                 <div class="card-header border-0">
@@ -20,14 +34,6 @@
                     </div>
                 </div>
                 <div class="card-body">   
-
-                @if(Session::has('info'))
-                    <div class="alert alert-success" role="alert">
-                        <h4 class="alert-heading">Success!</h4>
-                        <p>{{ Session::get('info') }}</p>
-                    </div>
-                @endif
-
                     <div class="table-responsive">
                         <table class="table align-items-center table-flush table-hover">
                             <thead class="thead-light">
