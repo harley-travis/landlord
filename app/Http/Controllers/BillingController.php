@@ -942,7 +942,7 @@ class BillingController extends Controller {
             'amount' => $total, 
             'currency' => "usd",
             'source' => $this->getBankAccounts(), 
-            'customer' => $customer->id,
+            'customer' => $this->getCustomer()->id,
             'metadata' => [
                 'Confirmation Number' => $confirmationNumber
             ],
