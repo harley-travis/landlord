@@ -594,7 +594,7 @@ class BillingController extends Controller {
 
         $plan = \Stripe\Plan::create([
             "nickname" => $user->name ." Home Owner Metered Monthly",
-            "product" => "prod_G7cAszLu1IUcgA", // hard coded. i think i just need one of these
+            "product" => "prod_GVRCMzXFI6A2wS", // hard coded. i think i just need one of these
             "amount" => 0,
             "currency" => "usd",
             "interval" => "month",
@@ -692,7 +692,7 @@ class BillingController extends Controller {
 
             $plan = \Stripe\Plan::create([
                 "nickname" => $user->name ." Home Owner Metered Monthly",
-                "product" => "prod_G7cAszLu1IUcgA", // hard coded. i think i just need one of these
+                "product" => "prod_GVRCMzXFI6A2wS", // hard coded. i think i just need one of these
                 "amount" => $amount,
                 "billing_scheme" => "per_unit",
                 "currency" => "usd",

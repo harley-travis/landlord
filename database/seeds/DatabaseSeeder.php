@@ -29,14 +29,14 @@ class DatabaseSeeder extends Seeder {
         // SENRENT - USERS
         DB::table('users')->insert([
             'name' => 'Travis Harley',
-            'email' =>'travis@gmail.com',
+            'email' => 'travis@gmail.com',
             'email_verified_at' => Carbon::now(),
             'password' => bcrypt('test'),
             'company_id' => '1',
             'role' => '10',
             'product' => '10', 
             'remember_token' => '',
-            'stripe_id' => 'cus_GFme8tZcVXTYF1', // dummy data. sorry no good hackers
+            'stripe_id' => 'cus_GVQk02oIcagwZn', // dummy data. sorry no good hackers
             'stripe_account' => null,
             'card_brand' => 'Visa', 
             'card_last_four' => '5555',
