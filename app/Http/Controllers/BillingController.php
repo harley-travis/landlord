@@ -969,7 +969,7 @@ class BillingController extends Controller {
         // validate
         // if it's successful, then update the rents table
         $rent = Rent::where('property_id', '=', $tenant->property_id)->first();
-        $rent->showNewAmount = 1; 
+        //$rent->showNewAmount = 1; 
         $rent->last_date_paid = Carbon::now();
         $rent->isPastDue = 0; // need to find a way to calculate the date on this. for now just have it say no
         $rent->next_due_date = $firstDay;
