@@ -70,13 +70,18 @@
                             Payment Method
                         </div>
 
-                        <div class="col-sm-6 mb-4">
-                            <i class="fas fa-university mr-2"></i> {{ $bank_account->bank_name }}
-                            <span class="pl-3">******** {{ $bank_account->last4 }} </span>
+                        <div class="col-sm-6 mb-4"> 
+
+                            @foreach($bank_account as $b)
+
+                                <i class="fas fa-university mr-2"></i> {{ $b->bank_name }}
+                                <span class="pl-3">******** {{ $b->last4 }} </span>
                         
-                            @if($bank_account->id == $customer->default_source)
-                                <span class="badge badge-primary">Default</span>
-                            @endif
+                                @if($b->id == $customer->default_source)
+                                    <span class="badge badge-primary">Default</span>
+                                @endif
+
+                            @endforeach
                         </div>
 
                         <div class="col-sm-6 mb-4">
@@ -139,7 +144,10 @@
                     <input type="hidden" name="total" value="{{ $amount + number_format( $convenience,2 ) }}">
                     <input type="hidden" name="rent" value="{{ $amount }}">
                     <input type="hidden" name="convenience" value="{{ $convenience }}">
-                    <input type="hidden" name="source" value="{{ $bank_account->id }}">
+
+                    @foreach($bank_account as $b)
+                    <input type="hidden" name="source" value="{{ $b->id }}">
+                    @endforeach
 
                     @csrf
 

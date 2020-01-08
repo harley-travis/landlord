@@ -62,7 +62,7 @@
 
                         <br><button type="submit" class="btn btn-primary">Make a Payment</a>
                    
-                        @endif
+                    @endif
 
                     </form>
                 </div>

@@ -65,6 +65,8 @@ class BillingController extends Controller {
             ]
         );
 
+        //dd($bank_accounts);
+
         return $bank_accounts;
 
     }
@@ -912,7 +914,7 @@ class BillingController extends Controller {
 
     public function payRent(Request $request) {
 
-        // $user = Auth::user();
+        $user = Auth::user();
         // $customer = \Stripe\Customer::retrieve($user->stripe_id);
         // $tenant = Tenant::where('user_id', '=', Auth::user()->id)->first();
 
@@ -926,10 +928,10 @@ class BillingController extends Controller {
                             ->where('role', '=', '3')
                             ->first();
 
-        // $bank_account = \Stripe\Customer::retrieveSource(
-        //     $user->stripe_id,
-        //     $request->input('source')
-        // );
+        $bank_account = \Stripe\Customer::retrieveSource(
+            $user->stripe_id,
+            $request->input('source')
+        );
 
         $amount = $request->input('rent') * 100;
         $setAmount = $property->rent_amount * 100;
@@ -941,7 +943,7 @@ class BillingController extends Controller {
         $charge = \Stripe\Charge::create([
             'amount' => $total, 
             'currency' => "usd",
-            'source' => $this->getBankAccounts(), 
+            'source' => $bank_account, 
             'customer' => $this->getCustomer()->id,
             'metadata' => [
                 'Confirmation Number' => $confirmationNumber
