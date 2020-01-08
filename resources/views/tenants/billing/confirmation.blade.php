@@ -22,10 +22,10 @@
 
                     <p><i class="ni ni-check-bold text-success mr-3"></i>Thank you for your payment! You will see the funds withdrawn from your account in 1-3 business days.</p>
                     <p>An email confirmation has been sent to you at {{ Auth::user()->email }}</p>
-                    <p>Please print this page for your records.</p>
+                    <p class="mt-5 mb-5">Please print this page for your records.</p>
 
 
-                    <h3<>Payment Details</h3>
+                    <h3>Payment Details</h3>
                     <div class="table-responsive">
                         <table class="table borderless">
                             <tr>
@@ -34,7 +34,7 @@
                             </tr>
                             <tr>
                                 <td>Payment Amount</td>
-                                <td>{{ $amount }}</td>
+                                <td>${{ $amount / 100}}</td>
                             </tr>
                             <tr>
                                 <td>Payment Method</td>
