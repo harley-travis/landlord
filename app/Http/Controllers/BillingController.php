@@ -958,6 +958,13 @@ class BillingController extends Controller {
         $currentBalance = $this->calculateRentBalance();
         $newBalance = ( $request->input('rent') + $currentBalance ) - $currentBalance;
 
+        // determine wither or not the total amount due is paid
+        $paidInFull = 0; // 0 = no 1 = yes
+
+        if($newBalance <= 0) { 
+            $paidInFull = 1; 
+        }
+
         $startDate = Carbon::now();
         $firstDay = $startDate->firstOfMonth();
 
@@ -969,9 +976,7 @@ class BillingController extends Controller {
         // validate
         // if it's successful, then update the rents table
         $rent = Rent::where('property_id', '=', $tenant->property_id)->first();
-        //$rent->showNewAmount = 1; 
         $rent->last_date_paid = Carbon::now();
-        //$rent->isPastDue = 0; // need to find a way to calculate the date on this. for now just have it say no
         $rent->next_due_date = $firstDay;
         $rent->save();
 
