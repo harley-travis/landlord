@@ -915,8 +915,8 @@ class BillingController extends Controller {
     public function payRent(Request $request) {
 
         $user = Auth::user();
-        // $customer = \Stripe\Customer::retrieve($user->stripe_id);
-        // $tenant = Tenant::where('user_id', '=', Auth::user()->id)->first();
+        $customer = \Stripe\Customer::retrieve($user->stripe_id);
+        $tenant = Tenant::where('user_id', '=', Auth::user()->id)->first();
 
         $property = Property::join('rents', 'rents.property_id', '=', 'properties.id')
                             ->where('properties.id', '=', $this->getTenant()->property_id)
