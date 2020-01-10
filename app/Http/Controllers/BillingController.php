@@ -940,23 +940,42 @@ class BillingController extends Controller {
         $total = $amount + $convenience;
         $confirmationNumber = str_random(10);
 
-        try {
+     
 
-            $charge = \Stripe\Charge::create([
-                'amount' => $total, 
+            /**
+             * CURRENTLY THIS IS USING THE CHARGE METHOD WHICH 
+             * I THINK WORKS BUT IS MEANT FOR REGULAR CHARGES 
+             * AND FOR CREDIT CARDS
+             * 
+             * WITH CONNECT, WE WANT TO USE THE TRANSFER METHOD
+             * https://stripe.com/docs/api/transfers/create
+             */
+
+            $charge = \Stripe\Transfer::create([
+                'amount' => $total,
                 'currency' => "usd",
-                'source' => $bank_account, 
-                'customer' => $this->getCustomer()->id,
+                'destination' => $proprietor->stripe_account,
+                'source_type' => 'bank_account',
                 'metadata' => [
                     'Confirmation Number' => $confirmationNumber
                 ],
-                'transfer_data' => [
-                    'amount' => $total, 
-                    'destination' => $proprietor->stripe_account, 
-                ],
-            ]);  
+            ]);
 
-            dd($charge);
+            // $charge = \Stripe\Charge::create([
+            //     'amount' => $total, 
+            //     'currency' => "usd",
+            //     'source' => $bank_account, 
+            //     'customer' => $this->getCustomer()->id,
+            //     'metadata' => [
+            //         'Confirmation Number' => $confirmationNumber
+            //     ],
+            //     'transfer_data' => [
+            //         'amount' => $total, 
+            //         'destination' => $proprietor->stripe_account, 
+            //     ],
+            // ]);  
+
+            // dd($charge);
 
             // calculate the new balance
             $currentBalance = $this->calculateRentBalance();
@@ -1006,59 +1025,7 @@ class BillingController extends Controller {
                 'date' => $transaction->created_at,
             ]);
 
-          } catch(\Stripe\Exception\CardException $e) {
-            // Since it's a decline, \Stripe\Exception\CardException will be caught
-            echo 'Status is:' . $e->getHttpStatus() . '\n';
-            echo 'Type is:' . $e->getError()->type . '\n';
-            echo 'Code is:' . $e->getError()->code . '\n';
-            // param is '' in this case
-            echo 'Param is:' . $e->getError()->param . '\n';
-            echo 'Message is:' . $e->getError()->message . '\n';
-          } catch (\Stripe\Exception\RateLimitException $e) {
-            // Too many requests made to the API too quickly
-
-            return redirect()
-                ->route('settings.billing.error')
-                ->with('info', 'Your payment did not go through.'. $e);
-
-          } catch (\Stripe\Exception\InvalidRequestException $e) {
-            // Invalid parameters were supplied to Stripe's API
-
-            return redirect()
-                ->route('settings.billing.error')
-                ->with('info', 'Your payment did not go through.'. $e);
-
-          } catch (\Stripe\Exception\AuthenticationException $e) {
-            // Authentication with Stripe's API failed
-            // (maybe you changed API keys recently)
-
-            return redirect()
-                ->route('settings.billing.error')
-                ->with('info', 'Your payment did not go through.'. $e);
-
-          } catch (\Stripe\Exception\ApiConnectionException $e) {
-            // Network communication with Stripe failed
-
-            return redirect()
-                ->route('settings.billing.error')
-                ->with('info', 'Your payment did not go through.'. $e);
-
-          } catch (\Stripe\Exception\ApiErrorException $e) {
-            // Display a very generic error to the user, and maybe send
-            // yourself an email
-
-            return redirect()
-                ->route('settings.billing.error')
-                ->with('info', 'Your payment did not go through.'. $e);
-
-          } catch (Exception $e) {
-            // Something else happened, completely unrelated to Stripe
-
-            return redirect()
-                ->route('settings.billing.error')
-                ->with('info', 'Your payment did not go through.'. $e);
-
-        }
+         
 
     }
 
