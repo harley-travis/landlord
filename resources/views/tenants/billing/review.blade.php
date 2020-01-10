@@ -144,10 +144,7 @@
                     <input type="hidden" name="total" value="{{ $amount + number_format( $convenience,2 ) }}">
                     <input type="hidden" name="rent" value="{{ $amount }}">
                     <input type="hidden" name="convenience" value="{{ $convenience }}">
-
-                    @foreach($bank_account as $b)
                     <input type="hidden" name="source" value="{{ $customer->default_source }}">
-                    @endforeach
 
                     @csrf
 
