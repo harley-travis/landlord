@@ -941,7 +941,7 @@ class BillingController extends Controller {
         $confirmationNumber = str_random(10);
 
      
-        try {
+    
 
             /**
              * CURRENTLY THIS IS USING THE CHARGE METHOD WHICH 
@@ -962,11 +962,9 @@ class BillingController extends Controller {
                 ],
             ]);
 
-            dd('worked');
-
-        } catch(Exception $e) {
-            dd('no worked');
-        }
+           if($charge->error) {
+                dd('error');
+           }
 
            
 
