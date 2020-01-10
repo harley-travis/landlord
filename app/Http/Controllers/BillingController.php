@@ -952,17 +952,33 @@ class BillingController extends Controller {
              * https://stripe.com/docs/api/transfers/create
              */
 
-            $charge = \Stripe\Transfer::create([
-                'amount' => $total,
+            // $charge = \Stripe\Transfer::create([
+            //     'amount' => $total,
+            //     'currency' => "usd",
+            //     'destination' => $proprietor->stripe_account,
+            //     'source_type' => 'bank_account',
+            //     'metadata' => [
+            //         'Confirmation Number' => $confirmationNumber
+            //     ],
+            // ]);
+
+            $charge = \Stripe\Charge::create([
+                'amount' => $total, 
                 'currency' => "usd",
-                'destination' => $proprietor->stripe_account,
-                'source_type' => 'bank_account',
+                'source' => $bank_account, 
+                'customer' => $this->getCustomer()->id,
                 'metadata' => [
                     'Confirmation Number' => $confirmationNumber
                 ],
-            ]);
+                'transfer_data' => [
+                    'amount' => $total, 
+                    'destination' => $proprietor->stripe_account, 
+                ],
+            ]);  
+
 
         } catch( \Stripe\Exception\InvalidRequestException $e ) {
+            // for failure upon use
             return redirect()
                 ->route('settings.billing.index', [
                     'user' => $this->getUser(),
@@ -972,24 +988,11 @@ class BillingController extends Controller {
                     'intent' => $user->createSetupIntent(),
                     'connect_accounts' => $this->getStripeAccount(),
                 ])->with('danger',  $e->getError()->message);
-        }
+        } 
 
            
 
-            // $charge = \Stripe\Charge::create([
-            //     'amount' => $total, 
-            //     'currency' => "usd",
-            //     'source' => $bank_account, 
-            //     'customer' => $this->getCustomer()->id,
-            //     'metadata' => [
-            //         'Confirmation Number' => $confirmationNumber
-            //     ],
-            //     'transfer_data' => [
-            //         'amount' => $total, 
-            //         'destination' => $proprietor->stripe_account, 
-            //     ],
-            // ]);  
-
+            
             // dd($charge);
 
             // calculate the new balance
