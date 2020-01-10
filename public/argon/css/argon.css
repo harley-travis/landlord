@@ -7109,7 +7109,13 @@ button.close
     box-shadow: 0 15px 35px rgba(50, 50, 93, .2), 0 5px 15px rgba(0, 0, 0, .17);
 }
 
-.modal-backdrop
+/**
+    I don't know what this is. but it was breaking the modal when i would 
+    try to set a payment method to default. i think it might just be calling
+    the same CSS twice?
+*/
+
+/* .modal-backdrop
 {
     position: fixed;
     z-index: 1040;
@@ -7127,7 +7133,7 @@ button.close
 .modal-backdrop.show
 {
     opacity: .16;
-}
+} */
 
 .modal-header
 {
