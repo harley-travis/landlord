@@ -964,7 +964,7 @@ class BillingController extends Controller {
 
         } catch(\Stripe\Exception\InvalidRequestException $e) {
             return redirect()
-                ->route('settings.billing.error')
+                ->back()
                 ->with('info', $e);
         }
 
