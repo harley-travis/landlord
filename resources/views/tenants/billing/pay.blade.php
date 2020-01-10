@@ -171,7 +171,7 @@
 
         $('#loading').show();
         //$('#form').submit();
-        console.log('heey')
+
     });
 </script>
 

@@ -940,67 +940,123 @@ class BillingController extends Controller {
         $total = $amount + $convenience;
         $confirmationNumber = str_random(10);
 
-        $charge = \Stripe\Charge::create([
-            'amount' => $total, 
-            'currency' => "usd",
-            'source' => $bank_account, 
-            'customer' => $this->getCustomer()->id,
-            'metadata' => [
-                'Confirmation Number' => $confirmationNumber
-            ],
-            'transfer_data' => [
+        try {
+
+            $charge = \Stripe\Charge::create([
                 'amount' => $total, 
-                'destination' => $proprietor->stripe_account, 
-            ],
-        ]);
+                'currency' => "usd",
+                'source' => $bank_account, 
+                'customer' => $this->getCustomer()->id,
+                'metadata' => [
+                    'Confirmation Number' => $confirmationNumber
+                ],
+                'transfer_data' => [
+                    'amount' => $total, 
+                    'destination' => $proprietor->stripe_account, 
+                ],
+            ]);  
 
-        // calculate the new balance
-        $currentBalance = $this->calculateRentBalance();
-        $newBalance = ( $request->input('rent') + $currentBalance ) - $currentBalance;
+            // calculate the new balance
+            $currentBalance = $this->calculateRentBalance();
+            $newBalance = ( $request->input('rent') + $currentBalance ) - $currentBalance;
 
-        // determine wither or not the total amount due is paid
-        $paidInFull = 0; // 0 = no 1 = yes
+            // determine wither or not the total amount due is paid
+            $paidInFull = 0; // 0 = no 1 = yes
 
-        if($newBalance <= 0) { 
-            $paidInFull = 1; 
-        }
+            if($newBalance <= 0) { 
+                $paidInFull = 1; 
+            }
 
-        $startDate = Carbon::now();
-        $firstDay = $startDate->firstOfMonth();
+            $startDate = Carbon::now();
+            $firstDay = $startDate->firstOfMonth();
 
-        $lateFee = 0;
-        if( $amount > $setAmount ) {
-            $lateFee = $findLateFeeAmount;
-        }
+            $lateFee = 0;
+            if( $amount > $setAmount ) {
+                $lateFee = $findLateFeeAmount;
+            }
 
-        // validate
-        // if it's successful, then update the rents table
-        $rent = Rent::where('property_id', '=', $tenant->property_id)->first();
-        $rent->last_date_paid = Carbon::now();
-        $rent->next_due_date = $firstDay;
-        $rent->save();
+            // validate
+            // if it's successful, then update the rents table
+            $rent = Rent::where('property_id', '=', $tenant->property_id)->first();
+            $rent->last_date_paid = Carbon::now();
+            $rent->next_due_date = $firstDay;
+            $rent->save();
 
-        $transaction = new Transaction([
-            'tenant_id' => $tenant->id,
-            'landlord_id' => $proprietor->id,
-            'property_id' => $property->id,
-            'amount_paid' => $charge->amount,
-            'balance' => $newBalance,
-            'payment_method' => $charge->payment_method_details->type,
-            'paid_in_full' => $paidInFull,
-            'late_fee_amount' => $lateFee,
-            'confirmation' => $confirmationNumber,
-        ]);
-        $transaction->save();
-    
-        Mail::to($user->email)->send(new PaymentConfirmation($user, $total));
+            $transaction = new Transaction([
+                'tenant_id' => $tenant->id,
+                'landlord_id' => $proprietor->id,
+                'property_id' => $property->id,
+                'amount_paid' => $charge->amount,
+                'balance' => $newBalance,
+                'payment_method' => $charge->payment_method_details->type,
+                'paid_in_full' => $paidInFull,
+                'late_fee_amount' => $lateFee,
+                'confirmation' => $confirmationNumber,
+            ]);
+            $transaction->save();
         
-        return view('tenants.billing.confirmation', [
-            'confirmation_number' => $confirmationNumber,
-            'amount' => $charge->amount,
-            'payment_method' => $charge->payment_method_details->type,
-            'date' => $transaction->created_at,
-        ]);
+            Mail::to($user->email)->send(new PaymentConfirmation($user, $total));
+            
+            return view('tenants.billing.confirmation', [
+                'confirmation_number' => $confirmationNumber,
+                'amount' => $charge->amount,
+                'payment_method' => $charge->payment_method_details->type,
+                'date' => $transaction->created_at,
+            ]);
+
+          } catch(\Stripe\Exception\CardException $e) {
+            // Since it's a decline, \Stripe\Exception\CardException will be caught
+            echo 'Status is:' . $e->getHttpStatus() . '\n';
+            echo 'Type is:' . $e->getError()->type . '\n';
+            echo 'Code is:' . $e->getError()->code . '\n';
+            // param is '' in this case
+            echo 'Param is:' . $e->getError()->param . '\n';
+            echo 'Message is:' . $e->getError()->message . '\n';
+          } catch (\Stripe\Exception\RateLimitException $e) {
+            // Too many requests made to the API too quickly
+
+            return redirect()
+                ->route('settings.billing.error')
+                ->with('info', 'Your payment did not go through.'. $e);
+
+          } catch (\Stripe\Exception\InvalidRequestException $e) {
+            // Invalid parameters were supplied to Stripe's API
+
+            return redirect()
+                ->route('settings.billing.error')
+                ->with('info', 'Your payment did not go through.'. $e);
+
+          } catch (\Stripe\Exception\AuthenticationException $e) {
+            // Authentication with Stripe's API failed
+            // (maybe you changed API keys recently)
+
+            return redirect()
+                ->route('settings.billing.error')
+                ->with('info', 'Your payment did not go through.'. $e);
+
+          } catch (\Stripe\Exception\ApiConnectionException $e) {
+            // Network communication with Stripe failed
+
+            return redirect()
+                ->route('settings.billing.error')
+                ->with('info', 'Your payment did not go through.'. $e);
+
+          } catch (\Stripe\Exception\ApiErrorException $e) {
+            // Display a very generic error to the user, and maybe send
+            // yourself an email
+
+            return redirect()
+                ->route('settings.billing.error')
+                ->with('info', 'Your payment did not go through.'. $e);
+
+          } catch (Exception $e) {
+            // Something else happened, completely unrelated to Stripe
+
+            return redirect()
+                ->route('settings.billing.error')
+                ->with('info', 'Your payment did not go through.'. $e);
+
+        }
 
     }
 
