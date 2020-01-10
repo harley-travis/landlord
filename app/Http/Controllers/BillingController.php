@@ -962,10 +962,16 @@ class BillingController extends Controller {
                 ],
             ]);
 
-        } catch(\Stripe\Exception\InvalidRequestException $e) {
+        } catch( \Stripe\Exception\InvalidRequestException $e ) {
             return redirect()
-                ->back()
-                ->with('info', $e->getError()->message);
+                ->route('settings.billing.index', [
+                    'user' => $this->getUser(),
+                    'bank_accounts' => $this->getBankAccounts(), 
+                    'invoices' => $this->getInvoices(),
+                    'customer' => $this->getCustomer(), 
+                    'intent' => $user->createSetupIntent(),
+                    'connect_accounts' => $this->getStripeAccount(),
+                ])->with('danger',  $e->getError()->message);
         }
 
            
