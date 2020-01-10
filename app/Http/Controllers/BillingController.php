@@ -961,6 +961,8 @@ class BillingController extends Controller {
                 ],
             ]);
 
+            dd($charge);
+
             // $charge = \Stripe\Charge::create([
             //     'amount' => $total, 
             //     'currency' => "usd",
