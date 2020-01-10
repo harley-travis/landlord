@@ -962,8 +962,10 @@ class BillingController extends Controller {
                 ],
             ]);
 
-        } catch(Exception $e) {
-            return response()->json(['error' => $e], 500);
+        } catch(\Stripe\Exception\InvalidRequestException $e) {
+            return redirect()
+                ->route('settings.billing.error')
+                ->with('info', $e);
         }
 
            
