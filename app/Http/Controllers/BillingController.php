@@ -965,7 +965,7 @@ class BillingController extends Controller {
         } catch(\Stripe\Exception\InvalidRequestException $e) {
             return redirect()
                 ->back()
-                ->with('info', $e);
+                ->with('info', $e->getError()->message);
         }
 
            
