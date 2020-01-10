@@ -956,6 +956,8 @@ class BillingController extends Controller {
                 ],
             ]);  
 
+            dd($charge);
+
             // calculate the new balance
             $currentBalance = $this->calculateRentBalance();
             $newBalance = ( $request->input('rent') + $currentBalance ) - $currentBalance;
