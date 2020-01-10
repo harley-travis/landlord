@@ -941,7 +941,7 @@ class BillingController extends Controller {
         $confirmationNumber = str_random(10);
 
      
-    
+        try {
 
             /**
              * CURRENTLY THIS IS USING THE CHARGE METHOD WHICH 
@@ -962,9 +962,9 @@ class BillingController extends Controller {
                 ],
             ]);
 
-           if($charge->error) {
-                dd('error');
-           }
+        } catch(Exception $e) {
+            return response()->json(['error' => $e], 500);
+        }
 
            
 
