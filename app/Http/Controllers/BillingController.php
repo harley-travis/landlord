@@ -996,7 +996,8 @@ class BillingController extends Controller {
             // ]);
 
 
-        } catch( \Stripe\Exception\InvalidRequestException $e ) {
+        // } catch( \Stripe\Exception\InvalidRequestException $e ) {
+        } catch( Exception $e ) {
             // for failure upon use
             return redirect()
                 ->route('settings.billing.index', [
@@ -1006,9 +1007,9 @@ class BillingController extends Controller {
                     'customer' => $this->getCustomer(), 
                     'intent' => $this->getUser(),
                     'connect_accounts' => $this->getStripeAccount(),
-                ])->with('danger',  $e->getError()->message);
-        } 
+                ])->with('danger',  $e);
 
+        } 
            
 
             

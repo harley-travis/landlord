@@ -492,4 +492,10 @@ Route::group(['prefix' => 'settings/billing', 'middleware' => ['auth']], functio
 
 });
 
+// stripe webhook 
+Route::post(
+  'stripe/webhook',
+  '\App\Http\Controllers\WebhookController@handleWebhook'
+);
+
 Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
