@@ -1054,7 +1054,7 @@ class BillingController extends Controller {
             ]);
             $transaction->save();
         
-            Mail::to($user->email)->send(new PaymentConfirmation($user, $total));
+           // Mail::to($user->email)->send(new PaymentConfirmation($user, $total));
             
             return view('tenants.billing.confirmation', [
                 'confirmation_number' => $confirmationNumber,
