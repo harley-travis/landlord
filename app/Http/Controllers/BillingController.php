@@ -299,7 +299,9 @@ class BillingController extends Controller {
     }
     
     public function createACH() {
-        return view('settings.billing.ach.create');
+        return view('settings.billing.ach.create', [
+            'intent' => $user->createSetupIntent(),
+        ]);
     }
 
     public function storeACH(Request $request) {
@@ -311,16 +313,24 @@ class BillingController extends Controller {
         $bank_account = \Stripe\Customer::createSource(
             $user->stripe_id,
           [
-            'bank_account' => [
-                'account_holder_name' => $request->input('account_holder_name'),
-                'routing_number' => $request->input('routing_number'),
-                'account_number' => $request->input('account_number'),
-                'account_holder_type' => $request->input('account_holder_type'),
-                'country' => 'US',
-                'currency' => 'usd',     
-            ],
+            'source' => $token,
           ]
         );
+
+        // what i had before i started changing things
+        // $bank_account = \Stripe\Customer::createSource(
+        //     $user->stripe_id,
+        //   [
+        //     'bank_account' => [
+        //         'account_holder_name' => $request->input('account_holder_name'),
+        //         'routing_number' => $request->input('routing_number'),
+        //         'account_number' => $request->input('account_number'),
+        //         'account_holder_type' => $request->input('account_holder_type'),
+        //         'country' => 'US',
+        //         'currency' => 'usd',     
+        //     ],
+        //   ]
+        // );
 
 
         /**
@@ -1000,7 +1010,7 @@ class BillingController extends Controller {
                     'bank_accounts' => $this->getBankAccounts(), 
                     'invoices' => $this->getInvoices(),
                     'customer' => $this->getCustomer(), 
-                    'intent' => $user->createSetupIntent(),
+                    'intent' => $this->getUser(),
                     'connect_accounts' => $this->getStripeAccount(),
                 ])->with('danger',  $e->getError()->message);
         } 
