@@ -29,6 +29,8 @@ class WebHookStripeController extends CashierController {
     public function handleChargeFailed($payload) {}
 
     public function handleChargeSucceeded($payload) {
+
+        dd('we in the web hooks now');
         
         $customerId = $payload['data']['object']['customer'];
 
