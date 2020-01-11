@@ -299,6 +299,8 @@ class BillingController extends Controller {
     }
     
     public function createACH() {
+        $user = User::find(Auth::user()->id);
+        
         return view('settings.billing.ach.create', [
             'intent' => $user->createSetupIntent(),
         ]);
