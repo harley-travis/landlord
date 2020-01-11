@@ -310,8 +310,6 @@ class BillingController extends Controller {
  
         $user = User::find(Auth::user()->id);
 
-       // $token = $request->request->get('stripeToken');
-
        //create a token
        $token = \Stripe\Token::create([
             'bank_account' => [
@@ -956,6 +954,8 @@ class BillingController extends Controller {
             $user->stripe_id,
             $request->input('source')
         );
+
+        dd($bank_account);
 
         $amount = $request->input('rent') * 100;
         $setAmount = $property->rent_amount * 100;
