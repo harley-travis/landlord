@@ -139,7 +139,7 @@
 
 @section('otherJs')
 
-    <script src="https://js.stripe.com/v3/"></script>
+    <!-- <script src="https://js.stripe.com/v3/"></script>
 
     <script>
 
@@ -181,7 +181,7 @@
             form.submit();
         }
 
-    </script>
+    </script> -->
 
 
 @endsection

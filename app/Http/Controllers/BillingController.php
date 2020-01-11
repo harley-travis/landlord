@@ -300,7 +300,7 @@ class BillingController extends Controller {
     
     public function createACH() {
         $user = User::find(Auth::user()->id);
-        
+
         return view('settings.billing.ach.create', [
             'intent' => $user->createSetupIntent(),
         ]);
@@ -310,7 +310,19 @@ class BillingController extends Controller {
  
         $user = User::find(Auth::user()->id);
 
-        $token = $request->request->get('stripeToken');
+       // $token = $request->request->get('stripeToken');
+
+       //create a token
+       $token = \Stripe\Token::create([
+            'bank_account' => [
+                'country' => 'US',
+                'currency' => 'usd',
+                'account_holder_name' => $request->input('account_holder_name'),
+                'account_holder_type' => $request->input('account_holder_type'),
+                'routing_number' => $request->input('routing_number'),
+                'account_number' => $request->input('account_number'),
+            ],
+        ]);
 
         $bank_account = \Stripe\Customer::createSource(
             $user->stripe_id,
