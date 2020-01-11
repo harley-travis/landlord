@@ -955,7 +955,7 @@ class BillingController extends Controller {
             $request->input('source')
         );
 
-        dd($bank_account);
+        //dd($bank_account);
 
         $amount = $request->input('rent') * 100;
         $setAmount = $property->rent_amount * 100;
