@@ -310,40 +310,20 @@ class BillingController extends Controller {
  
         $user = User::find(Auth::user()->id);
 
-       //create a token
-       $token = \Stripe\Token::create([
-            'bank_account' => [
-                'country' => 'US',
-                'currency' => 'usd',
-                'account_holder_name' => $request->input('account_holder_name'),
-                'account_holder_type' => $request->input('account_holder_type'),
-                'routing_number' => $request->input('routing_number'),
-                'account_number' => $request->input('account_number'),
-            ],
-        ]);
-
+        // what i had before i started changing things
         $bank_account = \Stripe\Customer::createSource(
             $user->stripe_id,
           [
-            'source' => $token,
+            'bank_account' => [
+                'account_holder_name' => $request->input('account_holder_name'),
+                'routing_number' => $request->input('routing_number'),
+                'account_number' => $request->input('account_number'),
+                'account_holder_type' => $request->input('account_holder_type'),
+                'country' => 'US',
+                'currency' => 'usd',     
+            ],
           ]
         );
-
-        // what i had before i started changing things
-        // $bank_account = \Stripe\Customer::createSource(
-        //     $user->stripe_id,
-        //   [
-        //     'bank_account' => [
-        //         'account_holder_name' => $request->input('account_holder_name'),
-        //         'routing_number' => $request->input('routing_number'),
-        //         'account_number' => $request->input('account_number'),
-        //         'account_holder_type' => $request->input('account_holder_type'),
-        //         'country' => 'US',
-        //         'currency' => 'usd',     
-        //     ],
-        //   ]
-        // );
-
 
         /**
          * MOVED THIS TO IT'S OWN FUNCTION
@@ -986,34 +966,34 @@ class BillingController extends Controller {
             //     ],
             // ]);
 
-            // $charge = \Stripe\Charge::create([
-            //     'amount' => $total, 
-            //     'currency' => "usd",
-            //     'source' => $bank_account, 
-            //     'customer' => $this->getCustomer()->id,
-            //     'metadata' => [
-            //         'Confirmation Number' => $confirmationNumber
-            //     ],
-            //     'transfer_data' => [
-            //         'amount' => $total, 
-            //         'destination' => $proprietor->stripe_account, 
-            //     ],
-            // ]);  
-
             $charge = \Stripe\Charge::create([
                 'amount' => $total, 
                 'currency' => "usd",
                 'source' => $bank_account, 
+                'customer' => $this->getCustomer()->id,
                 'metadata' => [
                     'Confirmation Number' => $confirmationNumber
                 ],
+                'transfer_data' => [
+                    'amount' => $total, 
+                    'destination' => $proprietor->stripe_account, 
+                ],
             ]);  
 
-            $transfer = \Stripe\Transfer::create([
-                'amount' => $amount,
-                'currency' => 'usd',
-                'destination' => $proprietor->stripe_account, 
-            ]);
+            // $charge = \Stripe\Charge::create([
+            //     'amount' => $total, 
+            //     'currency' => "usd",
+            //     'source' => $bank_account, 
+            //     'metadata' => [
+            //         'Confirmation Number' => $confirmationNumber
+            //     ],
+            // ]);  
+
+            // $transfer = \Stripe\Transfer::create([
+            //     'amount' => $amount,
+            //     'currency' => 'usd',
+            //     'destination' => $proprietor->stripe_account, 
+            // ]);
 
 
         } catch( \Stripe\Exception\InvalidRequestException $e ) {
