@@ -962,19 +962,34 @@ class BillingController extends Controller {
             //     ],
             // ]);
 
+            // $charge = \Stripe\Charge::create([
+            //     'amount' => $total, 
+            //     'currency' => "usd",
+            //     'source' => $bank_account, 
+            //     'customer' => $this->getCustomer()->id,
+            //     'metadata' => [
+            //         'Confirmation Number' => $confirmationNumber
+            //     ],
+            //     'transfer_data' => [
+            //         'amount' => $total, 
+            //         'destination' => $proprietor->stripe_account, 
+            //     ],
+            // ]);  
+
             $charge = \Stripe\Charge::create([
                 'amount' => $total, 
                 'currency' => "usd",
                 'source' => $bank_account, 
-                'customer' => $this->getCustomer()->id,
                 'metadata' => [
                     'Confirmation Number' => $confirmationNumber
                 ],
-                'transfer_data' => [
-                    'amount' => $total, 
-                    'destination' => $proprietor->stripe_account, 
-                ],
             ]);  
+
+            $transfer = \Stripe\Transfer::create([
+                'amount' => $amount,
+                'currency' => 'usd',
+                'destination' => $proprietor->stripe_account, 
+            ]);
 
 
         } catch( \Stripe\Exception\InvalidRequestException $e ) {
