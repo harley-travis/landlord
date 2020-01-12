@@ -9,6 +9,30 @@ use App\Mail\PaymentConfirmation;
 use Laravel\Cashier\Http\Controllers\WebhookController as CashierController;
 
 class WebHookStripeController extends CashierController {
+
+    /**
+     * Handle a Stripe webhook call.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function handleWebhook(Request $request)
+    {
+        $payload = json_decode($request->getContent(), true);
+        $method = 'handle'.Str::studly(str_replace('.', '_', $payload['type']));
+
+        WebhookReceived::dispatch($payload);
+
+        if (method_exists($this, $method)) {
+            $response = $this->{$method}($payload);
+
+            WebhookHandled::dispatch($payload);
+
+            return $response;
+        }
+ 
+        return $this->missingMethod();
+    }
     
     public function handleSourceCanceled($payload) {}
 
