@@ -174,6 +174,7 @@
         
     </form>
 
+    @include('layouts.footers.auth')
 </div>
 @endsection
 
