@@ -319,6 +319,57 @@ Route::group(['prefix' => 'feedback', 'middleware' => ['auth', 'trial']], functi
   
 });
 
+// HELP & TICKETS
+Route::group(['prefix' => 'tickets', 'middleware' => ['auth', 'trial']], function() {
+  $c = 'TicketController';
+
+  Route::get('', [
+    'uses' => "$c@index",
+    'as' => 'tickets.index'
+  ]);
+
+  Route::get('show/{id}', [
+    'uses' => "$c@show",
+    'as' => 'tickets.show'
+  ]);
+
+  Route::get('create', [
+    'uses' => "$c@create",
+    'as' => 'tickets.create'
+  ]);
+
+  Route::post('create', [
+    'uses' => "$c@store",
+    'as' => 'tickets.add'
+  ]);
+
+  Route::get('edit/{id}', [
+    'uses'	=> "$c@edit",
+    'as'	=> 'tickets.edit'
+  ]);
+
+  Route::post('edit', [
+    'uses'	=> "$c@update",
+    'as'	=> 'tickets.update'
+  ]);
+  
+  Route::get('archive/{id}', [
+    'uses'	=> "$c@archive",
+    'as'	=> 'tickets.archive'
+  ]);
+  
+  Route::get('archived', [
+    'uses'	=> "$c@showArchive",
+    'as'	=> 'tickets.archived'
+  ]);
+  
+  Route::get('progression/{id}', [
+    'uses'	=> "$c@progression",
+    'as'	=> 'tickets.progression'
+  ]);
+  
+});
+
 // COMMUNITIES
 Route::group(['prefix' => 'community', 'middleware' => ['auth', 'trial']], function() {
   $c = 'CommunityController';

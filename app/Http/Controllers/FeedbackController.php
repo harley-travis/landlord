@@ -7,8 +7,8 @@ use App\User;
 use App\Feedback;
 use Illuminate\Http\Request;
 
-class FeedbackController extends Controller
-{
+class FeedbackController extends Controller {
+    
     /**
      * Display a listing of the resource.
      *
