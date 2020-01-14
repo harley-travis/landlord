@@ -8,10 +8,10 @@
     <div class="row mb-3">
         <div class="col">
             <div class="card shadow">
-                <div class="card-header border-0 bg-success">
+                <div class="card-header border-0">
                     <div class="row align-items-center">
                         <div class="col-8">
-                            <h3 class="mb-0 text-white">Payment Confirmation!</h3>
+                            <h3 class="mb-0">Payment Confirmation!</h3>
                         </div>
                         <div class="col-4 text-right">
                            
@@ -20,10 +20,7 @@
                 </div>
                 <div class="card-body pb-5 pt-5">
 
-                    <p><i class="ni ni-check-bold text-success mr-3"></i>Thank you for your payment! You will see the funds withdrawn from your account in 1-3 business days.</p>
-                    <p>An email confirmation has been sent to you at {{ Auth::user()->email }}</p>
-                    <p class="mt-5 mb-5">Please print this page for your records.</p>
-
+                    <p><i class="ni ni-check-bold text-success mr-3"></i>Thank you for your payment. We are currently processing your payment. You will receive an email at {{ Auth::user()->email }} indicating if your payment was successful. You will see the funds withdrawn from your account in 1-3 business days.</p>
 
                     <h3>Payment Details</h3>
                     <div class="table-responsive">
