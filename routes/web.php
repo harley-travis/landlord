@@ -17,7 +17,33 @@ Route::get('/', function () {
 		return redirect('/login');
 	} else {
 
-		return view('dashboard');
+    if( Auth::user()->role === 0 ) {
+
+      // tenants
+      // need to figure out how to pass the data in here for them. 
+      return view('tenants.index');
+
+    } else if( Auth::user()->role === 1 ) {
+
+      // maintenance 
+      return view('dashboard');
+
+    } else if( Auth::user()->role === 2 || Auth::user()->role === 3 ) {
+
+      // office managers & account admins
+      return view('dashboard');
+
+    } else if( Auth::user()->role === 4 || Auth::user()->role === 10 ) {
+
+      // super admin
+      return view('dashboard');
+
+      Route::get('maintenance', function() {
+        
+      });
+
+    } 
+
 	}
     
 });

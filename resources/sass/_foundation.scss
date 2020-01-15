@@ -13,3 +13,13 @@ a.nav-link:hover {
 a.no-link-hover:hover {
     background: transparent;
 }
+
+.getting-started-ul {
+    margin: 0;
+    padding: 0;
+    
+    li {
+        list-style: none;
+        padding-bottom: 10px;
+    }
+}
