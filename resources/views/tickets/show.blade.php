@@ -25,34 +25,33 @@
                 <div class="card-header border-0">
                     <div class="row align-items-center">
                         <div class="col-8">
-                            <h3 class="mb-0">Ticket Request</h3>
+                            <h3 class="mb-0">Ticket Request <i>Submitted By: {{ $ticket->name }}</i></h3>
+                            <small>
+                                @if($ticket->status === 0)
+                                    <span class="text-warning">Pending</span>
+                                @elseif($ticket->status === 1) 
+                                    <span class="text-info">Under Review</span>
+                                @elseif($ticket->status === 2) 
+                                    <span class="text-primary">In Progress</span>
+                                @elseif($ticket->status === 3) 
+                                    <span class="text-success">Completed</span>
+                                @endif
+                            </small> 
                         </div>
                         <div class="col-4 text-right">
-                            
+                            <a href="{{ route('tickets.view') }}" class="btn btn-primary">Go Back</a>
                         </div>
                     </div>
                 </div>
                 <div class="card-body">
 
                     <h3>{{ $ticket->subject }}</h3>
-                    <small>
-                        @if($ticket->status === 0)
-                            <span class="text-warning">Pending</span>
-                        @elseif($ticket->status === 1) 
-                            <span class="text-info">Under Review</span>
-                        @elseif($ticket->status === 2) 
-                            <span class="text-primary">In Progress</span>
-                        @elseif($ticket->status === 3) 
-                            <span class="text-success">Completed</span>
-                        @endif
-                    </small> 
-                    <br>
 
-                    <div class="pt-3 pb-3"></div>
+                    <div class="pb-3"></div>
 
                     <p>{{ $ticket->description }}</p>
 
-                    <form action="{{ route('tickets.update') }}" method="post">
+                    <!-- <form action="{{ route('tickets.update') }}" method="post">
                         <div class="form-group">
                             <label for="status">Status Update</label>
                             <select id="status" name="status" class="form-control">
@@ -68,7 +67,7 @@
 
                         <input type="hidden" name="id" value="{{ $ticket->id }}">
                         <button type="submit" class="btn btn-primary shadow">Update Ticket Request</button>
-                    </form>
+                    </form> -->
 
                 </div>
 

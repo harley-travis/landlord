@@ -328,6 +328,11 @@ Route::group(['prefix' => 'tickets', 'middleware' => ['auth', 'trial']], functio
     'as' => 'tickets.index'
   ]);
 
+  Route::get('view', [
+    'uses' => "$c@getTickets",
+    'as' => 'tickets.view'
+  ]);
+
   Route::get('show/{id}', [
     'uses' => "$c@show",
     'as' => 'tickets.show'

@@ -15,13 +15,17 @@ class TicketController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function index() {
+       return view('tickets.index');
+    }
 
+    public function getTickets() {
+        
         $tickets = User::join('tickets', 'tickets.user_id', '=', 'users.id')
                         ->where('tickets.status', '!=', '3')
                         ->orderBy('tickets.created_at', 'desc')
                         ->paginate(15);
 
-        return view('tickets.index', ['tickets' => $tickets]);
+        return view('tickets.tickets', ['tickets' => $tickets]);
 
     }
 
@@ -70,7 +74,12 @@ class TicketController extends Controller {
      */
     public function show($id) {
         
-        $ticket = Ticket::where('id', '=', $id)->first();
+        //$ticket = Ticket::where('id', '=', $id)->first();
+        
+
+        $ticket = User::join('tickets', 'tickets.user_id', '=', 'users.id')
+                        ->where('users.id', '=', $id)->first();
+
         return view('tickets.show', ['ticket' => $ticket]);
 
     }
@@ -100,7 +109,7 @@ class TicketController extends Controller {
         $ticket->save();
 
         return redirect()
-                ->route('tickets.index')
+                ->route('tickets.tickets')
                 ->with('info', 'Good job! You successfully updated your ticket status!');
     }
 
@@ -121,7 +130,7 @@ class TicketController extends Controller {
         $ticket->save();
 
         return redirect()
-                ->route('tickets.index')
+                ->route('tickets.tickets')
                 ->with('info', 'The ticket status was successfully updated!');
 
     }

@@ -368,6 +368,12 @@
                         </div>
                     </li>
 
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('tickets.view') }}">
+                            <i class="ni ni-support-16 text-green"></i> Customer Tickets
+                        </a>
+                    </li>
+
                 @endif    
 
                 <li class="nav-item">

@@ -34,9 +34,9 @@
 
                         <div class="accordion" id="accordionExample">
                             <div class="card">
-                                <div class="card-header" id="headingOne">
+                                <div class="card-header bg-purple" id="headingOne">
                                     <h2 class="mb-0">
-                                        <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                        <button class="btn btn-link text-white" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
                                             Property Details <small class="text-danger pl-2">required</small>
                                         </button>
                                     </h2>
@@ -150,9 +150,9 @@
                                 </div>
                             </div>
                             <div class="card">
-                                <div class="card-header" id="headingTwo">
+                                <div class="card-header bg-purple" id="headingTwo">
                                     <h2 class="mb-0">
-                                        <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                        <button class="btn btn-link text-white collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
                                             Rent Information <small class="text-danger pl-2">required</small>
                                         </button>
                                     </h2>
@@ -209,9 +209,9 @@
 
                             @if( Auth::user()->product === 1 ||  Auth::user()->product === 2 || Auth::user()->product === 10 )
                             <div class="card">
-                                <div class="card-header" id="headingThree">
+                                <div class="card-header bg-purple" id="headingThree">
                                     <h2 class="mb-0">
-                                        <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                        <button class="btn btn-link text-white collapsed" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
                                             Additional Property Information
                                         </button>
                                     </h2>
