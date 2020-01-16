@@ -45,7 +45,7 @@ Route::get('/home', function () {
     // login first time and they don't have a stripe account for home homeonwers
     return view('settings.billing.trial.begin');
     
-	} else if(Auth::user()->role === 0) {
+	} else if( Auth::user()->role === 0 ) {
 
     // tenants
     // need to figure out how to grab the data and pass it through here
@@ -56,7 +56,7 @@ Route::get('/home', function () {
     // maintenance 
     return redirect()->route('maintenance.index');
 
-  } else if( Auth::user()->role >= 10 ) {
+  } else if( Auth::user()->role >= 2 ) {
 
     // office managers, property owners, super admins and travis
     return view('dashboard');
