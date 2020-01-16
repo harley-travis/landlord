@@ -11,42 +11,41 @@
 |
 */
 
-Route::get('/', function () {
+// Route::get('/', function () {
 	
-	if( auth()->check() == null ) {
-		return redirect('/login');
-	} else {
+// 	if( auth()->check() == null ) {
+// 		return redirect('/login');
+// 	} else {
 
-    if( Auth::user()->role === 0 ) {
+//     if( Auth::user()->role === 0 ) {
 
-      // tenants
-      // need to figure out how to pass the data in here for them. 
-      return view('tenants.index');
+//       // tenants
+//       // need to figure out how to pass the data in here for them. 
+//       return view('tenants.index');
 
-    } else if( Auth::user()->role === 1 ) {
+//     } else if( Auth::user()->role === 1 ) {
 
-      // maintenance 
-      return view('dashboard');
+//       // maintenance 
+//       return view('dashboard');
 
-    } else if( Auth::user()->role === 2 || Auth::user()->role === 3 ) {
+//     } else if( Auth::user()->role === 2 || Auth::user()->role === 3 ) {
 
-      // office managers & account admins
-      return view('dashboard');
+//       // office managers & account admins
+//       return view('dashboard');
 
-    } else if( Auth::user()->role === 4 || Auth::user()->role === 10 ) {
+//     } else if( Auth::user()->role === 4 || Auth::user()->role === 10 ) {
 
-      // super admin
-      return view('dashboard');
+//       // super admin
+//       //return view('dashboard');
+//       //dd('hello');
 
-      Route::get('maintenance', function() {
-        
-      });
+//       Route::get('maintenance', 'MaintenanceController@index')->name('maintenance.index');
 
-    } 
+//     } 
 
-	}
+// 	}
     
-});
+// });
 
 Auth::routes();
 
@@ -68,12 +67,27 @@ Route::group(['middleware' => 'auth'], function () {
 Route::get('/home', function () {
 	
 	if( Auth::user()->stripe_id === null && Auth::user()->role === 3 ) {
-		return view('settings.billing.trial.begin');
+    
+    // login first time and they don't have a stripe account for home homeonwers
+    return view('settings.billing.trial.begin');
+    
 	} else if(Auth::user()->role === 0) {
-    return view('tenants.billing.index');
-  } else {
-		return view('dashboard');
-	}
+
+    // tenants
+    // need to figure out how to grab the data and pass it through here
+    return redirect()->route('tenants.billing.index');
+
+  } else if( Auth::user()->role === 1 ) {
+
+    // maintenance 
+    return redirect()->route('maintenance.index');
+
+  } else if( Auth::user()->role >= 10 ) {
+
+    // office managers, property owners, super admins and travis
+    return view('dashboard');
+
+  } 
     
 })->name('home')->middleware('verified');
 
