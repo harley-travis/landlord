@@ -21,6 +21,8 @@ Route::get('/', function () {
 
     $role = Auth::user()->role;
 
+    dd($role);
+
     switch($role) {
 
       case "0":
