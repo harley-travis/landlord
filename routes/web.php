@@ -15,32 +15,43 @@
 Route::get('/', function () {
 	
 	if( auth()->check() == null ) {
-		return redirect('/login');
+    return redirect('/login');
+    
 	} else {
-    
-    if( Auth::user()->role === 3 && Auth::user()->stripe_id === null ) {
-    
-      // login first time and they don't have a stripe account for home homeonwers
-      return view('settings.billing.trial.begin');
-      
-    } else if( Auth::user()->role === 0 ) {
-  
-      // tenants
-      // need to figure out how to grab the data and pass it through here
-      return redirect()->route('tenants.billing.index');
-  
-    } else if( Auth::user()->role === 1 ) {
-  
-      // maintenance 
-      return redirect()->route('maintenance.index');
-  
-    } else if( Auth::user()->role >= 2 ) {
-  
-      // office managers, property owners, super admins and travis
-      return view('dashboard');
-  
-    } 
-    
+
+    $role = Auth::user()->role;
+
+    switch($role) {
+
+      case "0":
+        return redirect()->route('tenants.billing.index');
+        break;
+      case "1":
+        return redirect()->route('maintenance.index');
+        break;
+      case "2":
+        return view('dashboard');
+        break;
+      case "3":
+
+        if( Auth::user()->stripe_id === null ) {
+          // login first time and they don't have a stripe account for admins
+          return view('settings.billing.trial.begin');
+        } else {
+          return view('dashboard');
+        }
+
+        break;
+      case "4":
+        return view('dashboard');
+        break;
+      case "10":
+        return view('dashboard');
+        break;
+      default:
+        return view('dashboard');
+    }
+
 	}
     
 });
