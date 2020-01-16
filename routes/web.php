@@ -34,12 +34,12 @@ Route::get('/', function () {
         break;
       case 3:
 
-        if( Auth::user()->stripe_id === null ) {
-          // login first time and they don't have a stripe account for admins
-          return view('settings.billing.trial.begin');
-        } else {
-          return view('dashboard');
-        }
+        // if( Auth::user()->stripe_id === null ) {
+        //   // login first time and they don't have a stripe account for admins
+        //   return view('settings.billing.trial.begin');
+        // } else {
+        //   return view('dashboard');
+        // }
 
         break;
       case 4:
