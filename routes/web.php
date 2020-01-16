@@ -18,7 +18,7 @@ Route::get('/', function () {
 		return redirect('/login');
 	} else {
     
-    if( Auth::user()->stripe_id === null && Auth::user()->role === 3 ) {
+    if( Auth::user()->role === 3 && Auth::user()->stripe_id === null ) {
     
       // login first time and they don't have a stripe account for home homeonwers
       return view('settings.billing.trial.begin');
