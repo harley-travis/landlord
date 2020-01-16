@@ -23,16 +23,16 @@ Route::get('/', function () {
 
     switch($role) {
 
-      case "0":
+      case 0:
         return redirect()->route('tenants.billing.index');
         break;
-      case "1":
+      case 1:
         return redirect()->route('maintenance.index');
         break;
-      case "2":
+      case 2:
         return view('dashboard');
         break;
-      case "3":
+      case 3:
 
         if( Auth::user()->stripe_id === null ) {
           // login first time and they don't have a stripe account for admins
@@ -42,10 +42,10 @@ Route::get('/', function () {
         }
 
         break;
-      case "4":
+      case 4:
         return view('dashboard');
         break;
-      case "10":
+      case 10:
         return view('dashboard');
         break;
       default:
