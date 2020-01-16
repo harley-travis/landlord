@@ -5,7 +5,7 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <!-- Brand -->
-        <a class="navbar-brand p-0 text-left" href="{{ route('home') }}">
+        <a class="navbar-brand p-0 text-left" href="/">
             <img src="{{url('/img/logo.png')}}" class="navbar-brand-img" alt="senrent logo" style="max-width:75%">
         </a>
         <!-- User -->
@@ -51,7 +51,7 @@
             <div class="navbar-collapse-header d-md-none">
                 <div class="row">
                     <div class="col-6 collapse-brand">
-                        <a href="{{ route('home') }}">
+                        <a href="/">
                             <img src="{{url('/img/logo.png')}}" alt="senrent logo" style="width:100%;height:auto;" />
                         </a>
                     </div>
@@ -77,7 +77,7 @@
             <!-- Navigation -->
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('home') }}">
+                    <a class="nav-link" href="/">
                         <i class="fas fa-desktop text-gray-dark"></i> Dashboard
                     </a>
                 </li>

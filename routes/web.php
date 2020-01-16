@@ -62,32 +62,32 @@ Route::group(['middleware' => 'auth'], function () {
 
 // Route::get('/', 'HomeController@index')->name('dashboard.index')->middleware('auth', 'trial');
 
-Route::get('/home', function () {
+// Route::get('/home', function () {
 	
-	if( Auth::user()->stripe_id === null && Auth::user()->role === 3 ) {
+// 	if( Auth::user()->stripe_id === null && Auth::user()->role === 3 ) {
     
-    // login first time and they don't have a stripe account for home homeonwers
-    return view('settings.billing.trial.begin');
+//     // login first time and they don't have a stripe account for home homeonwers
+//     return view('settings.billing.trial.begin');
     
-	} else if( Auth::user()->role === 0 ) {
+// 	} else if( Auth::user()->role === 0 ) {
 
-    // tenants
-    // need to figure out how to grab the data and pass it through here
-    return redirect()->route('tenants.billing.index');
+//     // tenants
+//     // need to figure out how to grab the data and pass it through here
+//     return redirect()->route('tenants.billing.index');
 
-  } else if( Auth::user()->role === 1 ) {
+//   } else if( Auth::user()->role === 1 ) {
 
-    // maintenance 
-    return redirect()->route('maintenance.index');
+//     // maintenance 
+//     return redirect()->route('maintenance.index');
 
-  } else if( Auth::user()->role >= 2 ) {
+//   } else if( Auth::user()->role >= 2 ) {
 
-    // office managers, property owners, super admins and travis
-    return view('dashboard');
+//     // office managers, property owners, super admins and travis
+//     return view('dashboard');
 
-  } 
+//   } 
     
-})->name('home')->middleware('verified');
+// })->name('home')->middleware('verified');
 
 
 
