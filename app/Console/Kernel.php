@@ -13,7 +13,7 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        'App\Console\Commands\DbBackup'
+
     ];
 
     /**
@@ -24,12 +24,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-
-        //$schedule->command('month:update')
-            //->monthlyOn(24, '15:00');
-
         $schedule->command('db:backup')->everyMinute();
-
     }
 
     /**
