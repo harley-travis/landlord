@@ -31,7 +31,7 @@ Route::get('/', function () {
         //   return view('dashboard');
         // }
 
-        return view('dashboard');
+        Route::get('/', 'HomeController@index')->name('dashboard.index')->middleware('auth', 'trial');
 
         break;
       case 4:
@@ -65,7 +65,7 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::put('profile/password', ['as' => 'profile.password', 'uses' => 'ProfileController@password']);
 });
 
-// Route::get('/', 'HomeController@index')->name('dashboard.index')->middleware('auth', 'trial');
+// Route::get('dashboard', 'HomeController@index')->name('dashboard.index')->middleware('auth', 'trial');
 
 // Route::get('/home', function () {
 	

@@ -22,7 +22,7 @@ class CheckTrial
          */
         // if the user doesn't not have a stripe account
         // enforce the user to enable their free 14 day trial
-        if ( Auth::user()->stripe_id === null ) {
+        if ( Auth::user()->stripe_id === null && Auth::user()->role === 3 ) {
             return redirect('settings/billing/trial/begin');
         }
 
