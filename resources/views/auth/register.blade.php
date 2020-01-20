@@ -102,7 +102,7 @@
                             <div class="row my-4">
                                 <div class="col-12">
                                     <div class="custom-control custom-control-alternative custom-checkbox">
-                                        <input class="custom-control-input" id="customCheckRegister" type="checkbox">
+                                        <input class="custom-control-input" id="customCheckRegister" name="customCheckRegister" value="1" type="checkbox" required>
                                         <label class="custom-control-label" for="customCheckRegister">
                                             <span class="text-muted">{{ __('I agree with the') }} <a href="https://senrent.com/terms-of-service.php" target="_blank">Terms of Service</a></span>
                                         </label>
@@ -118,4 +118,15 @@
             </div>
         </div>
     </div>
+@endsection
+
+@section('otherJs')
+
+    <script>
+        function myFunction() {
+            var x = document.getElementById("customCheckRegister").required;
+            document.getElementById("demo").innerHTML = x;
+        }
+    </script>
+
 @endsection
