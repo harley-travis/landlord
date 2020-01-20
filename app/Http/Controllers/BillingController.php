@@ -614,7 +614,7 @@ class BillingController extends Controller {
         Mail::to($user->email)->send(new UserCreated($user));
 
         return redirect()
-            ->back()
+            ->route('dashboard')
             ->with('info', 'Your account was successfully created.');
     }
 
