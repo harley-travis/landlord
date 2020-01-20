@@ -31,17 +31,17 @@ Route::get('/', function () {
         //   return view('dashboard');
         // }
 
-        Route::get('/', 'HomeController@index')->name('dashboard')->middleware('auth', 'trial');
+        return redirect()->route('dashboard');
 
         break;
       case 4:
-        return view('dashboard');
+        return redirect()->route('dashboard');
         break;
       case 10:
-        return view('dashboard');
+        return redirect()->route('dashboard');
         break;
       default:
-        return view('dashboard');
+      return redirect()->route('dashboard');
     }
 
 	}
@@ -65,7 +65,7 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::put('profile/password', ['as' => 'profile.password', 'uses' => 'ProfileController@password']);
 });
 
-// Route::get('dashboard', 'HomeController@index')->name('dashboard.index')->middleware('auth', 'trial');
+Route::get('dashboard', 'HomeController@index')->name('dashboard')->middleware('auth', 'trial');
 
 // Route::get('/home', function () {
 	
