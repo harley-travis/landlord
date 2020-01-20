@@ -395,12 +395,12 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="https://senrent.com/terms-of-use.php" target="_blank">
+                    <a class="nav-link" href="https://senrent.com/terms-of-service.php" target="_blank">
                         <i class="fas fa-file-signature"></i> Terms of Service
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">
+                    <a class="nav-link" href="{{ route('legal.licenses') }}">
                         <i class="fas fa-id-badge"></i> Licenses
                     </a>
                 </li>

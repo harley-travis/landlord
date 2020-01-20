@@ -11,7 +11,6 @@
 |
 */
 
-// live
 Route::get('/', function () {
 	
 	if( auth()->check() == null ) {
@@ -33,6 +32,8 @@ Route::get('/', function () {
         return view('dashboard');
         break;
       case 3:
+
+        // commented this out for testing purposes. need to see if it's still hiting this spot
 
         // if( Auth::user()->stripe_id === null ) {
         //   // login first time and they don't have a stripe account for admins
@@ -61,6 +62,8 @@ Auth::routes();
 Route::get('email/verify', 'Auth\VerificationController@show')->name('verification.notice');
 Route::get('email/verify/{id}', 'Auth\VerificationController@verify')->name('verification.verify');
 Route::get('email/resend', 'Auth\VerificationController@resend')->name('verification.resend');
+
+Route::get('legal/licenses', 'HomeController@getLicenses')->name('legal.licenses');
 
 //Route::get('/home', 'HomeController@index')->name('home');
 
