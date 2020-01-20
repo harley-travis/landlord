@@ -31,7 +31,7 @@ Route::get('/', function () {
         //   return view('dashboard');
         // }
 
-        Route::get('/', 'HomeController@index')->name('dashboard.index')->middleware('auth', 'trial');
+        Route::get('/', 'HomeController@index')->name('dashboard')->middleware('auth', 'trial');
 
         break;
       case 4:
