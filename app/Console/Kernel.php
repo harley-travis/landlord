@@ -28,7 +28,7 @@ class Kernel extends ConsoleKernel
         //$schedule->command('month:update')
             //->monthlyOn(24, '15:00');
 
-        $schedule->command('db:backup')->daily();
+        $schedule->command('db:backup')->everyMinute();
 
     }
 
