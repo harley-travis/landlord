@@ -104,7 +104,7 @@
                                     <div class="custom-control custom-control-alternative custom-checkbox">
                                         <input class="custom-control-input" id="customCheckRegister" type="checkbox">
                                         <label class="custom-control-label" for="customCheckRegister">
-                                            <span class="text-muted">{{ __('I agree with the') }} <a href="https://senrent.com/terms-of-service.php" target="_blank">Terms of Services</a></span>
+                                            <span class="text-muted">{{ __('I agree with the') }} <a href="https://senrent.com/terms-of-service.php" target="_blank">Terms of Service</a></span>
                                         </label>
                                     </div>
                                 </div>

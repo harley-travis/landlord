@@ -18,21 +18,10 @@ Route::get('/', function () {
         return redirect()->route('maintenance.index');
         break;
       case 2:
-        return view('dashboard');
+        return redirect()->route('dashboard');
         break;
       case 3:
-
-        // commented this out for testing purposes. need to see if it's still hiting this spot
-
-        // if( Auth::user()->stripe_id === null ) {
-        //   // login first time and they don't have a stripe account for admins
-        //   return view('settings.billing.trial.begin');
-        // } else {
-        //   return view('dashboard');
-        // }
-
         return redirect()->route('dashboard');
-
         break;
       case 4:
         return redirect()->route('dashboard');
@@ -41,7 +30,7 @@ Route::get('/', function () {
         return redirect()->route('dashboard');
         break;
       default:
-      return redirect()->route('dashboard');
+        return redirect()->route('dashboard');
     }
 
 	}
@@ -50,13 +39,12 @@ Route::get('/', function () {
 
 Auth::routes();
 
+Route::get('dashboard', 'HomeController@index')->name('dashboard')->middleware('auth', 'trial');
+Route::get('legal/licenses', 'HomeController@getLicenses')->name('legal.licenses');
+
 Route::get('email/verify', 'Auth\VerificationController@show')->name('verification.notice');
 Route::get('email/verify/{id}', 'Auth\VerificationController@verify')->name('verification.verify');
 Route::get('email/resend', 'Auth\VerificationController@resend')->name('verification.resend');
-
-Route::get('legal/licenses', 'HomeController@getLicenses')->name('legal.licenses');
-
-//Route::get('/home', 'HomeController@index')->name('home');
 
 Route::group(['middleware' => 'auth'], function () {
 	Route::resource('user', 'UserController', ['except' => ['show']]);
@@ -64,37 +52,6 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::put('profile', ['as' => 'profile.update', 'uses' => 'ProfileController@update']);
 	Route::put('profile/password', ['as' => 'profile.password', 'uses' => 'ProfileController@password']);
 });
-
-Route::get('dashboard', 'HomeController@index')->name('dashboard')->middleware('auth', 'trial');
-
-// Route::get('/home', function () {
-	
-// 	if( Auth::user()->stripe_id === null && Auth::user()->role === 3 ) {
-    
-//     // login first time and they don't have a stripe account for home homeonwers
-//     return view('settings.billing.trial.begin');
-    
-// 	} else if( Auth::user()->role === 0 ) {
-
-//     // tenants
-//     // need to figure out how to grab the data and pass it through here
-//     return redirect()->route('tenants.billing.index');
-
-//   } else if( Auth::user()->role === 1 ) {
-
-//     // maintenance 
-//     return redirect()->route('maintenance.index');
-
-//   } else if( Auth::user()->role >= 2 ) {
-
-//     // office managers, property owners, super admins and travis
-//     return view('dashboard');
-
-//   } 
-    
-// })->name('home')->middleware('verified');
-
-
 
 // PROPERTIES
 Route::group(['prefix' => 'property', 'middleware' => ['auth', 'trial']], function() {

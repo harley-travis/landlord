@@ -32,10 +32,14 @@
                     <div class=" dropdown-header noti-title">
                         <h6 class="text-overflow m-0">{{ __('Welcome!') }}</h6>
                     </div>
+
+                    @if( Auth::user()->role != 1 )
                     <a href="{{ route('settings.billing.index') }}" class="dropdown-item">
                         <i class="ni ni-settings-gear-65"></i>
                         <span>Billing</span>
                     </a>
+                    @endif
+
                     <a href="{{ route('feedback.create') }}" class="dropdown-item">
                         <i class="ni ni-calendar-grid-58"></i>
                         <span>Send Feedback</span>
