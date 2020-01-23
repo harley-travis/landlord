@@ -45,7 +45,7 @@
             @include('layouts.navbars.sidebar')
         @endauth
         
-        <div class="main-content">
+        <div id="app" class="main-content">
             @include('layouts.navbars.navbar')
             @yield('content')
         </div>
@@ -61,7 +61,7 @@
         
         <!-- Argon JS -->
         <script src="{{ asset('argon') }}/js/argon.js?v=1.0.0"></script>
-
+    
         @yield('otherJs')
     </body>
 </html>

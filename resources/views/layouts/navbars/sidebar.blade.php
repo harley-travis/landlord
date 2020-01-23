@@ -154,6 +154,11 @@
                             </ul>
                         </div>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('reports.index') }}">
+                        <i class="ni ni-pin-3 text-orange"></i> Reports
+                        </a>
+                    </li>  
 
                 <!-- ADMIN -->
                 @elseif(Auth::user()->role === 3)
@@ -221,6 +226,11 @@
                             </ul>
                         </div>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('reports.index') }}">
+                        <i class="ni ni-pin-3 text-orange"></i> Reports
+                        </a>
+                    </li>  
 
                 <!-- SENRENT INTERNAL -->
                 @elseif(Auth::user()->role === 4)
@@ -280,7 +290,11 @@
                             </ul>
                         </div>
                     </li>
-
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('reports.index') }}">
+                        <i class="ni ni-pin-3 text-orange"></i> Reports
+                        </a>
+                    </li>  
 
                 <!-- TRAVIS -->
                 @elseif(Auth::user()->role === 10)
@@ -367,6 +381,12 @@
                             </ul>
                         </div>
                     </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('reports.index') }}">
+                        <i class="ni ni-pin-3 text-orange"></i> Reports
+                        </a>
+                    </li>  
 
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('tickets.view') }}">

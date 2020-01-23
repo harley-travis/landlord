@@ -25,6 +25,8 @@ class CreatePropertiesTable extends Migration
             $table->string('zip');
             $table->string('country');
             $table->integer('occupied')->nullable()->comment('0 = no 1 = yes');
+            $table->date('date_occupied')->nullable();
+            $table->date('date_available')->nullable();
             $table->integer('pet')->nullable()->comment('0 = no 1 = yes');     
             $table->integer('bed_amount')->nullable();
             $table->integer('bath_amount')->nullable();

@@ -12,27 +12,33 @@ Route::get('/', function () {
     switch($role) {
 
       case 0:
+        // tenant
         return redirect()->route('tenants.billing.index');
         break;
       case 1:
+        // maintenance
         return redirect()->route('maintenance.index');
         break;
       case 2:
+        // office manager
         return redirect()->route('dashboard');
         break;
       case 3:
+        // property owner \ admin
         return redirect()->route('dashboard');
         break;
       case 4:
+        // super admin
         return redirect()->route('dashboard');
         break;
       case 10:
+        // travis
         return redirect()->route('dashboard');
         break;
       default:
         return redirect()->route('dashboard');
     }
-
+    
 	}
     
 });
@@ -221,6 +227,23 @@ Route::group(['prefix' => 'maintenance', 'middleware' => ['auth', 'trial']], fun
     ]);
     
 });
+
+// MAINTENANCE
+Route::group(['prefix' => 'reports', 'middleware' => ['auth', 'trial']], function() {
+  $c = 'ReportController';
+
+  Route::get('', [
+    'uses' => "$c@index",
+    'as' => 'reports.index'
+  ]);
+  
+  Route::post('show', [
+    'uses' => "$c@show",
+    'as' => 'reports.show'
+  ]);
+  
+});
+
 
 // USERS
 Route::group(['prefix' => 'users', 'middleware' => ['auth', 'trial']], function() {
