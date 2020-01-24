@@ -80,14 +80,18 @@
                         <tr>
                             <td>Property</td>
                             <td>
+                                @if( $property != null )
                                 {{ $property->address_1 }} {{ $property->address_2 }} {{ $property->address_3 }}
+                                @endif
                             </td>
                         </tr>
                     </table>
 
                     @if($tenant->active === 1)
-                    <a href="{{ route('tenants.archive', ['id' => $tenant->user_id ]) }}" class="btn btn-danger">Archive Tenanat</a>
-                    <a href="{{ route('tenants.edit', ['id' => $tenant->user_id ]) }}" class="btn btn-primary shadow">Edit Tenanat</a>
+                    <div class="mt-5">
+                        <a href="{{ route('tenants.archive', ['id' => $tenant->user_id ]) }}" class="btn btn-danger">Archive Tenanat</a>
+                        <a href="{{ route('tenants.edit', ['id' => $tenant->user_id ]) }}" class="btn btn-primary shadow">Edit Tenanat</a>
+                    </div>
                     @endif
 
                 </div>

@@ -63,6 +63,11 @@
                                     <option value="3">HOA Association</option>
                                     <option value="4">Storage Rentals</option>
                                 </select>
+                                @if ($errors->has('product'))
+                                    <span class="invalid-feedback" style="display: block;" role="alert">
+                                        <strong>{{ $errors->first('product') }}</strong>
+                                    </span>
+                                @endif
                             </div>    
                    
                             <div class="form-group">

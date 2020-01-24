@@ -46,8 +46,6 @@ class ReportController extends Controller {
                     ->where('properties.company_id', '=', Auth::user()->company_id)
                     ->get();
 
-                    dd($data);
-
                 return view('reports.revenue', [
                     'data' => $data, 
                 ]);
