@@ -57,11 +57,11 @@
 
                             <div class="form-group">
                                 <select id="product" name="product" class="form-control form-control-alternative" required>
-                                    <option selected>- Select Account Type -</option>
+                                    <option value="" disabled selected>Property Type</option>
                                     <option value="1">Home Owner</option>
                                     <option value="2">Apartment Complex</option>
-                                    <option value="3">HOA Association</option>
-                                    <option value="4">Storage Rentals</option>
+                                    <!-- <option value="3">HOA Association</option>
+                                    <option value="4">Storage Rentals</option> -->
                                 </select>
                                 @if ($errors->has('product'))
                                     <span class="invalid-feedback" style="display: block;" role="alert">
