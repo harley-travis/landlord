@@ -25,7 +25,7 @@
                 <div class="card-header border-0">
                     <div class="row align-items-center">
                         <div class="col-8">
-                            <h3 class="mb-0">Revenue</h3>
+                            <h3 class="mb-0">This Years Revenue: ${{ $total }}</h3>
                         </div>
                         <div class="col-4 text-right">
                             <a href="{{ route('reports.index') }}" class="btn btn-primary shadow">Run another report</a>
@@ -39,31 +39,11 @@
                     
                     @else
 
-                    <div class="table-responsive">
-                        <table class="table table-hover">
-                            <thead>
-                                <tr>
-                                    <th scope="col">Address</th>
-                                    <th scope="col">Tenant Name</th>
-                                    <th scope="col">Amount Earned</th>
-                                    <th scope="col">Amount Owed</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-
-                                @foreach($data as $d)
-
-                                <tr>
-                                    <td>{{ $d->address_1 }} {{ $d->address_2 }}</td>
-                                    <td>{{ $d->tenant_id }}</td>
-                                    <td>{{ $d->amount_paid }}</td>
-                                    <td>{{ $d->balance }}</td>
-                                </tr>
-
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
+                    <revenue-component 
+                        labels="{{ json_encode(['', 'Jan', 'Feb', 'Mar', 'April', 'May', 'June', 'July', 'Aug', 'Sept', 'Nov', 'Dec']) }}"
+                        data-prop="{{ $dataset }}"
+                    >
+                    </revenue-component>
 
                     @endif 
 
@@ -74,4 +54,9 @@
 
     @include('layouts.footers.auth')
 </div>
+@endsection
+
+@section('otherJs')
+    <!-- FOR SOME REASON THERE IS A BUG WHEN THIS IS ON. IT PREVENTS YOU FROM OPENING THE DROP DOWN MENU TOP RIGHT -->
+    <script src="{{ asset('js/app.js') }}"></script>
 @endsection

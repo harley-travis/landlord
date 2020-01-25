@@ -156,7 +156,7 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('reports.index') }}">
-                        <i class="ni ni-pin-3 text-orange"></i> Reports
+                            <i class="ni ni-chart-pie-35 text-orange"></i> Reports
                         </a>
                     </li>  
 
@@ -228,7 +228,7 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('reports.index') }}">
-                        <i class="ni ni-pin-3 text-orange"></i> Reports
+                            <i class="ni ni-chart-pie-35 text-orange"></i> Reports
                         </a>
                     </li>  
 
@@ -292,7 +292,7 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('reports.index') }}">
-                        <i class="ni ni-pin-3 text-orange"></i> Reports
+                            <i class="ni ni-chart-pie-35 text-orange"></i> Reports
                         </a>
                     </li>  
 
@@ -384,7 +384,7 @@
 
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('reports.index') }}">
-                        <i class="ni ni-pin-3 text-orange"></i> Reports
+                            <i class="ni ni-chart-pie-35 text-orange"></i> Reports
                         </a>
                     </li>  
 

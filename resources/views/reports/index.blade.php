@@ -37,9 +37,7 @@
                     <!-- might have to write a VUE page for this | could create a chart.js
                         heck we might even use this data for the dashboard. if we're create a vue 
                         component. then we could just call it there
-                    -->
-
-                    <!-- <report-component></report-component> -->
+                    -->          
 
                     <form action="{{ route('reports.show') }}" method="post">
 
@@ -47,7 +45,7 @@
                             <select class="form-control" name="report">
                                 <option value="0">Vacancies and Occupancies</option> <!-- pie chart. 100% properties and number of vacancies -->
                                 <option value="1">Revenue</option><!-- show amount earned for the year v projected | line | give option to select the date in this view -->
-                                <option value="2">Maintenance Requests</option>
+                                <option>Maintenance Requests (coming soon)</option>
                                 <option>Expenditures (coming soon)</option>
                             </select>
                         </div>
