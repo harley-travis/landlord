@@ -41,14 +41,6 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="password">Password <small class="text-danger pl-2">required</small></label>
-                            <input type="password" class="form-control {{ $errors->has('password') ? 'is-invalid' : '' }}" name="password" aria-describedby="password" placeholder="Enter password">
-                            @error('password')
-                            <span class='invalid-feedback'>{{ $message }} Password must be 8 characters long.</span>
-                            @enderror
-                        </div>
-
-                        <div class="form-group">
                             <label for="phone">Phone <small class="text-danger pl-2">required</small></label>
                             <input type="text" class="form-control {{ $errors->has('phone') ? 'is-invalid' : '' }}" name="phone" aria-describedby="phone" placeholder="Enter phone (555) 555-5555" value="{{ old('phone') }}">
                             @error('phone')
