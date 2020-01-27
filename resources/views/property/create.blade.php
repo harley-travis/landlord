@@ -231,7 +231,7 @@
 
                                         <div class="form-group">
                                             <label for="square_footage">Square Footage</label>
-                                            <input type="text" class="form-control" name="square_footage" aria-describedby="square_footage" placeholder="Enter deposit amount" value="{{ old('square_footage') }}">
+                                            <input type="text" class="form-control" name="square_footage" aria-describedby="square_footage" placeholder="Enter square footage" value="{{ old('square_footage') }}">
                                         </div>
 
                                         <div class="form-group">

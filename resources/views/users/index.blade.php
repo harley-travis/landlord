@@ -57,7 +57,7 @@
                                             @endif
                                         
                                         </td>
-                                        <td><a href="{{ route('users.edit', ['id' => $user->id ]) }}" class="btn btn-info shadow">Edit Tenant</a></td>
+                                        <td><a href="{{ route('users.edit', ['id' => $user->id ]) }}" class="btn btn-info shadow">Edit User</a></td>
                                     </tr>
                                 @endforeach
                             </tbody>
