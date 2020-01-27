@@ -43,14 +43,14 @@ Route::get('/', function () {
     
 })->middleware('verified');
 
-Auth::routes(['verify' => true]);
+Auth::routes();
 
 Route::get('dashboard', 'HomeController@index')->name('dashboard')->middleware('auth', 'trial');
 Route::get('legal/licenses', 'HomeController@getLicenses')->name('legal.licenses');
 
 Route::get('email/verify', 'Auth\VerificationController@show')->name('verification.notice');
-Route::get('email/verify/{id}', 'Auth\VerificationController@verify')->name('verification.verify');
-Route::get('email/resend', 'Auth\VerificationController@resend')->name('verification.resend');
+Route::get('email/verify/{id}/{hash}', 'Auth\VerificationController@verify')->name('verification.verify');
+Route::post('email/resend', 'Auth\VerificationController@resend')->name('verification.resend');
 
 Route::group(['middleware' => 'auth'], function () {
 	Route::resource('user', 'UserController', ['except' => ['show']]);
