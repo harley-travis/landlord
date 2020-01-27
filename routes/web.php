@@ -41,7 +41,7 @@ Route::get('/', function () {
     
 	}
     
-});
+})->middleware('auth', 'trial');
 
 Auth::routes();
 
