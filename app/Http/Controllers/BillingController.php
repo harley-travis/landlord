@@ -846,7 +846,7 @@ class BillingController extends Controller {
                             ->where('properties.id', '=', $this->getTenant()->property_id)
                             ->first();
 
-        if( $property->late_date === null || $property->late_date === 0 ) {
+        if( !isset($property->late_date) || $property->late_date === null || $property->late_date === 0 ) {
             $late_date = 17;
         } else {
             $late_date = $property->late_date;
