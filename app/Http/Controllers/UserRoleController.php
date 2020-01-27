@@ -48,14 +48,16 @@ class UserRoleController extends Controller {
         $request->validate([
             'name' => 'required',
             'email' => 'required|email',
-            'password' => 'required|min:8',
             'role' => 'required',
         ]);
+
+        $random = str_shuffle('abcdefghjklmnopqrstuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZ1234567890!&$%');
+        $password = substr($random, 0, 10);
         
         $u = new User([
             'name' => $request->input('name'),
             'email' => $request->input('email'),
-            'password' => Hash::make( $request->input('password')),
+            'password' => Hash::make( $password ),
             'company_id'=> Auth::user()->company_id,
             'role' => $request->input('role'),
             'product'=> Auth::user()->product,
