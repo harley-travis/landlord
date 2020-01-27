@@ -43,7 +43,7 @@ Route::get('/', function () {
     
 })->middleware('verified');
 
-Auth::routes();
+Auth::routes(['verify' => true]);
 
 Route::get('dashboard', 'HomeController@index')->name('dashboard')->middleware('auth', 'trial');
 Route::get('legal/licenses', 'HomeController@getLicenses')->name('legal.licenses');
