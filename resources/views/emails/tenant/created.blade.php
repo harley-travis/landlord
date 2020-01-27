@@ -3,9 +3,9 @@
 
 Your property owner just created an account for you at SenRent.com. Login to start paying rent online.
 
-When you login, we encourage you to update your password.
+Click here to reset your password.
 
-@component('mail::button', ['url' => 'https://app.senrent.com/login'])
+@component('mail::button', ['url' => 'https://app.senrent.com/password/reset'])
 Login
 @endcomponent
 
