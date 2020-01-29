@@ -21,7 +21,7 @@ class WebhookController extends CashierController {
         // $total = 'test money';
         // Mail::to($user->email)->send(new PaymentConfirmation($user, $total));
 
-        return new \Illuminate\Http\Response('handleChargeSucceeded handled', 200);
+        return new \Illuminate\Http\Response($payload, 200);
 
     }
 
