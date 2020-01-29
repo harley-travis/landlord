@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Mail;
 use App\User;
 use App\Mail\PaymentConfirmation;
+use\Illuminate\Http\Response;
 use Laravel\Cashier\Http\Controllers\WebhookController as CashierController;
 
 class WebhookController extends CashierController {
@@ -21,7 +22,7 @@ class WebhookController extends CashierController {
         // $total = 'test money';
         // Mail::to($user->email)->send(new PaymentConfirmation($user, $total));
 
-        return new \Illuminate\Http\Response($payload, 200);
+        return response($payload, 200);
 
     }
 
