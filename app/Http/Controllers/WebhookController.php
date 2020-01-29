@@ -18,13 +18,13 @@ class WebhookController extends CashierController {
 
     public function handleChargeSucceeded($payload) {
 
-        $user = Auth::user();
-        $total = 'test money';
-        Mail::to($user->email)->send(new PaymentConfirmation($user, $total));
+        // $user = Auth::user();
+        // $total = 'test money';
+        // Mail::to($user->email)->send(new PaymentConfirmation($user, $total));
 
-        
 
-        return response($payload, 200);
+
+        return response('hey look at that', 200);
 
     }
 
