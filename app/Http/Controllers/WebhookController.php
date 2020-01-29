@@ -7,7 +7,7 @@ use App\User;
 use App\Mail\PaymentConfirmation;
 use Laravel\Cashier\Http\Controllers\WebhookController as CashierController;
 
-class WebhookController extends Controller {
+class WebhookController extends CashierController {
     
     public function handleChargeFailed($payload) {
 
@@ -20,6 +20,8 @@ class WebhookController extends Controller {
         $user = Auth::user();
         $total = 'test money';
         Mail::to($user->email)->send(new PaymentConfirmation($user, $total));
+
+        return new \Illuminate\Http\Response('handleChargeSucceeded handled', 200);
 
     }
 
