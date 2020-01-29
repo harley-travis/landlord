@@ -20,7 +20,11 @@ class WebhookController extends CashierController {
 
         // $user = Auth::user();
         // $total = 'test money';
-        // Mail::to($user->email)->send(new PaymentConfirmation($user, $total));
+
+        $user = 'Travis';
+        $total = '1000';
+        
+        Mail::to('harley.travis2@gmail.com')->send(new PaymentConfirmation($user, $total));
 
 
 
