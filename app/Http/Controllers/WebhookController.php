@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Mail;
 use App\User;
 use App\Mail\PaymentConfirmation;
-use\Illuminate\Http\Response;
+use Symfony\Component\HttpFoundation\Response;
 use Laravel\Cashier\Http\Controllers\WebhookController as CashierController;
 
 class WebhookController extends CashierController {
@@ -28,7 +28,7 @@ class WebhookController extends CashierController {
 
 
 
-        return response('hey look at that');
+        return new Response('Webhook Handled, yeah boy', 200);
 
     }
 
