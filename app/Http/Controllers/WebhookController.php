@@ -28,7 +28,7 @@ class WebhookController extends CashierController {
 
 
 
-        return response('hey look at that', 200);
+        return response('hey look at that');
 
     }
 
