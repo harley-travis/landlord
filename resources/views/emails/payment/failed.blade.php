@@ -5,7 +5,7 @@ Unfortunately, your payment for rent was unsuccessful in the amount of ${{ numbe
 
 Please add funds to your account, as soon as possible to avoid any late fees. 
 
-If you are finding that this is an error, please contact our support team at support@senrent.com. Be sure to inform your landlord as well.
+If you find that this is an error, please contact our support team at support@senrent.com. Be sure to inform your landlord as well.
 
 If you have any questions, please let us know.
 

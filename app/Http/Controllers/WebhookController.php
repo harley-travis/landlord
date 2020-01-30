@@ -4,6 +4,10 @@ namespace App\Http\Controllers;
 
 use Mail;
 use App\User;
+use App\Rent;
+use App\Tenant;
+use App\Transaction;
+use Carbon\Carbon;
 use App\Mail\PaymentConfirmation;
 use App\Mail\PaymentFailed;
 use Symfony\Component\HttpFoundation\Response;
@@ -13,6 +17,12 @@ class WebhookController extends CashierController {
     
     public function handleChargeFailed($payload) {
 
+        // update transaction table to indicat that the balance has not been paid in full
+        $transaction = Transaction::where('confirmation', '=', $payload['data']['object']['ConfirmationNumber']);
+        $transaction->paid_in_full = 0;
+        $transaction->save();
+
+        // inform the tenant
         $stripe_id = $payload['data']['object']['customer'];
         $user = User::where('stripe_id', '=', $stripe_id)->first();
         $email = $user->email;
@@ -30,6 +40,16 @@ class WebhookController extends CashierController {
         $user = User::where('stripe_id', '=', $stripe_id)->first();
         $email = $user->email;
         $total = $payload['data']['object']['amount'];
+
+        // update the rent table
+        $startDate = Carbon::now();
+        $firstDay = $startDate->firstOfMonth();
+
+        $tenant = Tenant::where('user_id', '=', $user->id)->first();
+        $rent = Rent::where('property_id', '=', $tenant->property_id)->first();
+        $rent->last_date_paid = Carbon::now();
+        $rent->next_due_date = $firstDay;
+        $rent->save();
 
         Mail::to($email)->send(new PaymentConfirmation($user, $total));
 

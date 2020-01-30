@@ -935,8 +935,6 @@ class BillingController extends Controller {
             $request->input('source')
         );
 
-        //dd($bank_account);
-
         $amount = $request->input('rent') * 100;
         $setAmount = $property->rent_amount * 100;
         $findLateFeeAmount = $amount - $setAmount;
@@ -956,23 +954,13 @@ class BillingController extends Controller {
              * https://stripe.com/docs/api/transfers/create
              */
 
-            // $charge = \Stripe\Transfer::create([
-            //     'amount' => $total,
-            //     'currency' => "usd",
-            //     'destination' => $proprietor->stripe_account,
-            //     'source_type' => 'bank_account',
-            //     'metadata' => [
-            //         'Confirmation Number' => $confirmationNumber
-            //     ],
-            // ]);
-
             $charge = \Stripe\Charge::create([
                 'amount' => $total, 
                 'currency' => "usd",
                 'source' => $bank_account, 
                 'customer' => $this->getCustomer()->id,
                 'metadata' => [
-                    'Confirmation Number' => $confirmationNumber,
+                    'ConfirmationNumber' => $confirmationNumber,
                     'email' => $user->email,
                 ],
                 'transfer_data' => [
@@ -981,25 +969,10 @@ class BillingController extends Controller {
                 ],
             ]);  
 
-            // $charge = \Stripe\Charge::create([
-            //     'amount' => $total, 
-            //     'currency' => "usd",
-            //     'source' => $bank_account, 
-            //     'metadata' => [
-            //         'Confirmation Number' => $confirmationNumber
-            //     ],
-            // ]);  
-
-            // $transfer = \Stripe\Transfer::create([
-            //     'amount' => $amount,
-            //     'currency' => 'usd',
-            //     'destination' => $proprietor->stripe_account, 
-            // ]);
-
-
-        // } catch( \Stripe\Exception\InvalidRequestException $e ) {
         } catch( Exception $e ) {
+
             // for failure upon use
+            // I don't think this is doing anything. but i'll leave it for safe keeping
             return redirect()
                 ->route('settings.billing.index', [
                     'user' => $this->getUser(),
@@ -1011,10 +984,6 @@ class BillingController extends Controller {
                 ])->with('danger',  $e);
 
         } 
-           
-
-            
-            // dd($charge);
 
             // calculate the new balance
             $currentBalance = $this->calculateRentBalance();
@@ -1027,20 +996,10 @@ class BillingController extends Controller {
                 $paidInFull = 1; 
             }
 
-            $startDate = Carbon::now();
-            $firstDay = $startDate->firstOfMonth();
-
             $lateFee = 0;
             if( $amount > $setAmount ) {
                 $lateFee = $findLateFeeAmount;
             }
-
-            // validate
-            // if it's successful, then update the rents table
-            $rent = Rent::where('property_id', '=', $tenant->property_id)->first();
-            $rent->last_date_paid = Carbon::now();
-            $rent->next_due_date = $firstDay;
-            $rent->save();
 
             $transaction = new Transaction([
                 'tenant_id' => $tenant->id,
@@ -1054,18 +1013,13 @@ class BillingController extends Controller {
                 'confirmation' => $confirmationNumber,
             ]);
             $transaction->save();
-        
-           // Mail::to($user->email)->send(new PaymentConfirmation($user, $total));
-            
+                
             return view('tenants.billing.confirmation', [
                 'confirmation_number' => $confirmationNumber,
                 'amount' => $charge->amount,
                 'payment_method' => $charge->payment_method_details->type,
                 'date' => $transaction->created_at,
             ]);
-
-         
-
     }
 
     public function calculateRentBalance() {
