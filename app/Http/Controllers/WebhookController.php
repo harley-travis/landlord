@@ -18,7 +18,7 @@ class WebhookController extends CashierController {
     public function handleChargeFailed($payload) {
 
         // update transaction table to indicat that the balance has not been paid in full
-        $confirmationNumber = $payload['data']['object']['ConfirmationNumber'];
+        $confirmationNumber = $payload['data']['object']['metadata']['ConfirmationNumber'];
         // $transaction = Transaction::where('confirmation', '=', $confirmationNumber )->first();
         // $transaction->paid_in_full = 0;
         // $transaction->save();
