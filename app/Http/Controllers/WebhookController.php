@@ -39,7 +39,7 @@ class WebhookController extends CashierController {
 
         $data = json_encode($payload);
 
-        $email = $payload['data']['metadata']['email'];
+        //$email = $payload['data']['metadata']['email'];
         //$user = User::where('email', '=', $email);
         //$total = $payload['data']['object']['amount'];
 
