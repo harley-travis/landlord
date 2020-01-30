@@ -12,9 +12,9 @@ class WebhookController extends CashierController {
     
     public function handleChargeFailed($payload) {
 
-        $customer = $payload['data']['object']['customer'];
+        $stripe_id = $payload['data']['object']['customer'];
         //$email = $payload['data']['object']['metadata']['email'];
-        //$user = User::where('email', '=', $email);
+        $user = User::where('stripe_id', '=', $stripe_id);
        // $total = $payload['data']['object']['amount'];
 
        //Mail::to($email)->send(new PaymentConfirmation($user, $total));
