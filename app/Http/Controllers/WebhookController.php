@@ -41,6 +41,11 @@ class WebhookController extends CashierController {
         $email = $user->email;
         $total = $payload['data']['object']['amount'];
 
+        // update transaction table to indicat that the balance has not been paid in full
+        $transaction = Transaction::where('confirmation', '=', $payload['data']['object']['ConfirmationNumber'])->first();
+        $transaction->paid_in_full = 1;
+        $transaction->save();
+
         // update the rent table
         $startDate = Carbon::now();
         $firstDay = $startDate->firstOfMonth();

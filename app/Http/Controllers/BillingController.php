@@ -985,17 +985,22 @@ class BillingController extends Controller {
 
         } 
 
+        /**
+         * i have a feeling that we will need to pull this function in first 
+         * and that is how the system calculates the amount due. 
+         * 
+         * after we need to update the amount.
+         * 
+         * i think i might just be pulling this in from teh DB already when i call it. 
+         * 
+         * so i would have to update the new balance in the webhook
+         */
             // calculate the new balance
             $currentBalance = $this->calculateRentBalance();
             $newBalance = ( $request->input('rent') + $currentBalance ) - $currentBalance;
 
-            // determine wither or not the total amount due is paid
-            $paidInFull = 0; // 0 = no 1 = yes
-
-            if($newBalance <= 0) { 
-                $paidInFull = 1; 
-            }
-
+            // i don't think i add this here. i'm not charging the late fee
+            // need to read more about this 
             $lateFee = 0;
             if( $amount > $setAmount ) {
                 $lateFee = $findLateFeeAmount;
@@ -1008,7 +1013,7 @@ class BillingController extends Controller {
                 'amount_paid' => $charge->amount,
                 'balance' => $newBalance,
                 'payment_method' => $charge->payment_method_details->type,
-                'paid_in_full' => $paidInFull,
+                'paid_in_full' => 0,
                 'late_fee_amount' => $lateFee,
                 'confirmation' => $confirmationNumber,
             ]);
