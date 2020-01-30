@@ -37,7 +37,9 @@ class WebhookController extends CashierController {
 
     public function handleChargeExpired($payload) {
 
-        $email = $payload->data;
+        $data = json_encode($payload);
+
+        $email = $payload['data']['metadata']['email'];
         //$user = User::where('email', '=', $email);
         //$total = $payload['data']['object']['amount'];
 
