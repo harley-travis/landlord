@@ -52,9 +52,9 @@ class WebhookController extends CashierController {
     }
 
     public function handleChargeCaptured($payload) {
-        $data = json_encode($payload);
+        //$data = json_encode($payload);
 
-        $email = $data['data']['metadata']['email'];
+        $email = $payload['data'];
     }
 
 }
