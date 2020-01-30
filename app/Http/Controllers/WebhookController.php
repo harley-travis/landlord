@@ -15,6 +15,7 @@ class WebhookController extends CashierController {
         $stripe_id = $payload['data']['object']['customer'];
         //$email = $payload['data']['object']['metadata']['email'];
         $user = User::where('stripe_id', '=', $stripe_id);
+        $email = $user->email;
        // $total = $payload['data']['object']['amount'];
 
        //Mail::to($email)->send(new PaymentConfirmation($user, $total));
