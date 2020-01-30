@@ -21,6 +21,7 @@ class CreateTransactionsTable extends Migration
             $table->integer('amount_paid');
             $table->integer('balance')->nullable();
             $table->string('payment_method');
+            $table->integer('payment_failed')->nullable()->comment('0=no 1=yes');
             $table->integer('paid_in_full')->comment('0=no 1=yes');
             $table->integer('late_fee_amount')->comment('0=no late fee');
             $table->string('confirmation');

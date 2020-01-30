@@ -21,6 +21,7 @@ class WebhookController extends CashierController {
         $confirmationNumber = $payload['data']['object']['metadata']['ConfirmationNumber'];
         $transaction = Transaction::where('confirmation', '=', $confirmationNumber )->first();
         $transaction->paid_in_full = 0;
+        $transaction->payment_failed = 1;
         $transaction->save();
 
         // inform the tenant
