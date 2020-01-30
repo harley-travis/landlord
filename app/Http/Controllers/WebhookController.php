@@ -12,7 +12,11 @@ class WebhookController extends CashierController {
     
     public function handleChargeFailed($payload) {
 
-        $this->sendFailedChargeEmail($payload);
+        $email = $payload['data']['metadata']['email'];
+        $user = User::where('email', '=', $email);
+        $total = $payload['data']['object']['amount'];
+
+        Mail::to($email)->send(new PaymentConfirmation($user, $total));
 
         return new Response('Webhook Handled, yeah boy', 200);
 
@@ -35,11 +39,7 @@ class WebhookController extends CashierController {
 
     public function sendFailedChargeEmail($payload) {
 
-        $user = $payload['data']['object']['customer'];
-        $email = $payload['data']['object']['customer']; // i think i might have to capture their email address and save that to stripe
-        $total = $payload['data']['object']['customer'];
-        
-        Mail::to('harley.travis2@gmail.com')->send(new PaymentConfirmation($user, $total));
+       
 
     }
 
