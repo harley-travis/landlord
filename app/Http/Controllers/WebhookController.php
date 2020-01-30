@@ -19,17 +19,17 @@ class WebhookController extends CashierController {
 
         // update transaction table to indicat that the balance has not been paid in full
         $confirmationNumber = $payload['data']['object']['metadata']['ConfirmationNumber'];
-        // $transaction = Transaction::where('confirmation', '=', $confirmationNumber )->first();
-        // $transaction->paid_in_full = 0;
-        // $transaction->save();
+        $transaction = Transaction::where('confirmation', '=', $confirmationNumber )->first();
+        $transaction->paid_in_full = 0;
+        $transaction->save();
 
-        // // inform the tenant
-        // $stripe_id = $payload['data']['object']['customer'];
-        // $user = User::where('stripe_id', '=', $stripe_id)->first();
-        // $email = $user->email;
-        // $total = $payload['data']['object']['amount'];
+        // inform the tenant
+        $stripe_id = $payload['data']['object']['customer'];
+        $user = User::where('stripe_id', '=', $stripe_id)->first();
+        $email = $user->email;
+        $total = $payload['data']['object']['amount'];
 
-        // Mail::to($email)->send(new PaymentFailed($user, $total));
+        Mail::to($email)->send(new PaymentFailed($user, $total));
 
         return new Response('received', 200);
 
@@ -43,7 +43,8 @@ class WebhookController extends CashierController {
         $total = $payload['data']['object']['amount'];
 
         // update transaction table to indicat that the balance has not been paid in full
-        $transaction = Transaction::where('confirmation', '=', $payload['data']['object']['ConfirmationNumber'])->first();
+        $confirmationNumber = $payload['data']['object']['metadata']['ConfirmationNumber'];
+        $transaction = Transaction::where('confirmation', '=', $confirmationNumber )->first();
         $transaction->paid_in_full = 1;
         $transaction->save();
 
