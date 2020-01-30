@@ -972,7 +972,7 @@ class BillingController extends Controller {
                 'source' => $bank_account, 
                 'customer' => $this->getCustomer()->id,
                 'metadata' => [
-                    'Confirmation Number' => $confirmationNumberj,
+                    'Confirmation Number' => $confirmationNumber,
                     'email' => $user->email,
                 ],
                 'transfer_data' => [
