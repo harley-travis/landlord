@@ -14,7 +14,7 @@ class WebhookController extends CashierController {
 
         $stripe_id = $payload['data']['object']['customer'];
         //$email = $payload['data']['object']['metadata']['email'];
-        $user = User::where('stripe_id', '=', $stripe_id);
+        $user = User::where('stripe_id', '=', $stripe_id)->first();
         $email = $user->email;
        // $total = $payload['data']['object']['amount'];
 
