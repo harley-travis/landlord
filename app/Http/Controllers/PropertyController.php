@@ -39,7 +39,7 @@ class PropertyController extends Controller {
                             ->join('properties', 'tenants.property_id', '=', 'properties.id')
                             ->where('properties.company_id', '=', Auth::user()->company_id)
                             ->where('users.company_id', '=', Auth::user()->company_id)
-                            ->where('tenants.active', '=', '1')
+                            ->where('tenants.active', '=', 1)
                             ->paginate(15);
 
         $company = Company::where('id', '=', Auth::user()->company_id)->first();
@@ -62,7 +62,8 @@ class PropertyController extends Controller {
     public function create() {
 
         $communities = Community::where('company_id', '=', Auth::user()->company_id)->get();
-        return view('property.create', ['communities' => $communities]);
+        return view('property.create'
+        );
 
     }
 
@@ -92,7 +93,7 @@ class PropertyController extends Controller {
             'state' => $request->input('state'),
             'zip' => $request->input('zip'),
             'country' => $request->input('country'),
-            'occupied' => $request->input('occupied'),
+            'occupied' => 0,
             'pet' => $request->input('pet'),
             'bed_amount' => $request->input('bed_amount'),
             'bath_amount' => $request->input('bath_amount'),

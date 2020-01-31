@@ -45,15 +45,15 @@
             
                 @else           
 
-                <div class="table-responsive">
+                <div class="">
 
-                        <table class="table align-items-center table-flush table-hover">
+                        <table class="table align-items-center table-flush table-hover mb-5">
                             <thead class="thead-light">
                                 <tr>   
                                     <th>Name</th>
                                     <th>Phone</th>
                                     <th>Email</th>
-                                    <th></th>
+                                    <th class="text-right">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -157,9 +157,9 @@
 
                 @else           
 
-                <div class="table-responsive">
+                <div class="">
 
-                        <table class="table align-items-center table-flush table-hover">
+                        <table class="table align-items-center table-flush table-hover mb-5">
                             <thead class="thead-light">
                                 <tr>   
                                     <th>Name</th>
@@ -185,6 +185,7 @@
                                             <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
                                                 <a class="dropdown-item" data-toggle="modal" data-target="#unassignModal-{{ $tenant->user_id }}">Unassign from Property</a>
                                                 <a class="dropdown-item" href="{{ route('tenants.edit', ['id' => $tenant->user_id ]) }}" class="btn btn-info text-white">Edit Tenant</a>
+                                                <a class="dropdown-item" href="{{ route('tenants.billing.payment', ['id' => $tenant->user_id ]) }}" class="btn btn-info text-white">Enter Rent Manually</a>
                                             </div>
                                         </div>
                                     </td>

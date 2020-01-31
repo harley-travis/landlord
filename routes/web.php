@@ -99,6 +99,7 @@ Route::group(['prefix' => 'property', 'middleware' => ['auth', 'trial']], functi
 Route::group(['prefix' => 'tenants', 'middleware' => ['auth', 'trial']], function() {
     $c = 'TenantController';
     $bc = 'BillingController';
+    $tc = 'TransactionController';
 
     Route::get('', [
         'uses' => "$c@index",
@@ -174,6 +175,17 @@ Route::group(['prefix' => 'tenants', 'middleware' => ['auth', 'trial']], functio
       'uses' => "$bc@showPaymentConfirmation",
       'as' => 'tenants.billing.confirmation'
     ]);
+
+    Route::get('billing/payment/{id}', [
+      'uses' => "$tc@create",
+      'as' => 'tenants.billing.payment'
+    ]);
+
+    Route::post('billing/payment/create', [
+      'uses' => "$tc@store",
+      'as' => 'tenants.billing.payment.create'
+    ]);
+    
     
 });
 
