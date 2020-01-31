@@ -40,15 +40,36 @@
                         <input type="hidden" name="tenant_id" value="{{ $tenant->id }}">
                         
                         @csrf
-
-                        <button type="submit" class="btn btn-success shadow">Save Transaction</button>
-
-                    </form>
+                        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#transactionModal">Save Transaction</button>                 
 
                 </div>
             </div>
         </div>
     </div>
+
+
+     <!-- Modal -->
+     <div class="modal fade" id="transactionModal" tabindex="-1" role="dialog" aria-labelledby="transactionModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="transactionModalLabel">Are you sure you want to add this transaction?</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to save this payment? You will be able to update this transaction at a later time.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-success shadow">Yes, Create Transaction</button>
+            </div>
+            </div>
+        </div>
+    </div>
+
+    </form>
 
     @include('layouts.footers.auth')
 </div>
