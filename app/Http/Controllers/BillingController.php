@@ -885,6 +885,7 @@ class BillingController extends Controller {
                             ->first();
 
         $amount = $request->input('amount');
+        $late_fee = $request->input('late_fee');
 
         return view('tenants.billing.pay', [
                     'tenant' => $this->getTenant(),
@@ -892,6 +893,7 @@ class BillingController extends Controller {
                     'bank_accounts' => $this->getBankAccounts(),
                     'customer' => $this->getCustomer(),
                     'amount' => $amount,
+                    'late_fee' => $late_fee,
         ]);
         
     }
