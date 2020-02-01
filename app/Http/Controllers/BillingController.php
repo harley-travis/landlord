@@ -901,6 +901,7 @@ class BillingController extends Controller {
         $date = $request->input('date');
         $source = $request->input('source');
         $amount = $request->input('amount');
+        $late_fee = $request->input('late_fee');
         $convenience = 5;
         $total = $amount + $convenience;
 
@@ -908,6 +909,7 @@ class BillingController extends Controller {
             'date' => $date,
             'source' => $source,
             'amount' => $amount,
+            'late_fee' => $late_fee,
             'bank_account' => $this->getBankAccounts(),
             'customer' => $this->getCustomer(),
             'convenience' => $convenience,

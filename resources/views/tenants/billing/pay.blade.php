@@ -124,8 +124,6 @@
 
                             @foreach( $bank_accounts as $bank_account )
 
-
-
                             <div class="form-group">
 
                                 @if($bank_account->id == $customer->default_source)
@@ -152,7 +150,6 @@
                                 @endif
 
                             </div>
-
 
                             @endforeach 
 

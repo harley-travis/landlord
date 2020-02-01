@@ -186,14 +186,9 @@ Route::group(['prefix' => 'tenants', 'middleware' => ['auth', 'trial']], functio
       'as' => 'tenants.billing.payment.create'
     ]);
 
-    Route::get('billing/history/show/{id}', [
-      'uses' => "$tc@show",
-      'as' => 'tenants.billing.history.show'
-    ]);   
-
-    Route::post('billing/payment/update', [
-      'uses'	=> "$tc@update",
-      'as'	=> 'tenants.billing.payment.update'
+    Route::get('billing/payment/delete/{id}', [
+      'uses'	=> "$tc@destroy",
+      'as'	=> 'tenants.billing.payment.delete'
     ]);
     
 });

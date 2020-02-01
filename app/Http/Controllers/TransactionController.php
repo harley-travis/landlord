@@ -163,9 +163,14 @@ class TransactionController extends Controller {
 
     }
 
-    public function update($id) {
+    public function destroy($id) {
 
+        $transaction = Transaction::find($id);
+        $transaction->delete();
 
+        return redirect()
+            ->route('tenants.index')
+            ->with('info', 'The transaction was deleted successfully.');
 
     }
 

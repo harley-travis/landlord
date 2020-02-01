@@ -126,6 +126,7 @@
                                         <th scope="col">Type</th>
                                         <th scope="col">Amount</th>
                                         <th scope="col">Paid In Full</th>
+                                        <th scope="col">Action</th>
                                         <!-- <th scope="col">Receipt</th> -->
                                     </tr>
                                 </thead>
@@ -133,12 +134,7 @@
 
                                     @foreach( $invoices as $invoice )
                                     <tr>
-                                        <td scope="row">
-                                            @if( $invoice->payment_method === 'cash/check')
-                                                <a href="{{ route('tenants.billing.history.show', ['id' => $invoice->id]) }}">{{ \Carbon\Carbon::parse($invoice->created_at)->toFormattedDateString() }}</a></td>
-                                            @else
-                                                {{ \Carbon\Carbon::parse($invoice->created_at)->toFormattedDateString() }}
-                                            @endif
+                                        <td scope="row">{{ \Carbon\Carbon::parse($invoice->created_at)->toFormattedDateString() }}</td>
                                         <td>{{ $invoice->payment_method }}</td>
                                         <td>${{ $invoice->amount_paid }}</td>
                                         <td>
@@ -148,8 +144,34 @@
                                                 <span class="text-danger"><i class="fas fa-times pr-2"></i> No</span>
                                             @endif
                                         </td>
+                                        <td><a class="btn btn-sm btn-link" data-toggle="modal" data-target="#deleteModal-{{ $invoice->id }}">Delete Transaction</a></td>
                                         <!-- <td><a href="{{ $invoice->invoice_pdf }}"><i class="fas fa-download pr-2"></i> Download Invoice</a></td> -->
                                     </tr>
+
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="deleteModal-{{ $invoice->id }}" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel-{{ $invoice->id }}" aria-hidden="true">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title text-danger" id="deleteModalLabel-{{ $invoice->id }}">Are you sure you want to delete this transaction?</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <p>Beware, if you delete this transaction you will not be able to recover from it. If you would like to cancel, click on the close button.
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                    <a class="btn btn-danger shadow" href="{{ route('tenants.billing.payment.delete', ['id' => $invoice->id ]) }}">Yes, Delete Transaction</a>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+
                                     @endforeach
                                 </tbody>
                             </table>

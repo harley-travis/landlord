@@ -46,7 +46,16 @@
                         @elseif ( $betweenDates === true ) 
                             <h2 class="display-2 text-danger mb-5">${{ $property->rent_amount + $property->late_fee + $balance }}</h2>
                             <p>Payment was due {{ \Carbon\Carbon::now()->addMonth()->format('F') }} 1, {{ \Carbon\Carbon::now()->year }}</p>
-                            <p class="text-danger font-weight-bold">Added late fee: ${{ $property->late_fee }}</p>
+                            <p class="text-danger font-weight-bold">Added late fee: 
+                            
+                            @if( $property->late_fee === null || !isset($property->late_fee) ) 
+                                $20 
+                                <input type="hidden" name="late_fee" value="20">
+                            @else 
+                                ${{ $property->late_fee }} 
+                                <input type="hidden" name="late_fee" value="{{ $property->late_fee }}">
+                            @endif
+                            </p>
 
                             <input type="hidden" name="amount" value="{{ $property->rent_amount + $property->late_fee + $balance }}">
                         @else

@@ -227,10 +227,10 @@
                                     
                                     @endif
 
-                                    <a href="#" class="btn btn-outline-danger" data-toggle="modal" data-target="#deleteACH"><i class="far fa-trash-alt pr-2"></i> Delete Account</a>
+                                    <a href="#" class="btn btn-outline-danger" data-toggle="modal" data-target="#deleteACH-{{ $bank_account->last4 }}"><i class="far fa-trash-alt pr-2"></i> Delete Account</a>
 
                                     <!-- Delete ACH Modal -->
-                                    <div class="modal fade" id="deleteACH" tabindex="-1" role="dialog" aria-labelledby="deleteACHLabel" aria-hidden="true">
+                                    <div class="modal fade" id="deleteACH-{{ $bank_account->last4 }}" tabindex="-1" role="dialog" aria-labelledby="deleteACH-{{ $bank_account->last4 }}Label" aria-hidden="true">
                                         <div class="modal-dialog" role="document">
                                             <div class="modal-content">
                                                 <div class="modal-header">

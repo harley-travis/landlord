@@ -101,6 +101,10 @@
                         </div>
 
                         <div class="col-sm-6 mb-4">
+                            ${{ $late_fee }}
+                        </div>
+
+                        <div class="col-sm-6 mb-4">
                             Processing Fee
                         </div>
                         
@@ -141,6 +145,7 @@
                     </div>
 
                     <input type="hidden" name="date" value="{{ $date }}">
+                    <input type="hidden" name="late_fee" value="{{ $late_fee }}">
                     <input type="hidden" name="total" value="{{ $amount + number_format( $convenience,2 ) }}">
                     <input type="hidden" name="rent" value="{{ $amount }}">
                     <input type="hidden" name="convenience" value="{{ $convenience }}">
