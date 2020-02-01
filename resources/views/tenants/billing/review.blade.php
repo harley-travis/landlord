@@ -100,6 +100,10 @@
                             ${{ $amount }}
                         </div>
 
+                        <div class="col-sm-6 mb-4">
+                            Late Fee
+                        </div>
+
                         
                         <div class="col-sm-6 mb-4">
                         @if( $late_fee === null || $late_fee != 0 ) 
@@ -109,10 +113,6 @@
                         @endif
                         </div>
 
-                        <div class="col-sm-6 mb-4">
-                            Late Fee
-                        </div>
-                        
                         <div class="col-sm-6 mb-4">
                             Processing Fee
                         </div>
