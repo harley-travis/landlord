@@ -118,7 +118,7 @@
                         </div>
                         
                         <div class="col-sm-6 mb-4">
-                            + ${{ number_format( $convenience,2 ) }}
+                            ${{ number_format( $convenience,2 ) }}
                         </div>
 
                         <div class="col-sm-6 mb-4">
