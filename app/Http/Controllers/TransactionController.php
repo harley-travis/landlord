@@ -43,10 +43,12 @@ class TransactionController extends Controller {
             'amount_paid' => 'required',
         ]);
 
+        
         $tenant_id = $request->input('tenant_id');
         $findPropertyId = Tenant::where('id', '=', $tenant_id)->first(); 
         $property_id =  $findPropertyId->property_id;
         $landlord_id = Auth::user()->id;
+        $user = User::where('id', '=', $findPropertyId->user_id)->first();
 
         // figure the late fee
         $latefee = $this->calculateLateFee($request->input('late_fee_amount'));
@@ -83,7 +85,7 @@ class TransactionController extends Controller {
         $transaction->save();
 
         // send email to tenant
-        Mail::to($findPropertyId->email)->send(new PaymentConfirmation($findPropertyId, $amount_paid));
+        Mail::to($findPropertyId->email)->send(new PaymentConfirmation($user, $amount_paid));
 
         return redirect()
                 ->route('tenants.index')
