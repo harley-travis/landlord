@@ -52,8 +52,13 @@
                             <h3 class="mb-0">Payment Amount</h3>
                         </div>
                         <div class="col-4 text-right">
+                            @if( !isset($late_fee) || $late_fee === null || $late_fee != 0)
+                            <span class="text-success font-weight-bold display-4">${{ $amount + $late_fee }}</span>
+                            <input type="hidden" name="amount" value="{{ $amount }}">
+                            @else
                             <span class="text-success font-weight-bold display-4">${{ $amount }}</span>
                             <input type="hidden" name="amount" value="{{ $amount }}">
+                            @endif
                         </div>
                     </div>
                 </div>
