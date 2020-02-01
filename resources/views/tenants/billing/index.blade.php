@@ -48,7 +48,7 @@
                             <p>Payment was due {{ \Carbon\Carbon::now()->addMonth()->format('F') }} 1, {{ \Carbon\Carbon::now()->year }}</p>
                             <p class="text-danger font-weight-bold">Added late fee: 
                             
-                            @if( $property->late_fee === null || !isset($property->late_fee || $late_fee != 0) ) 
+                            @if( $property->late_fee === null || $late_fee != 0) ) 
                                 $20 
                                 <input type="hidden" name="late_fee" value="20">
                             @else 
