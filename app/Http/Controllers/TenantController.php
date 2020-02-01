@@ -8,6 +8,7 @@ use App\User;
 use App\Company;
 use App\Property;
 use App\Tenant;
+use App\Transaction;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use Mail;
@@ -164,9 +165,17 @@ class TenantController extends Controller {
         $property = Property::join('tenants', 'properties.id', '=', 'tenants.property_id')
                             ->where('tenants.id', '=', $tenant->id)
                             ->first();
+
+        $invoices = Transaction::where('tenant_id', '=', $tenant->id)->get();
                             
-        return view('tenants.show', ['tenant' => $tenant, 'property' => $property]);
+        return view('tenants.show', [
+            'tenant' => $tenant, 
+            'property' => $property,
+            'invoices' => $invoices,
+        ]);
     }
+
+
 
     /**
      * Show the form for editing the specified resource.

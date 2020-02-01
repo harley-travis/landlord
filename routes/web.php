@@ -185,7 +185,16 @@ Route::group(['prefix' => 'tenants', 'middleware' => ['auth', 'trial']], functio
       'uses' => "$tc@store",
       'as' => 'tenants.billing.payment.create'
     ]);
-    
+
+    Route::get('billing/history/show/{id}', [
+      'uses' => "$tc@show",
+      'as' => 'tenants.billing.history.show'
+    ]);   
+
+    Route::post('billing/payment/update', [
+      'uses'	=> "$tc@update",
+      'as'	=> 'tenants.billing.payment.update'
+    ]);
     
 });
 

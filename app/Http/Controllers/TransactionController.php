@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Mail;
 use Auth;
 use App\User;
 use App\Rent;
@@ -9,6 +10,7 @@ use App\Property;
 use App\Tenant;
 use App\Transaction;
 use Carbon\Carbon;
+use App\Mail\PaymentConfirmation;
 use Illuminate\Http\Request;
 
 class TransactionController extends Controller {
@@ -47,36 +49,20 @@ class TransactionController extends Controller {
         $landlord_id = Auth::user()->id;
 
         // figure the late fee
-        if( $request->input('late_fee_amount') === null || $request->input('late_fee_amount') <= 0) {
-            $latefee = 0;
-        } else {
-            $latefee = $request->input('late_fee_amount');
-        }
-
+        $latefee = $this->calculateLateFee($request->input('late_fee_amount'));
+        
         $property = Property::join('rents', 'rents.property_id', '=', 'properties.id')
                             ->where('properties.id', '=', $property_id)
                             ->first();
 
         // calculate the balance
-        $currentBalance = $this->calculateRentBalance($tenant_id) + $property->rent_amount;
-        $newBalance = 0;
-
-        if( $currentBalance != 0 ) {
-
-            if( $currentBalance > $request->input('amount_paid') || $currentBalance === $property->rent_amount || $currentBalance < $property->rent_amount && $currentBalance >= 0 ) {
-                $newBalance = $currentBalance - $request->input('amount_paid');
-            } elseif( $currentBalance < 0 ) {
-                $calcTotal = number_format( (-$currentBalance) + $property->rent_amount );
-            }
-
-            
-        } else {
-            $newBalance = ( $property->rent_amount - $request->input('amount_paid'));
-        }
-
+        $amount_paid = $request->input('amount_paid');
+        $currentBalance  = $this->calculateRentBalance($tenant_id) + $property->rent_amount;
+        $newBalance = $this->calculateNewBalance($currentBalance, $amount_paid, $property->rent_amount); 
+       
         // calc paid in full
         $paid_in_full = 0;
-        if( $newBalance <= 0 ) {
+        if( $newBalance  <= 0 ) {
             $paid_in_full = 1;
         }
 
@@ -87,7 +73,7 @@ class TransactionController extends Controller {
             'tenant_id' => $tenant_id,
             'landlord_id' => $landlord_id,
             'property_id' => $property_id,
-            'amount_paid' => $request->input('amount_paid'),
+            'amount_paid' => $amount_paid,
             'balance' => $newBalance,
             'payment_method' => 'cash/check',
             'paid_in_full' => $paid_in_full,
@@ -97,10 +83,21 @@ class TransactionController extends Controller {
         $transaction->save();
 
         // send email to tenant
+        Mail::to($findPropertyId->email)->send(new PaymentConfirmation($findPropertyId, $amount_paid));
 
         return redirect()
                 ->route('tenants.index')
                 ->with('info', 'Good job! You have successfully entered the tenants rent payment for the month. It will reflect on the tenants page.');
+
+    }
+
+    public function calculateLateFee($latefee) {
+
+        if( $latefee === null || $latefee <= 0) {
+            return 0;
+        } else {
+            return $latefee;
+        }
 
     }
 
@@ -130,6 +127,44 @@ class TransactionController extends Controller {
         }
 
         return $b;
+        
+    }
+
+    public function calculateNewBalance($currentBalance, $amount_paid, $rent_amount) {
+        
+        $newBalance = 0;
+
+        if( $currentBalance < 0 ) {
+
+            $newBalance = number_format( (-$currentBalance) + $rent_amount );
+            return $newBalance;
+
+        } else  {
+
+            $newBalance = $currentBalance - $amount_paid;
+            return $newBalance;
+        }
+
+    }
+
+    public function show($id) {
+
+        $transaction = Transaction::where('id', '=', $id)->first();
+        $tenant = User::join('tenants', 'users.id', '=', 'tenants.user_id')
+                            ->where('tenants.id', '=', $transaction->tenant_id)
+                            ->first();
+
+        return view('tenants.billing.history.show', [
+            'transaction' => $transaction, 
+            'tenant'=> $tenant
+        ]);
+
+    }
+
+    public function update($id) {
+
+
+
     }
 
 }
