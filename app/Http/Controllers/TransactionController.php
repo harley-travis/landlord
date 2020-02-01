@@ -85,7 +85,7 @@ class TransactionController extends Controller {
         $transaction->save();
 
         // send email to tenant
-        Mail::to($findPropertyId->email)->send(new PaymentConfirmation($user, $amount_paid));
+        Mail::to($user->email)->send(new PaymentConfirmation($user, $amount_paid));
 
         return redirect()
                 ->route('tenants.index')
