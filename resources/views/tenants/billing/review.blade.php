@@ -73,7 +73,7 @@
                         <div class="col-sm-6 mb-4"> 
 
                             @foreach($bank_account as $b)
-                            @if($b->id == $customer->default_source)
+                            @if($b->id == $source)
                                 <i class="fas fa-university mr-2"></i> {{ $b->bank_name }}
                                 <span class="pl-3">******** {{ $b->last4 }} </span>
                         
