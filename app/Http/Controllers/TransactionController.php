@@ -61,7 +61,12 @@ class TransactionController extends Controller {
         $amount_paid = $request->input('amount_paid');
         $currentBalance  = $this->calculateRentBalance($tenant_id) + $property->rent_amount;
         $newBalance = $this->calculateNewBalance($currentBalance, $amount_paid, $property->rent_amount); 
-       
+
+        // save balance to rents table 
+        $rents = Rent::where('property_id', '=', $property->id)->first();
+        $rents->balance = $newBalance;
+        $rents->save();
+
         // calc paid in full
         $paid_in_full = 0;
         if( $newBalance  <= 0 ) {
