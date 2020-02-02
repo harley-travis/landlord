@@ -84,11 +84,6 @@ class TransactionController extends Controller {
         ]);
         $transaction->save();
 
-        // save balance to rents table 
-        $rents = Rent::where('property_id', '=', $property->id)->first();
-        $rents->balance = $newBalance;
-        $rents->save();
-
         // send email to tenant
         Mail::to($user->email)->send(new PaymentConfirmation($user, $amount_paid));
 
@@ -132,6 +127,11 @@ class TransactionController extends Controller {
             }
             
         }
+
+         // save balance to rents table 
+         $rents = Rent::where('property_id', '=', $property->id)->first();
+         $rents->balance = $b;
+         $rents->save();
 
         return $b;
         
