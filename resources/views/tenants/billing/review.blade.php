@@ -77,10 +77,10 @@
                                 <i class="fas fa-university mr-2"></i> {{ $b->bank_name }}
                                 <span class="pl-3">******** {{ $b->last4 }} </span>
                         
-                                
+                                @if($b->id == $customer->default_source)
                                     <span class="badge badge-primary">Default</span>
                                 @endif
-
+                            @endif
                             @endforeach
                         </div>
 
