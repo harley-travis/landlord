@@ -132,7 +132,7 @@ class TransactionController extends Controller {
         $property_id =  $findPropertyId->property_id;
 
         // save balance to rents table 
-        $rents = Rent::where('property_id', '=', $property->id)->first();
+        $rents = Rent::where('property_id', '=', $property_id)->first();
         $rents->balance = $b;
         $rents->save();
 
