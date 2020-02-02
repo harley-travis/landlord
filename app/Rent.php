@@ -14,6 +14,7 @@ class Rent extends Model {
         'pet_deposit_amount',
         'amount_refundable',
         'lease_length',
+        'balance',
         'late_date',
         'late_fee',
         'account_number',

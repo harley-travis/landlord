@@ -31,7 +31,7 @@ class CreateRentsTable extends Migration
             $table->string('lease_length')->nullable();
             $table->integer('late_date')->nullable();
             $table->integer('late_fee')->nullable();
-            $table->integer('balance')->nullable();
+            $table->bigInteger('balance')->nullable();
             $table->text('account_number')->nullable();
             $table->integer('hoa_amount')->nullable();
             $table->timestamps();
