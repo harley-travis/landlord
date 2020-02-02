@@ -143,6 +143,7 @@
                                     </label>
                                 </div>
                                 @else
+                                @if($bank_account->status === "verified")
                                 <div class="custom-control custom-radio mb-3">
                                     <input name="source" class="custom-control-input" id="agree-{{ $bank_account->id }}" type="radio" value="{{ $bank_account->id }}">
                                     <label class="custom-control-label" for="agree-{{ $bank_account->id }}">
@@ -152,6 +153,7 @@
                                 
                                     </label>
                                 </div>
+                                @endif
                                 @endif
 
                             </div>
