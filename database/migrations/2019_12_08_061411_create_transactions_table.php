@@ -19,7 +19,6 @@ class CreateTransactionsTable extends Migration
             $table->unsignedBigInteger('landlord_id');
             $table->unsignedBigInteger('property_id');
             $table->integer('amount_paid');
-            $table->integer('balance')->nullable();
             $table->string('payment_method');
             $table->integer('payment_failed')->nullable()->comment('0=no 1=yes');
             $table->integer('paid_in_full')->comment('0=no 1=yes');

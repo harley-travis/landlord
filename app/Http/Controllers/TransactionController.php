@@ -62,6 +62,9 @@ class TransactionController extends Controller {
         $currentBalance  = $this->calculateRentBalance($tenant_id) + $property->rent_amount;
         $newBalance = $this->calculateNewBalance($currentBalance, $amount_paid, $property->rent_amount); 
 
+
+        //dd($newBalance);
+
         // calc paid in full
         $paid_in_full = 0;
         if( $newBalance  <= 0 ) {
@@ -76,7 +79,7 @@ class TransactionController extends Controller {
             'landlord_id' => $landlord_id,
             'property_id' => $property_id,
             'amount_paid' => $amount_paid,
-            'balance' => $newBalance,
+            //'balance' => $newBalance,
             'payment_method' => 'cash/check',
             'paid_in_full' => $paid_in_full,
             'late_fee_amount' => $latefee,
@@ -84,8 +87,16 @@ class TransactionController extends Controller {
         ]);
         $transaction->save();
 
+
+        //dd($newBalance);
+
+        // save balance to rents table 
+        $rents = Rent::where('property_id', '=', $property_id)->first();
+        $rents->balance = $newBalance;
+        $rents->save();
+
         // send email to tenant
-        Mail::to($user->email)->send(new PaymentConfirmation($user, $amount_paid));
+       // Mail::to($user->email)->send(new PaymentConfirmation($user, $amount_paid));
 
         return redirect()
                 ->route('tenants.index')
@@ -105,39 +116,18 @@ class TransactionController extends Controller {
 
     public function calculateRentBalance($tenant_id) {
 
-        $balanceAmount = Transaction::where('tenant_id', '=', $tenant_id)->get();
-        $balance = $balanceAmount->pluck('balance');
-
-        if( $balanceAmount === null || !isset($balanceAmount) ) {
-            return 0;
-        }
-
-        if( count($balance) === 0 ) {
-            return 0;
-        } else {
-
-            $b = 0;
-            foreach ( $balanceAmount as $value ) {
-                $b += $value->balance;
-
-                // update the record to 0 so we're only writing the current balance
-                $transaction = Transaction::where('tenant_id', '=', $tenant_id)->where('id', '=', $value->id)->first();
-                $transaction->balance = 0;
-                $transaction->save();
-            }
-            
-        }
-
         $findPropertyId = Tenant::where('id', '=', $tenant_id)->first(); 
         $property_id =  $findPropertyId->property_id;
 
-        // save balance to rents table 
-        $rents = Rent::where('property_id', '=', $property_id)->first();
-        $rents->balance = $b;
-        $rents->save();
+        $balanceAmount = Rent::where('property_id', '=', $property_id)->first();
+        $balance = $balanceAmount->balance;
 
-        return $b;
-        
+        if( $balanceAmount === null || $balanceAmount === 0 ) {
+            return 0;
+        } else {
+            return $balance;
+        }
+
     }
 
     public function calculateNewBalance($currentBalance, $amount_paid, $rent_amount) {
@@ -146,7 +136,7 @@ class TransactionController extends Controller {
 
         if( $currentBalance < 0 ) {
 
-            $newBalance = number_format( (-$currentBalance) + $rent_amount );
+            $newBalance = (-$currentBalance) + $rent_amount;
             return $newBalance;
 
         } else  {
@@ -172,6 +162,12 @@ class TransactionController extends Controller {
     }
 
     public function destroy($id) {
+
+        // grab the last transaction amount
+
+        // update the new balance 
+
+        // delete the transaction
 
         $transaction = Transaction::find($id);
         $transaction->delete();
