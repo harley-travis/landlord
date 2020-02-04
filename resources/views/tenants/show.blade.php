@@ -144,7 +144,7 @@
                                                 <span class="text-danger"><i class="fas fa-times pr-2"></i> No</span>
                                             @endif
                                         </td>
-                                        <td><a class="btn btn-sm btn-link" data-toggle="modal" data-target="#deleteModal-{{ $invoice->id }}">Delete Transaction</a></td>
+                                        <td><a class="btn btn-sm btn-link text-red" data-toggle="modal" data-target="#deleteModal-{{ $invoice->id }}">Delete Transaction</a></td>
                                         <!-- <td><a href="{{ $invoice->invoice_pdf }}"><i class="fas fa-download pr-2"></i> Download Invoice</a></td> -->
                                     </tr>
 

@@ -8,6 +8,7 @@ use App\User;
 use App\Company;
 use App\Property;
 use App\Tenant;
+use App\Rent;
 use App\Transaction;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;

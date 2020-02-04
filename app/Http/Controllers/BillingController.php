@@ -989,16 +989,6 @@ class BillingController extends Controller {
 
         } 
 
-        /**
-         * i have a feeling that we will need to pull this function in first 
-         * and that is how the system calculates the amount due. 
-         * 
-         * after we need to update the amount.
-         * 
-         * i think i might just be pulling this in from teh DB already when i call it. 
-         * 
-         * so i would have to update the new balance in the webhook
-         */
             // calculate the new balance
             $currentBalance = $this->calculateRentBalance();
             $newBalance = ( $request->input('rent') + $currentBalance ) - $currentBalance;
