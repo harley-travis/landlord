@@ -38,11 +38,9 @@
                         <span class="text-danger font-weight-bold">Your landlord has not assigned you to a property yet. Contact them if you don't see your property in a day or two.</span>
                     @else
 
-                    property balance: {{ $property->balance }}
-
                     <form action="{{ route('tenants.billing.pay') }}" method="post">
                                                        
-                        @if( $balance === 0 ) 
+                        @if( $property->balance === 0 ) 
                             <h2 class="display-2 text-success mb-5">$0.00</h2>
 
                         @elseif ( $betweenDates === true ) 
@@ -64,7 +62,7 @@
                             <h2 class="display-2 text-danger mb-5">${{ $property->rent_amount + $property->balance }}</h2>
                             <p>Payment due {{ \Carbon\Carbon::now()->addMonth()->format('F') }} 1, {{ \Carbon\Carbon::now()->year }}</p>
                             
-                            <input type="hidden" name="amount" value="{{ $property->rent_amount + $balance }}">
+                            <input type="hidden" name="amount" value="{{ $property->rent_amount + $property->balance }}">
                         @endif
 
                         <p>If the full amount is not paid by the <span class="text-danger">{{ \Carbon\Carbon::now()->addMonth()->format('F') }} @if( $property->late_date === null || $property->late_date == '' ) 17, @else {{ $property->late_date }},@endif {{ \Carbon\Carbon::now()->year }}</span>, then a late fee of <span class="text-danger"> @if( $property->late_fee === null ) $20 @else ${{ $property->late_fee }} @endif</span> taxed on.</p>
