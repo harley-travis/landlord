@@ -44,7 +44,7 @@
                             <h2 class="display-2 text-success mb-5">$0.00</h2>
 
                         @elseif ( $betweenDates === false && $property->balance > 0) 
-                            <h2 class="display-2 text-danger mb-5">{{ $property->balance }}</h2>
+                            <h2 class="display-2 text-danger mb-5">${{ number_format($property->balance, 2) }}</h2>
 
                         @elseif ( $betweenDates === true ) 
                             <h2 class="display-2 text-danger mb-5">${{ $property->rent_amount + $property->balance + $property->late_fee }}</h2>
