@@ -53,7 +53,7 @@
                         </div>
                         <div class="col-4 text-right">
                             @if( $late_fee === null )
-                            <span class="text-success font-weight-bold display-4">${{ $amount }}</span>
+                            <span class="text-success font-weight-bold display-4">@if( $amount === 0) $0 @else ${{ $amount }} @endif</span>
                             <input type="hidden" name="amount" value="{{ $amount }}">
                             <input type="hidden" name="late_fee" value="{{ $late_fee }}">
                             @else
