@@ -995,10 +995,8 @@ class BillingController extends Controller {
 
             $amount_paid = $amount / 100;
             //dd($total, $amount_paid);
-            $currentBalance  = $this->findRentBalance($tenant->id) + $property->rent_amount;
+            $currentBalance  = $this->findRentBalance($tenant->id);
             $newBalance = $this->calculateNewBalance($currentBalance, $amount_paid, $property->rent_amount); 
-
-            dd($currentBalance, $newBalance);
 
             // i don't think i add this here. i'm not charging the late fee
             // need to read more about this 
