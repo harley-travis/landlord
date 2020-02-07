@@ -1016,6 +1016,11 @@ class BillingController extends Controller {
                 'confirmation' => $confirmationNumber,
             ]);
             $transaction->save();
+
+            // save balance to rents table 
+            $rents = Rent::where('property_id', '=', $property_id)->first();
+            $rents->balance = $newBalance;
+            $rents->save();
                 
             return view('tenants.billing.confirmation', [
                 'confirmation_number' => $confirmationNumber,
