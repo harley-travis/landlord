@@ -92,7 +92,7 @@ class BillingController extends Controller {
            ]
         );
 
-        $tenant = Tenant::where('user_id', '=', $$user->id)->first();
+        $tenant = Tenant::where('user_id', '=', $user->id)->first();
         $transactions = Transaction::where('tenant_id', '=', $tenant->id)->get();
 
         return view('settings.billing.index', [
