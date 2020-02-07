@@ -65,8 +65,6 @@ class BillingController extends Controller {
             ]
         );
 
-        //dd($bank_accounts);
-
         return $bank_accounts;
 
     }
@@ -85,28 +83,42 @@ class BillingController extends Controller {
 
         $user = User::find(Auth::user()->id);
 
-        // charges and transactions are for tenants
-        $charges = \Stripe\Charge::all(
-            [
-               "customer" => $user->stripe_id
-           ]
-        );
+        if( $user->role != 0 ) {
 
-        $tenant = Tenant::where('user_id', '=', $user->id)->first();
-        $transactions = Transaction::where('tenant_id', '=', $tenant->id)
-                                ->where('payment_method', '=', 'cash/check')
-                                ->get();
+            return view('settings.billing.index', [
+                'user' => $this->getUser(),
+                'bank_accounts' => $this->getBankAccounts(), 
+                'invoices' => $this->getInvoices(),
+                'customer' => $this->getCustomer(), 
+                'intent' => $user->createSetupIntent(),
+                'connect_accounts' => $this->getStripeAccount(),
+            ]);
 
-        return view('settings.billing.index', [
-            'user' => $this->getUser(),
-            'bank_accounts' => $this->getBankAccounts(), 
-            'invoices' => $this->getInvoices(),
-            'charges' => $charges, 
-            'transactions' => $transactions,
-            'customer' => $this->getCustomer(), 
-            'intent' => $user->createSetupIntent(),
-            'connect_accounts' => $this->getStripeAccount(),
-        ]);
+        } else {
+
+            $charges = \Stripe\Charge::all(
+                [
+                   "customer" => $user->stripe_id
+               ]
+            );
+    
+            $tenant = Tenant::where('user_id', '=', $user->id)->first();
+            $transactions = Transaction::where('tenant_id', '=', $tenant->id)
+                                    ->where('payment_method', '=', 'cash/check')
+                                    ->get();
+    
+            return view('settings.billing.index', [
+                'user' => $this->getUser(),
+                'bank_accounts' => $this->getBankAccounts(), 
+                'invoices' => $this->getInvoices(),
+                'charges' => $charges, 
+                'transactions' => $transactions,
+                'customer' => $this->getCustomer(), 
+                'intent' => $user->createSetupIntent(),
+                'connect_accounts' => $this->getStripeAccount(),
+            ]);
+
+        }
 
     }
 
