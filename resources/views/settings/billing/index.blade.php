@@ -286,9 +286,9 @@
                     </div>
                 </div>
 
-                <div class="card-body">{{ $charges }}
+                <div class="card-body">
 
-                @if( $invoices->isEmpty() || $charges->isEmpty() ) 
+                @if( Auth::user()->role != 0 && $invoices->isEmpty() || Auth::user()->role === 0 && $charges->isEmpty() ) 
                     <p class="text-center">No transactions at this time</p>
                 @else
 
@@ -322,7 +322,6 @@
                                 @endforeach
                                 @else
                                 @foreach( $charges as $charge )
-                                hello yo uare tenant
                                 <tr>
                                     <td scope="row">{{ \Carbon\Carbon::createFromTimestamp($charge->created)->toFormattedDateString() }}</td>
                                     <td>Automatic Charge</td>
