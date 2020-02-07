@@ -338,7 +338,7 @@
                                 @endforeach
                                 @foreach( $transactions as $transaction )
                                 <tr>
-                                    <td scope="row">{{ \Carbon\Carbon::createFromTimestamp($transaction->created_at)->toFormattedDateString() }}</td>
+                                    <td scope="row">{{ $transaction->created_at }}</td>
                                     <td>Cash/Check</td>
                                     <td>${{ $transaction->amount_paid }}</td>
                                     <td>
