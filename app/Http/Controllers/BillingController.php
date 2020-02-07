@@ -85,7 +85,7 @@ class BillingController extends Controller {
 
         $user = User::find(Auth::user()->id);
 
-        $charges = \Stripe\Charge::retrieve(
+        $charges = \Stripe\Charge::all(
             [
                "customer" => $user->stripe_id
            ]
