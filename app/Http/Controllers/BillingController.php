@@ -867,7 +867,7 @@ class BillingController extends Controller {
                             ->where('properties.id', '=', $this->getTenant()->property_id)
                             ->first();
         
-        $balance = $this->calculateRentBalance();
+        $balance = $this->findRentBalance($this->getTenant()->tenant_id) + $property->rent_amount;
         $betweenDates = $this->calculateRentDueDate();
        
         return view('tenants.billing.index', [
@@ -990,8 +990,12 @@ class BillingController extends Controller {
         } 
 
             // calculate the new balance
-            $currentBalance = $this->calculateRentBalance();
-            $newBalance = ( $request->input('rent') + $currentBalance ) - $currentBalance;
+            // $currentBalance = $this->calculateRentBalance();
+            // $newBalance = ( $request->input('rent') + $currentBalance ) - $currentBalance;
+
+            $amount_paid = $charge->amount;
+            $currentBalance  = $this->findRentBalance($tenant->id) + $property->rent_amount;
+            $newBalance = $this->calculateNewBalance($currentBalance, $amount_paid, $property->rent_amount); 
 
             // i don't think i add this here. i'm not charging the late fee
             // need to read more about this 
@@ -1004,7 +1008,7 @@ class BillingController extends Controller {
                 'tenant_id' => $tenant->id,
                 'landlord_id' => $proprietor->id,
                 'property_id' => $property->id,
-                'amount_paid' => $charge->amount,
+                'amount_paid' => $amount_paid,
                 'balance' => $newBalance,
                 'payment_method' => $charge->payment_method_details->type,
                 'paid_in_full' => 0,
@@ -1019,6 +1023,49 @@ class BillingController extends Controller {
                 'payment_method' => $charge->payment_method_details->type,
                 'date' => $transaction->created_at,
             ]);
+    }
+
+    public function calculateLateFee($latefee) {
+
+        if( $latefee === null || $latefee <= 0) {
+            return 0;
+        } else {
+            return $latefee;
+        }
+
+    }
+
+    public function findRentBalance($tenant_id) {
+
+        $findPropertyId = Tenant::where('id', '=', $tenant_id)->first(); 
+        $property_id =  $findPropertyId->property_id;
+
+        $balanceAmount = Rent::where('property_id', '=', $property_id)->first();
+        $balance = $balanceAmount->balance;
+
+        if( $balanceAmount === null || $balanceAmount === 0 ) {
+            return 0;
+        } else {
+            return $balance;
+        }
+
+    }
+
+    public function calculateNewBalance($currentBalance, $amount_paid, $rent_amount) {
+        
+        $newBalance = 0;
+
+        if( $currentBalance < 0 ) {
+
+            $newBalance = (-$currentBalance) + $rent_amount;
+            return $newBalance;
+
+        } else  {
+
+            $newBalance = $currentBalance - $amount_paid;
+            return $newBalance;
+        }
+
     }
 
     public function calculateRentBalance() {
