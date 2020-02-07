@@ -867,7 +867,7 @@ class BillingController extends Controller {
                             ->where('properties.id', '=', $this->getTenant()->property_id)
                             ->first();
         
-        $balance = $this->findRentBalance($this->getTenant()->tenant_id) + $property->rent_amount;
+        $balance = $this->findRentBalance($this->getTenant()->id) + $property->rent_amount;
         $betweenDates = $this->calculateRentDueDate();
        
         return view('tenants.billing.index', [
