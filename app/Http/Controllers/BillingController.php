@@ -1018,7 +1018,7 @@ class BillingController extends Controller {
             $transaction->save();
 
             // save balance to rents table 
-            $rents = Rent::where('property_id', '=', $property_id)->first();
+            $rents = Rent::where('property_id', '=', $property->id)->first();
             $rents->balance = $newBalance;
             $rents->save();
                 
