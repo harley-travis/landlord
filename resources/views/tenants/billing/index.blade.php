@@ -43,6 +43,9 @@
                         @if( $property->balance === 0 ) 
                             <h2 class="display-2 text-success mb-5">$0.00</h2>
 
+                        @elseif ( $betweenDates === false && $property->balance > 0) 
+                            <h2 class="display-2 text-danger mb-5">{{ $property->balance }}</h2>
+
                         @elseif ( $betweenDates === true ) 
                             <h2 class="display-2 text-danger mb-5">${{ $property->rent_amount + $property->balance + $property->late_fee }}</h2>
                             <p>Payment was due {{ \Carbon\Carbon::now()->addMonth()->format('F') }} 1, {{ \Carbon\Carbon::now()->year }}</p>
