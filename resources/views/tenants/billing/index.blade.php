@@ -38,6 +38,8 @@
                         <span class="text-danger font-weight-bold">Your landlord has not assigned you to a property yet. Contact them if you don't see your property in a day or two.</span>
                     @else
 
+                    property balance: {{ $property->balance }}
+
                     <form action="{{ route('tenants.billing.pay') }}" method="post">
                                                        
                         @if( $balance === 0 ) 
