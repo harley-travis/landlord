@@ -53,11 +53,11 @@
                         </div>
                         <div class="col-4 text-right">
                             @if( $late_fee === null )
-                            <span class="text-success font-weight-bold display-4">@if( $amount === 0) $0 @else ${{ $amount }} @endif</span>
+                            <span class="text-success font-weight-bold display-4">@if( $amount === 0 || $amount === null) $0.00 @else ${{ number_format($amount, 2) }} @endif</span>
                             <input type="hidden" name="amount" value="{{ $amount }}">
                             <input type="hidden" name="late_fee" value="{{ $late_fee }}">
                             @else
-                            <span class="text-success font-weight-bold display-4">${{ $amount + $late_fee }}</span>
+                            <span class="text-success font-weight-bold display-4">${{ number_format($amount $late_fee, 2) }}</span>
                             <input type="hidden" name="amount" value="{{ $amount }}">
                             <input type="hidden" name="late_fee" value="{{ $late_fee }}">
                             @endif
