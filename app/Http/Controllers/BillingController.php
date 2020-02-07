@@ -85,7 +85,13 @@ class BillingController extends Controller {
 
         $user = User::find(Auth::user()->id);
 
-        dd($this->getInvoices());
+        $charges = \Stripe\Charge::retrieve(
+            $this->getUser()->stripe_id
+        );
+
+        dd($charges);
+
+        //dd($this->getInvoices());
 
         return view('settings.billing.index', [
             'user' => $this->getUser(),
