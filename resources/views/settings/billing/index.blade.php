@@ -288,7 +288,7 @@
 
                 <div class="card-body">
 
-                @if( $invoices->isEmpty() ) 
+                @if( $invoices->isEmpty() || $charges->isEmpty() ) 
                     <p class="text-center">No transactions at this time</p>
                 @else
 
@@ -322,18 +322,19 @@
                                 @endforeach
                                 @else
                                 @foreach( $charges as $charge )
+                                hello yo uare tenant
                                 <tr>
                                     <td scope="row">{{ \Carbon\Carbon::createFromTimestamp($charge->created)->toFormattedDateString() }}</td>
                                     <td>Automatic Charge</td>
-                                    <td>${{ $charge->amount_paid / 100 }}</td>
+                                    <td>${{ $charge->amount / 100 }}</td>
                                     <td>
-                                        @if($charge->attempted == 1)
+                                        @if($charge->paid === true)
                                             <span class="text-success"><i class="fas fa-check pr-2"></i> Success</span>
                                         @else
                                             <span class="text-danger"><i class="fas fa-times pr-2"></i> Failed</span>
                                         @endif
                                     </td>
-                                    <td><a href="{{ $invoice->invoice_pdf }}"><i class="fas fa-download pr-2"></i> Download Invoice</a></td>
+                                    <td><a href="{{ $charge->receipt_url }}"><i class="fas fa-download pr-2"></i> Download Invoice</a></td>
                                 </tr>
                                 @endforeach
                                 @endif
