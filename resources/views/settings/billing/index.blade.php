@@ -336,6 +336,21 @@
                                     <td><a href="{{ $charge->receipt_url }}"><i class="fas fa-download pr-2"></i> Download Invoice</a></td>
                                 </tr>
                                 @endforeach
+                                @foreach( $transactions as $transaction )
+                                <tr>
+                                    <td scope="row">{{ \Carbon\Carbon::createFromTimestamp($transaction->created_at)->toFormattedDateString() }}</td>
+                                    <td>Cash/Check</td>
+                                    <td>${{ $transaction->amount_paid }}</td>
+                                    <td>
+                                        @if($transaction->paid_in_full === 1)
+                                            <span class="text-success"><i class="fas fa-check pr-2"></i> Success</span>
+                                        @else
+                                            <span class="text-danger"><i class="fas fa-times pr-2"></i> Failed</span>
+                                        @endif
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                @endforeach
                                 @endif
 						    </tbody>
 					    </table>

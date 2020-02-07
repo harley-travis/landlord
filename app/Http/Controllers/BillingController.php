@@ -85,18 +85,21 @@ class BillingController extends Controller {
 
         $user = User::find(Auth::user()->id);
 
-        // charges are for tenants
+        // charges and transactions are for tenants
         $charges = \Stripe\Charge::all(
             [
                "customer" => $user->stripe_id
            ]
         );
 
+        $transactions = Transaction::where('tenant_id', '=', $user->id)->get();
+
         return view('settings.billing.index', [
             'user' => $this->getUser(),
             'bank_accounts' => $this->getBankAccounts(), 
             'invoices' => $this->getInvoices(),
             'charges' => $charges, 
+            'transactions' => $transactions,
             'customer' => $this->getCustomer(), 
             'intent' => $user->createSetupIntent(),
             'connect_accounts' => $this->getStripeAccount(),
