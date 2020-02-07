@@ -304,7 +304,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-
+                                @if(Auth::user()->role != 0)
                                 @foreach( $invoices as $invoice )
                                 <tr>
                                     <td scope="row">{{ \Carbon\Carbon::createFromTimestamp($invoice->created)->toFormattedDateString() }}</td>
@@ -320,6 +320,23 @@
                                     <td><a href="{{ $invoice->invoice_pdf }}"><i class="fas fa-download pr-2"></i> Download Invoice</a></td>
                                 </tr>
                                 @endforeach
+                                @else
+                                @foreach( $charges as $charge )
+                                <tr>
+                                    <td scope="row">{{ \Carbon\Carbon::createFromTimestamp($charge->created)->toFormattedDateString() }}</td>
+                                    <td>Automatic Charge</td>
+                                    <td>${{ $charge->amount_paid / 100 }}</td>
+                                    <td>
+                                        @if($charge->attempted == 1)
+                                            <span class="text-success"><i class="fas fa-check pr-2"></i> Success</span>
+                                        @else
+                                            <span class="text-danger"><i class="fas fa-times pr-2"></i> Failed</span>
+                                        @endif
+                                    </td>
+                                    <td><a href="{{ $invoice->invoice_pdf }}"><i class="fas fa-download pr-2"></i> Download Invoice</a></td>
+                                </tr>
+                                @endforeach
+                                @endif
 						    </tbody>
 					    </table>
                     </div>
