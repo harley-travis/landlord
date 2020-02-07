@@ -57,7 +57,7 @@
                             <input type="hidden" name="amount" value="{{ $amount }}">
                             <input type="hidden" name="late_fee" value="{{ $late_fee }}">
                             @else
-                            <span class="text-success font-weight-bold display-4">${{ number_format($amount $late_fee, 2) }}</span>
+                            <span class="text-success font-weight-bold display-4">${{ number_format($amount + $late_fee, 2) }}</span>
                             <input type="hidden" name="amount" value="{{ $amount }}">
                             <input type="hidden" name="late_fee" value="{{ $late_fee }}">
                             @endif
