@@ -107,8 +107,8 @@
 
                         <div class="col-sm-6 mb-4">
                             ${{ $late_fee }}
-                        @endif
                         </div>
+                        @endif
 
                         <div class="col-sm-6 mb-4">
                             Processing Fee
