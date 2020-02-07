@@ -286,7 +286,7 @@
                     </div>
                 </div>
 
-                <div class="card-body">
+                <div class="card-body">{{ $charges }}
 
                 @if( $invoices->isEmpty() || $charges->isEmpty() ) 
                     <p class="text-center">No transactions at this time</p>
