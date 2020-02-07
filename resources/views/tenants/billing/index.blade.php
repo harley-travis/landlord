@@ -47,28 +47,28 @@
                             <h2 class="display-2 text-danger mb-5">${{ number_format($property->balance, 2) }}</h2>
 
                         @elseif ( $betweenDates === true ) 
-                            <h2 class="display-2 text-danger mb-5">${{ $property->rent_amount + $property->balance + $property->late_fee }}</h2>
+                            <h2 class="display-2 text-danger mb-5">${{ number_format($property->rent_amount + $property->balance + $property->late_fee, 2) }}</h2>
                             <p>Payment was due {{ \Carbon\Carbon::now()->addMonth()->format('F') }} 1, {{ \Carbon\Carbon::now()->year }}</p>
                             <p class="text-danger font-weight-bold">Added late fee: 
                             
                             @if( $property->late_fee === null ) 
-                                $20 
+                                $20.00 
                                 <input type="hidden" name="late_fee" value="20">
                             @else 
-                                ${{ $property->late_fee }} 
+                                ${{ number_format($property->late_fee, 2) }} 
                                 <input type="hidden" name="late_fee" value="{{ $property->late_fee }}">
                             @endif
                             </p>
 
                             <input type="hidden" name="amount" value="{{ $property->rent_amount + $property->balance + $property->late_fee }}">
                         @else
-                            <h2 class="display-2 text-danger mb-5">${{ $property->rent_amount + $property->balance }}</h2>
+                            <h2 class="display-2 text-danger mb-5">${{ number_format($property->rent_amount + $property->balance, 2) }}</h2>
                             <p>Payment due {{ \Carbon\Carbon::now()->addMonth()->format('F') }} 1, {{ \Carbon\Carbon::now()->year }}</p>
                             
                             <input type="hidden" name="amount" value="{{ $property->rent_amount + $property->balance }}">
                         @endif
 
-                        <p>If the full amount is not paid by the <span class="text-danger">{{ \Carbon\Carbon::now()->addMonth()->format('F') }} @if( $property->late_date === null || $property->late_date == '' ) 17, @else {{ $property->late_date }},@endif {{ \Carbon\Carbon::now()->year }}</span>, then a late fee of <span class="text-danger"> @if( $property->late_fee === null ) $20 @else ${{ $property->late_fee }} @endif</span> taxed on.</p>
+                        <p>If the full amount is not paid by the <span class="text-danger">{{ \Carbon\Carbon::now()->addMonth()->format('F') }} @if( $property->late_date === null || $property->late_date == '' ) 17, @else {{ $property->late_date }},@endif {{ \Carbon\Carbon::now()->year }}</span>, then a late fee of <span class="text-danger"> @if( $property->late_fee === null ) $20 @else ${{ number_format($property->late_fee, 2) }} @endif</span> taxed on.</p>
 
                         @csrf
 
