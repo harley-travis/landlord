@@ -82,9 +82,14 @@ class TransactionController extends Controller {
         ]);
         $transaction->save();
 
+        // find the next due date 
+        $numberOfMonths = $amount_paid / $property->rent_amount; 
+        $roundMonth = floor($numberOfMonths); // always round down
+
         // save balance to rents table 
         $rents = Rent::where('property_id', '=', $property_id)->first();
         $rents->balance = $newBalance;
+        $rents->next_due_date = Carbon::now()->addMonths($roundMonth);
         $rents->save();
 
         // send email to tenant
