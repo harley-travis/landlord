@@ -1044,9 +1044,14 @@ class BillingController extends Controller {
             ]);
             $transaction->save();
 
+            // find the next due date 
+            $numberOfMonths = $amount_paid / $property->rent_amount; 
+            $roundMonth = floor($numberOfMonths); // always round down
+            
             // save balance to rents table 
             $rents = Rent::where('property_id', '=', $property->id)->first();
             $rents->balance = $newBalance;
+            $rents->next_due_date = Carbon::now()->addMonths($roundMonth);
             $rents->save();
                 
             return view('tenants.billing.confirmation', [
