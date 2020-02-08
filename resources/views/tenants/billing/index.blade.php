@@ -46,7 +46,8 @@
                         @elseif( $property->balance < 0 )
                             <h2 class="display-3 text-danger mb-3">Amount Due: $0.00</h2>
                             <h4 class="display-4 text-success mb-5">Surplus Avaliable: ${{ number_format( str_replace("-", "+", $property->balance + $property->rent_amount), 2 ) }}</h4>
-                            <input type="hidden" name="amount" value="{{ $property->rent_amount }}">
+                            
+                            <p>Next payment due on <span class="text-danger font-weight-bold"></span></p>
 
                         @elseif ( $betweenDates === false && $property->balance > 0) 
                             <h2 class="display-2 text-danger mb-5">${{ number_format($property->balance, 2) }}</h2>
@@ -78,7 +79,11 @@
 
                         @csrf
 
+                        @if( $property->balance <= 0 )
+                        <br><button type="submit" class="btn btn-primary" disabled>Make a Payment</a>
+                        @else
                         <br><button type="submit" class="btn btn-primary">Make a Payment</a>
+                        @endif
                    
                     @endif
 
