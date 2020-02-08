@@ -47,7 +47,7 @@
                             <h2 class="display-3 text-danger mb-3">Amount Due: $0.00</h2>
                             <h4 class="display-4 text-success mb-5">Surplus Avaliable: ${{ number_format( str_replace("-", "+", $property->balance + $property->rent_amount), 2 ) }}</h4>
                             
-                            <p>Next payment due on <span class="text-danger font-weight-bold">{{ $property->next_due_date }}</span></p>
+                            <p>Next payment due on <span class="text-danger font-weight-bold">{{ \Carbon\Carbon::createFromTimestamp($property->next_due_date)->toFormattedDateString() }}</span></p>
 
                         @elseif ( $betweenDates === false && $property->balance > 0) 
                             <h2 class="display-2 text-danger mb-5">${{ number_format($property->balance, 2) }}</h2>
@@ -78,7 +78,7 @@
                         @if( $property->balance > 0 )
                         <p>If the full amount is not paid by the <span class="text-danger font-weight-bold">{{ \Carbon\Carbon::now()->addMonth()->format('F') }} @if( $property->late_date === null || $property->late_date == '' ) 17, @else {{ $property->late_date }},@endif {{ \Carbon\Carbon::now()->year }}</span>, then a late fee of <span class="text-danger font-weight-bold"> @if( $property->late_fee === null ) $20 @else ${{ number_format($property->late_fee, 2) }} @endif</span> taxed on.</p>
                         @endif
-                        
+
                         @csrf
 
                         @if( $property->balance <= 0 )
