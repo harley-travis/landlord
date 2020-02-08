@@ -10,7 +10,7 @@ use App\Property;
 use App\Tenant;
 use App\Transaction;
 use Carbon\Carbon;
-use App\Mail\PaymentConfirmation;
+use App\Mail\ManualPaymentConfirmation;
 use Illuminate\Http\Request;
 
 class TransactionController extends Controller {
@@ -88,7 +88,7 @@ class TransactionController extends Controller {
         $rents->save();
 
         // send email to tenant
-        Mail::to($user->email)->send(new PaymentConfirmation($user, $amount_paid));
+        Mail::to($user->email)->send(new ManualPaymentConfirmation($user, $amount_paid));
 
         return redirect()
                 ->route('tenants.index')
