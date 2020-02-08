@@ -46,7 +46,7 @@
                         @elseif( $property->balance < 0 )
                             <h2 class="display-3 text-danger mb-3">Amount Due: ${{ number_format( $property->balance + $property->rent_amount, 2 ) }}</h2>
                             <h4 class="display-4 text-success mb-5">Surplus Avaliable: ${{ number_format( str_replace("-", "+", $property->balance), 2 ) }}</h4>
-                            <input type="hidden" name="amount" value="{{ $property->balance }}">
+                            <input type="hidden" name="amount" value="{{ $property->rent_amount }}">
 
                         @elseif ( $betweenDates === false && $property->balance > 0) 
                             <h2 class="display-2 text-danger mb-5">${{ number_format($property->balance, 2) }}</h2>
@@ -74,7 +74,7 @@
                             <input type="hidden" name="amount" value="{{ $property->rent_amount + $property->balance }}">
                         @endif
 
-                        <p>If the full amount is not paid by the <span class="text-danger">{{ \Carbon\Carbon::now()->addMonth()->format('F') }} @if( $property->late_date === null || $property->late_date == '' ) 17, @else {{ $property->late_date }},@endif {{ \Carbon\Carbon::now()->year }}</span>, then a late fee of <span class="text-danger"> @if( $property->late_fee === null ) $20 @else ${{ number_format($property->late_fee, 2) }} @endif</span> taxed on.</p>
+                        <p>If the full amount is not paid by the <span class="text-danger font-weight-bold">{{ \Carbon\Carbon::now()->addMonth()->format('F') }} @if( $property->late_date === null || $property->late_date == '' ) 17, @else {{ $property->late_date }},@endif {{ \Carbon\Carbon::now()->year }}</span>, then a late fee of <span class="text-danger font-weight-bold"> @if( $property->late_fee === null ) $20 @else ${{ number_format($property->late_fee, 2) }} @endif</span> taxed on.</p>
 
                         @csrf
 
