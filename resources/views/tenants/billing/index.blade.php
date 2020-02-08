@@ -47,7 +47,7 @@
                             <h2 class="display-3 text-danger mb-3">Amount Due: $0.00</h2>
                             <h4 class="display-4 text-success mb-5">Surplus Avaliable: ${{ number_format( str_replace("-", "+", $property->balance + $property->rent_amount), 2 ) }}</h4>
                             
-                            <p>Next payment due on <span class="text-danger font-weight-bold"></span></p>
+                            <p>Next payment due on <span class="text-danger font-weight-bold">{{ $property->next_due_date }}</span></p>
 
                         @elseif ( $betweenDates === false && $property->balance > 0) 
                             <h2 class="display-2 text-danger mb-5">${{ number_format($property->balance, 2) }}</h2>
