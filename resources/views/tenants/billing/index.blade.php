@@ -44,7 +44,8 @@
                             <h2 class="display-2 text-success mb-5">$0.00</h2>
 
                         @elseif( $property->balance < 0 )
-                            <h2 class="display-2 text-success mb-5">${{ number_format( str_replace("-", "+", $property->balance), 2 ) }}</h2>
+                            <h4 class="display-2 text-success mb-5">Surplus Avaliable: ${{ number_format( str_replace("-", "+", $property->balance), 2 ) }}</h4>
+                            <h2 class="display-2 text-danger mb-5">Amount Due: ${{ number_format( str_replace("-", "+", $property->balance + $property->balance), 2 ) }}</h2>
                             <input type="hidden" name="amount" value="{{ $property->balance }}">
 
                         @elseif ( $betweenDates === false && $property->balance > 0) 
