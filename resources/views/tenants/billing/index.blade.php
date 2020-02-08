@@ -75,8 +75,10 @@
                             <input type="hidden" name="amount" value="{{ $property->rent_amount + $property->balance }}">
                         @endif
 
+                        @if( $property->balance > 0 )
                         <p>If the full amount is not paid by the <span class="text-danger font-weight-bold">{{ \Carbon\Carbon::now()->addMonth()->format('F') }} @if( $property->late_date === null || $property->late_date == '' ) 17, @else {{ $property->late_date }},@endif {{ \Carbon\Carbon::now()->year }}</span>, then a late fee of <span class="text-danger font-weight-bold"> @if( $property->late_fee === null ) $20 @else ${{ number_format($property->late_fee, 2) }} @endif</span> taxed on.</p>
-
+                        @endif
+                        
                         @csrf
 
                         @if( $property->balance <= 0 )
