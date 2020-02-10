@@ -495,6 +495,11 @@ Route::group(['prefix' => 'settings/billing', 'middleware' => ['auth']], functio
     'as' => 'settings.billing.index'
   ]);
 
+  Route::get('cancel', [
+    'uses' => "$c@showCancel",
+    'as' => 'settings.billing.cancel'
+  ]);
+
   Route::get('create', [
     'uses' => "$c@create",
     'as' => 'settings.billing.subscription.create'

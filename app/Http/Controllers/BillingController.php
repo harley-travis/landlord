@@ -122,6 +122,10 @@ class BillingController extends Controller {
 
     }
 
+    public function showCancel() {
+        return view('settings.billing.cancel');
+    }
+
     public function getTrialBeginView() {
         return view('settings.billing.trial.begin');
     }

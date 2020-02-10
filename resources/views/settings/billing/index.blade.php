@@ -281,7 +281,9 @@
                             <h3 class="mb-0">Billing History</h3>
                         </div>
                         <div class="col-4 text-right">
-                        
+                            @if( Auth::user()->product != 0 )
+                            <a href="{{ route('settings.billing.cancel') }}" class="btn btn-link text-danger">Cancel Account</a>
+                            @endif
                         </div>
                     </div>
                 </div>
