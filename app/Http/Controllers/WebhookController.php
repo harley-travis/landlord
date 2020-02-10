@@ -59,7 +59,7 @@ class WebhookController extends CashierController {
         $rent->next_due_date = $firstDay;
         $rent->save();
 
-        Mail::to($email)->send(new PaymentConfirmation($user, $total));
+        Mail::to($email)->send(new PaymentConfirmation($user, $total, $transaction->created_at, $confirmationNumber));
 
         return new Response('received', 200);
 

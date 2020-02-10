@@ -14,16 +14,20 @@ class PaymentConfirmation extends Mailable
 
     public $user;
     public $total;
+    public $date;
+    public $confirmationNumber;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct(User $user, $total)
+    public function __construct(User $user, $total, $date, $confirmationNumber)
     {
         $this->user = $user;
         $this->total = $total;
+        $this->date = $date;
+        $this->confirmationNumber = $confirmationNumber;
     }
 
     /**
