@@ -45,7 +45,7 @@
 
                     @else
 
-                    <div class="table-responsive">
+                    <div class="">
                         <table class="table align-items-center table-flush table-hover">
                             <thead class="thead-light">
                                 <tr>
@@ -177,7 +177,7 @@
                         <p class="text-center">There are no assigned parking spaces. Go ahead and assign a parking space to a property.</p>
                     @else
 
-                    <div class="table-responsive">
+                    <div class="">
                         <table class="table align-items-center table-flush table-hover">
                             <thead class="thead-light">
                                 <tr>
@@ -213,12 +213,13 @@
                                             <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
                                                 <a class="dropdown-item" data-toggle="modal" data-target="#unassignModal-{{ $o->id }}">Unassign from Property</a>
                                                 <a class="dropdown-item" href="{{ route('property.parking.edit', ['id' => $o->id ]) }}">Edit Parking Space</a>
+                                                <a class="dropdown-item" data-toggle="modal" data-target="#deleteTwoModal-{{ $o->id }}">Delete Parking Space</a>
                                             </div>
                                         </div>
                                     </td>
                                 </tr>
 
-                                <!-- Modal -->
+                                <!-- Unassign Modal -->
                                 <div class="modal fade" id="unassignModal-{{ $o->id }}" tabindex="-1" role="dialog" aria-labelledby="unassignModalLabel-{{ $o->id }}" aria-hidden="true">
                                     <div class="modal-dialog" role="document">
                                         <div class="modal-content">
@@ -245,6 +246,27 @@
                                                 <button class="btn btn-danger shadow" type="submit">Unassign Parking Space To Property</button>
 
                                                 </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Delete Modal -->
+                                <div class="modal fade" id="deleteTwoModal-{{ $o->id }}" tabindex="-1" role="dialog" aria-labelledby="deleteTwoModalLabel-{{ $o->id }}" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title text-danger" id="deleteTwoModalLabel-{{ $o->id }}">Delete Parking Space</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p>Are you sure you want to delete this parking space? This action cannot be undone.</p>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                <a class="btn btn-danger shadow" href="{{ route('property.parking.delete', ['id' => $o->id ]) }}">Delete Parking Space</a>
                                             </div>
                                         </div>
                                     </div>
