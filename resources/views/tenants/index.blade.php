@@ -204,7 +204,7 @@
                                             </div>
                                             <div class="modal-body">
 
-                                                <p class="mb-5">Are you sure you want to unnassign {{ $tenant->address_1 }} {{ $tenant->address_2 }} from this {{ $tenant->name }}</p>
+                                                <p class="mb-5">Are you sure you want to unassign {{ $tenant->address_1 }} {{ $tenant->address_2 }} from this {{ $tenant->name }}</p>
                                             
                                                 <form action="{{ route('tenants.unassignProperty') }}" method="post">
                                                     @csrf

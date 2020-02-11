@@ -32,6 +32,7 @@ class CreatePropertiesTable extends Migration
             $table->integer('bath_amount')->nullable();
             $table->integer('square_footage')->nullable();
             $table->text('description')->nullable();
+            $table->integer('assigned_parking')->default(0)->comment('0 = no 1 = yes');
             $table->timestamps();
 
             $table->foreign('company_id')->references('id')->on('companies');

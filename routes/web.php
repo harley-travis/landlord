@@ -62,6 +62,7 @@ Route::group(['middleware' => 'auth'], function () {
 // PROPERTIES
 Route::group(['prefix' => 'property', 'middleware' => ['auth', 'trial']], function() {
     $c = 'PropertyController';
+    $pc = 'ParkingController';
 
     Route::get('', [
       'uses' => "$c@index",
@@ -91,6 +92,47 @@ Route::group(['prefix' => 'property', 'middleware' => ['auth', 'trial']], functi
     Route::get('delete/{id}', [
       'uses'	=> "$c@destroy",
       'as'	=> 'property.delete'
+    ]);
+
+    // parking
+    Route::get('parking', [
+      'uses' => "$pc@index",
+      'as' => 'property.parking'
+    ]);
+
+    Route::get('parking/create', [
+      'uses' => "$pc@create",
+      'as' => 'property.parking.create'
+    ]);
+
+    Route::post('parking/create', [
+      'uses' => "$pc@store",
+      'as' => 'property.parking.add'
+    ]);
+
+    Route::get('parking/edit/{id}', [
+      'uses'	=> "$pc@edit",
+      'as'	=> 'property.parking.edit'
+    ]);
+
+	  Route::post('parking/edit', [
+      'uses'	=> "$pc@update",
+      'as'	=> 'property.parking.update'
+    ]);
+    
+    Route::get('parking/delete/{id}', [
+      'uses'	=> "$pc@destroy",
+      'as'	=> 'property.parking.delete'
+    ]);
+
+    Route::post('parking/delete/assignProperty', [
+      'uses'	=> "$pc@assignProperty",
+      'as'	=> 'property.parking.assignProperty'
+    ]);
+
+    Route::post('parking/delete/unassignProperty', [
+      'uses'	=> "$pc@unassignProperty",
+      'as'	=> 'property.parking.unassignProperty'
     ]);
 
 });

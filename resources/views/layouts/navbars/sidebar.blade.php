@@ -130,10 +130,25 @@
                     @endif
 
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('property.index') }}">
-                        <i class="ni ni-pin-3 text-orange"></i> Properties
+                        <a class="nav-link" href="#properties" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="properties">
+                            <i class="ni ni-pin-3 text-orange"></i>
+                            <span class="">Properties</span>
                         </a>
-                    </li>   
+                        <div class="collapse" id="properties">
+                            <ul class="nav nav-sm flex-column">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('property.index') }}">
+                                        View All
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('property.parking') }}">
+                                        Parking
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#tenants" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="tenants">
                             <i class="fas fa-users text-info"></i>
@@ -182,10 +197,25 @@
                     @endif
 
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('property.index') }}">
-                        <i class="ni ni-pin-3 text-orange"></i> Properties
+                        <a class="nav-link" href="#properties" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="properties">
+                            <i class="ni ni-pin-3 text-orange"></i>
+                            <span class="">Properties</span>
                         </a>
-                    </li>   
+                        <div class="collapse" id="properties">
+                            <ul class="nav nav-sm flex-column">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('property.index') }}">
+                                        View All
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('property.parking') }}">
+                                        Parking
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li> 
                     <li class="nav-item">
                         <a class="nav-link" href="#tenants" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="tenants">
                             <i class="fas fa-users text-info"></i>
@@ -236,10 +266,25 @@
                 @elseif(Auth::user()->role === 4)
 
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('property.index') }}">
-                        <i class="ni ni-pin-3 text-orange"></i> Properties
+                        <a class="nav-link" href="#properties" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="properties">
+                            <i class="ni ni-pin-3 text-orange"></i>
+                            <span class="">Properties</span>
                         </a>
-                    </li>   
+                        <div class="collapse" id="properties">
+                            <ul class="nav nav-sm flex-column">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('property.index') }}">
+                                        View All
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('property.parking') }}">
+                                        Parking
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li> 
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('community.index') }}">
                             <i class="fas fa-city text-teal"></i> Communites
@@ -305,9 +350,24 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                        <a class="nav-link" href="{{ route('property.index') }}">
-                        <i class="ni ni-pin-3 text-orange"></i> Properties
+                        <a class="nav-link" href="#properties" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="properties">
+                            <i class="ni ni-pin-3 text-orange"></i>
+                            <span class="">Properties</span>
                         </a>
+                        <div class="collapse" id="properties">
+                            <ul class="nav nav-sm flex-column">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('property.index') }}">
+                                        View All
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('property.parking') }}">
+                                        Parking
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
                     </li>   
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('community.index') }}">

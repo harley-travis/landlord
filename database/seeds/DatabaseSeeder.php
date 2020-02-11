@@ -1,5 +1,6 @@
 <?php
 
+use App\Parking;
 use App\User;
 use App\Company;
 use App\Community;
@@ -231,7 +232,6 @@ class DatabaseSeeder extends Seeder {
 
         }
 
-
         // FEEDBACK
         DB::table('feedback')->insert([
             'subject' => 'Tenant background application checks',
@@ -242,6 +242,9 @@ class DatabaseSeeder extends Seeder {
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
         ]);
+
+        // PARKING
+        factory(Parking::class, 50)->create(); 
 
     }
 
