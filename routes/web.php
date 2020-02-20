@@ -632,6 +632,16 @@ Route::group(['prefix' => 'settings/billing', 'middleware' => ['auth']], functio
     'as'	=> 'settings.billing.expressConnection'
   ]); 
 
+  Route::get('onboarding', [
+    'uses'	=> "$c@viewOnboarding",
+    'as'	=> 'settings.billing.onboarding'
+  ]);
+
+  Route::post('onboarding', [
+    'uses'	=> "$c@viewOnboarding",
+    'as'	=> 'settings.billing.onboarding.add'
+  ]);
+
 });
 
 Route::post(

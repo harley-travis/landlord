@@ -14,6 +14,43 @@ use Symfony\Component\HttpFoundation\Response;
 use Laravel\Cashier\Http\Controllers\WebhookController as CashierController;
 
 class WebhookController extends CashierController {
+
+    // listen for when a connect account has been created
+    // then update the Connect Account User's Customer info
+    public function handleAccountUpdated($payload) {
+
+        // grab the users information
+        $email = $payload['data']['object']['individual']['email'];
+
+        $account_holder_name = $payload['data']['object']['external_accounts']['data']['account_holder_name'];
+        $routing_number = $payload['data']['object']['external_accounts']['data']['routing_number'];
+        $account_number = $payload['data']['object']['external_accounts']['data']['account_number']; // this is a prob. i don't get this data
+        $account_holder_type = $payload['data']['object']['external_accounts']['data']['account_holder_type'];
+        
+
+        // find their Stripe Customer infomration
+        $user = User::where('email', '=', $email)->first();
+
+        // update their stripe information
+        $bank_account = \Stripe\Customer::createSource(
+            $user->stripe_id,
+          [
+            'bank_account' => [
+                'account_holder_name' => $account_holder_name,
+                'routing_number' => $routing_number,
+                'account_number' => $account_number,
+                'account_holder_type' => $account_holder_type,
+                'country' => 'US',
+                'currency' => 'usd',     
+            ],
+          ]
+        );
+
+        // need to figure out when they do the onboarding process if their account is verified immedialty. 
+
+        // subscribe them to the account plan
+
+    }
     
     public function handleChargeFailed($payload) {
 

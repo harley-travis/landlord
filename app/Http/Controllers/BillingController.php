@@ -1135,4 +1135,137 @@ class BillingController extends Controller {
         return view('tenants.billing.confirmation');
     }
 
+    // CONNECT CUSTOM ACCOUNT
+
+    // DON'T FORGET TO ADD THE STRIPE TERMS OF USE ACCEPT FORM
+    // https://stripe.com/docs/connect/updating-accounts#referencing-the-agreement
+
+    public function viewOnboarding() {
+        return view('settings.billing.onboarding.index');
+    }
+
+    /**
+     * ONBOARDING - Collect the following information
+     */
+    public function CustomAccountOnboarding(Request $request) {
+
+        // need to inform that whoever is filling out the form that it has to be created on the property admins account
+        // restirct it to their view as well.
+
+        /**
+         * THE FORM NEEDS TO INDICATE THE FOLLOW INFORMATION
+         * 1) ONLY US ACCOUNTS ARE ALLOW AT THE MOMENT. 
+         * 2) ACCEPT THE TERMS OF USE
+         */
+
+        // validate 
+        $request->validate([
+            'location' => 'required',
+            'type' => 'required',
+        ]);
+
+        $token = $request->input('token-account');
+
+        // create the account based on the business_type
+        if($request->input('business_type') === 'company') { 
+
+            $account = \Stripe\Account::create([
+                'country' => 'US',
+                'type' => 'custom',
+                'account_token' => $token,
+                'requested_capabilities' => [
+                    'card_payments', 
+                    'transfers', 
+                    'tax_reporting_us_1099_misc', 
+                    'tax_reporting_us_1099_k'
+                ],
+                'business_type' => $request->input('business_type'),
+                'company' => [
+                    'name' => $request->input('company_name'),
+                ],
+                'tos_acceptance' => [
+                    'date' => Carbon::now(), 
+                    'ip' => $request->ip(), 
+                ],
+                'business_profile' => [
+                    'url' => $request->input('business_profile_url'),
+                    'product_description' => $request->input('product_description'),
+                    'mcc' => '6513',
+                ],
+            ]);
+
+
+        } else if($request->input('business_type') === 'individual') {
+            
+            $account = \Stripe\Account::create([
+                'country' => 'US',
+                'type' => 'custom',
+                'account_token' => $token,
+                'requested_capabilities' => [
+                    'card_payments', 
+                    'transfers', 
+                    'tax_reporting_us_1099_misc', 
+                    'tax_reporting_us_1099_k'
+                ],
+                'business_type' => $request->input('business_type'),
+                'company' => $request->input('company'),
+                'individual' => [
+                    'first_name' => $request->input('first_name'),
+                    'last_name' => $request->input('last_name'),
+                    'dob' => [
+                        'day' => $request->input('day'),
+                        'month' => $request->input('month'),
+                        'year' => $request->input('year'),
+                    ],
+                    'ssn_last_4' => $request->input('ssn_last_4'),
+                ],
+                'tos_acceptance' => [
+                    'date' => Carbon::now(), 
+                    'ip' => $request->ip(), 
+                ],
+                'business_profile' => [
+                    'url' => $request->input('business_profile_url'),
+                    'product_description' => $request->input('product_description'),
+                    'mcc' => '6513', // Real Estate Agents and Managers - Rentals
+                ],
+            ]);
+
+        }
+
+        // create a person
+        $person = \Stripe\Account::createPerson(
+            $account->id,
+            [
+              'person_token' => $request->input('token-person'),
+            ]
+        );
+
+        // store the id to the database
+        $user = User::find(Auth::user()->id);
+        $user->stripe_account = $account->id; 
+        $user->save();
+
+        /**
+         * TO DO 
+         * Eventually we are going to have to have a way for users to upload files 
+         * for future verification
+         * 
+         * https://stripe.com/docs/connect/account-tokens#file-upload
+         */
+
+    }
+
+    /**
+     * THIS IS CRITICAL
+     * if this is not setup properly, I will loose money based on the daily payouts
+     * Each payout costs $0.25. 
+     * 
+     * Restrict payout to happen once a month! 
+     *
+     */
+    public function setPayoutSchedule() {
+
+    }
+
+
 }
