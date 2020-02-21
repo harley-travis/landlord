@@ -100,7 +100,7 @@
                             <h3 class="mb-0">ACH Accounts</h3>
                         </div>
                         <div class="col-4 text-right">
-                          
+                            <a href="{{ route('settings.billing.ach.create') }}" class="btn btn-success"><i class="fas fa-plus-circle pr-2"></i>Add ACH Account</a>
                         </div>
                     </div>
                 </div>

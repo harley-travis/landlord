@@ -340,20 +340,40 @@ class BillingController extends Controller {
  
         $user = User::find(Auth::user()->id);
 
-        // what i had before i started changing things
-        $bank_account = \Stripe\Customer::createSource(
-            $user->stripe_id,
-          [
+        // handle this with a token \
+        $token = \Stripe\Token::create([
             'bank_account' => [
+                'country' => 'US',
+                'currency' => 'usd',
                 'account_holder_name' => $request->input('account_holder_name'),
+                'account_holder_type' => $request->input('account_holder_type'),
                 'routing_number' => $request->input('routing_number'),
                 'account_number' => $request->input('account_number'),
-                'account_holder_type' => $request->input('account_holder_type'),
-                'country' => 'US',
-                'currency' => 'usd',     
             ],
-          ]
+        ]);
+
+        /// i need to see if this is working. i haven't tested just the token
+        $bank_account = \Stripe\Customer::createSource(
+            $user->stripe_id,
+          [$token]
         );
+
+
+// old method
+        // $bank_account = \Stripe\Customer::createSource(
+        //     $user->stripe_id,
+        //   [
+        //     'bank_account' => [
+        //         'account_holder_name' => $request->input('account_holder_name'),
+        //         'routing_number' => $request->input('routing_number'),
+        //         'account_number' => $request->input('account_number'),
+        //         'account_holder_type' => $request->input('account_holder_type'),
+        //         'country' => 'US',
+        //         'currency' => 'usd',     
+        //     ],
+        //   ]
+        // );
+
 
         /**
          * MOVED THIS TO IT'S OWN FUNCTION
@@ -1152,98 +1172,94 @@ class BillingController extends Controller {
         // need to inform that whoever is filling out the form that it has to be created on the property admins account
         // restirct it to their view as well.
 
-        /**
-         * THE FORM NEEDS TO INDICATE THE FOLLOW INFORMATION
-         * 1) ONLY US ACCOUNTS ARE ALLOW AT THE MOMENT. 
-         * 2) ACCEPT THE TERMS OF USE
-         */
-
-        // validate 
-        $request->validate([
-            'location' => 'required',
-            'type' => 'required',
+        $ach_token = \Stripe\Token::create([
+            'bank_account' => [
+                'country' => 'US',
+                'currency' => 'usd',
+                'account_holder_name' => $request->input('account_holder_name'),
+                'account_holder_type' => $request->input('account_holder_type'),
+                'routing_number' => $request->input('routing_number'),
+                'account_number' => $request->input('account_number'),
+            ],
         ]);
 
-        $token = $request->input('token-account');
+        $account_token = $request->input('token-account');
+        $person_token = $request->input('token-person');
 
         // create the account based on the business_type
-        if($request->input('business_type') === 'company') { 
-
-            $account = \Stripe\Account::create([
-                'country' => 'US',
-                'type' => 'custom',
-                'account_token' => $token,
-                'requested_capabilities' => [
-                    'card_payments', 
-                    'transfers', 
-                    'tax_reporting_us_1099_misc', 
-                    'tax_reporting_us_1099_k'
-                ],
-                'business_type' => $request->input('business_type'),
-                'company' => [
-                    'name' => $request->input('company_name'),
-                ],
-                'tos_acceptance' => [
-                    'date' => Carbon::now(), 
-                    'ip' => $request->ip(), 
-                ],
-                'business_profile' => [
-                    'url' => $request->input('business_profile_url'),
-                    'product_description' => $request->input('product_description'),
-                    'mcc' => '6513',
-                ],
-            ]);
-
-
-        } else if($request->input('business_type') === 'individual') {
-            
-            $account = \Stripe\Account::create([
-                'country' => 'US',
-                'type' => 'custom',
-                'account_token' => $token,
-                'requested_capabilities' => [
-                    'card_payments', 
-                    'transfers', 
-                    'tax_reporting_us_1099_misc', 
-                    'tax_reporting_us_1099_k'
-                ],
-                'business_type' => $request->input('business_type'),
-                'company' => $request->input('company'),
-                'individual' => [
-                    'first_name' => $request->input('first_name'),
-                    'last_name' => $request->input('last_name'),
-                    'dob' => [
-                        'day' => $request->input('day'),
-                        'month' => $request->input('month'),
-                        'year' => $request->input('year'),
+        $account = \Stripe\Account::create([
+            'country' => 'US',
+            'type' => 'custom',
+            'account_token' => $account_token,
+            'requested_capabilities' => [
+                'card_payments', 
+                'transfers', 
+                'tax_reporting_us_1099_misc', 
+                'tax_reporting_us_1099_k'
+            ],
+            'business_profile' => [
+                'mcc' => '6513',
+                'url' => $request->input('url'),
+            ],
+            'settings' => [
+                'payouts' => [
+                    'schedule' => [
+                        'interval' => 'monthly',
+                        'monthly_anchor' => 20
                     ],
-                    'ssn_last_4' => $request->input('ssn_last_4'),
                 ],
-                'tos_acceptance' => [
-                    'date' => Carbon::now(), 
-                    'ip' => $request->ip(), 
-                ],
-                'business_profile' => [
-                    'url' => $request->input('business_profile_url'),
-                    'product_description' => $request->input('product_description'),
-                    'mcc' => '6513', // Real Estate Agents and Managers - Rentals
-                ],
-            ]);
+            ],
+            'external_account' => $ach_token,
+        ]);
 
+        if( $request->input('business_type') === 'company' ) {
+            $person = \Stripe\Account::createPerson(
+                $account->id,
+                [
+                    'person_token' => $person_token,
+                ]
+            );
         }
 
-        // create a person
-        $person = \Stripe\Account::createPerson(
-            $account->id,
-            [
-              'person_token' => $request->input('token-person'),
-            ]
+        /**
+         * Normally I wouldn't allow so much happening in a single method
+         * However, adding the customer account and the connect account 
+         * has proven to be challenging. 
+         * 
+         * I can not add the ACH account for the connect account and intercept
+         * the token to add to their Customer account to charge them monthly. 
+         * 
+         * And I have to create two tokens with the same data.
+         * 
+         * I have to do it in the same method on the same page as the onboarding. 
+         */
+
+        $ach_token2 = \Stripe\Token::create([
+            'bank_account' => [
+                'country' => 'US',
+                'currency' => 'usd',
+                'account_holder_name' => $request->input('account_holder_name'),
+                'account_holder_type' => $request->input('account_holder_type'),
+                'routing_number' => $request->input('routing_number'),
+                'account_number' => $request->input('account_number'),
+            ],
+        ]);
+
+        $user = User::find(Auth::user()->id);
+
+        $bank_account = \Stripe\Customer::update(
+            $user->stripe_id,
+            ['source' => $ach_token2]
         );
 
         // store the id to the database
-        $user = User::find(Auth::user()->id);
+        
         $user->stripe_account = $account->id; 
         $user->save();
+
+        return redirect()
+                ->back()
+                ->with('info', 'Congratulations! Your account has been onboarded!');
 
         /**
          * TO DO 
@@ -1264,6 +1280,11 @@ class BillingController extends Controller {
      *
      */
     public function setPayoutSchedule() {
+
+        // this is set when creating an account
+
+        // need to find out if i need to set when i want my payout. i think that is done in
+        // the stripe dashboard
 
     }
 

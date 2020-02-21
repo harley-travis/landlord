@@ -638,7 +638,7 @@ Route::group(['prefix' => 'settings/billing', 'middleware' => ['auth']], functio
   ]);
 
   Route::post('onboarding', [
-    'uses'	=> "$c@viewOnboarding",
+    'uses'	=> "$c@CustomAccountOnboarding",
     'as'	=> 'settings.billing.onboarding.add'
   ]);
 
