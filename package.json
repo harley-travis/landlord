@@ -29,6 +29,7 @@
         "chart.js": "^2.9.3",
         "dot-prop": "^5.3.0",
         "serialize-javascript": ">=3.1.0",
-        "vue-chartjs": "^3.5.1"
+        "vue-chartjs": "^3.5.1",
+        "websocket-extensions": ">=0.1.4"
     }
 }
