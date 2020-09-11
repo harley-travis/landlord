@@ -74,7 +74,9 @@
                     </div>
                 </div>
             </form> -->
+
             <!-- Navigation -->
+            <h6 class="navbar-heading text-muted">Navigation</h6>
             <ul class="navbar-nav">
                 <li class="nav-item">
                     <a class="nav-link" href="/">
@@ -111,6 +113,7 @@
                         <i class="ni ni-credit-card text-green"></i> Pay Rent
                     </a>
                 </li>
+
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('settings.billing.index') }}">
                         <i class="ni ni-archive-2 text-primary"></i> Billing History
@@ -118,351 +121,168 @@
                 </li>
                 
                 <!-- OFFICE MANAGER -->
-                @elseif(Auth::user()->role === 2)
-
-                    <!-- HOA -->
-                    @if( Auth::user()->product === 3 )
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('community.index') }}">
-                            <i class="fas fa-city text-teal"></i> Communities
-                        </a>
-                    </li>   
-                    @endif
-
-                    <li class="nav-item">
-                        <a class="nav-link" href="#properties" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="properties">
-                            <i class="ni ni-pin-3 text-orange"></i>
-                            <span class="">Properties</span>
-                        </a>
-                        <div class="collapse" id="properties">
-                            <ul class="nav nav-sm flex-column">
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('property.index') }}">
-                                        View All
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('property.parking') }}">
-                                        Parking
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#tenants" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="tenants">
-                            <i class="fas fa-users text-info"></i>
-                            <span class="">Tenants</span>
-                        </a>
-                        <div class="collapse" id="tenants">
-                            <ul class="nav nav-sm flex-column">
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('tenants.index') }}">
-                                        View All
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('tenants.archived') }}">
-                                        View Archived
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('reports.index') }}">
-                            <i class="ni ni-chart-pie-35 text-success"></i> Reports
-                        </a>
-                    </li>  
-
-                <!-- ADMIN -->
-                @elseif(Auth::user()->role === 3)
-
-                    <!-- HOA -->
-                    @if( Auth::user()->product === 3 )
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('community.index') }}">
-                            <i class="fas fa-city text-teal"></i> Communities
-                        </a>
-                    </li>   
-                    @endif
-
-                    <!-- STORAGE RENTALS -->
-                    @if( Auth::user()->product === 4 )
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('storage-rentals.index') }}">
-                            <i class="fas fa-box-open text-purple"></i> Storage Rentals
-                        </a>
-                    </li> 
-                    @endif
-
-                    <li class="nav-item">
-                        <a class="nav-link" href="#properties" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="properties">
-                            <i class="ni ni-pin-3 text-orange"></i>
-                            <span class="">Properties</span>
-                        </a>
-                        <div class="collapse" id="properties">
-                            <ul class="nav nav-sm flex-column">
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('property.index') }}">
-                                        View All
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('property.parking') }}">
-                                        Parking
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </li> 
-                    <li class="nav-item">
-                        <a class="nav-link" href="#tenants" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="tenants">
-                            <i class="fas fa-users text-info"></i>
-                            <span class="">Tenants</span>
-                        </a>
-                        <div class="collapse" id="tenants">
-                            <ul class="nav nav-sm flex-column">
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('tenants.index') }}">
-                                        View All
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('tenants.archived') }}">
-                                        View Archived
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#users" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="users">
-                            <i class="far fa-user-circle text-pink"></i>
-                            <span>Users</span>
-                        </a>
-                        <div class="collapse" id="users">
-                            <ul class="nav nav-sm flex-column">
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('users.index') }}">
-                                        View All
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('users.archived') }}">
-                                        View Archived
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('reports.index') }}">
-                            <i class="ni ni-chart-pie-35 text-success"></i> Reports
-                        </a>
-                    </li>  
-
-                <!-- SENRENT INTERNAL -->
-                @elseif(Auth::user()->role === 4)
-
-                    <li class="nav-item">
-                        <a class="nav-link" href="#properties" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="properties">
-                            <i class="ni ni-pin-3 text-orange"></i>
-                            <span class="">Properties</span>
-                        </a>
-                        <div class="collapse" id="properties">
-                            <ul class="nav nav-sm flex-column">
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('property.index') }}">
-                                        View All
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('property.parking') }}">
-                                        Parking
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </li> 
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('community.index') }}">
-                            <i class="fas fa-city text-teal"></i> Communites
-                        </a>
-                    </li> 
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('storage-rentals.index') }}">
-                            <i class="fas fa-box-open text-purple"></i> Storage Rentals
-                        </a>
-                    </li> 
-                    <li class="nav-item">
-                        <a class="nav-link" href="#tenants" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="tenants">
-                            <i class="fas fa-users text-info"></i>
-                            <span class="">Tenants</span>
-                        </a>
-                        <div class="collapse" id="tenants">
-                            <ul class="nav nav-sm flex-column">
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('tenants.index') }}">
-                                        View All
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('tenants.archived') }}">
-                                        View Archived
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#users" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="users">
-                            <i class="far fa-user-circle text-pink"></i>
-                            <span>Users</span>
-                        </a>
-                        <div class="collapse" id="users">
-                            <ul class="nav nav-sm flex-column">
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('users.index') }}">
-                                        View All
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('users.archived') }}">
-                                        View Archived
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('reports.index') }}">
-                            <i class="ni ni-chart-pie-35 text-success"></i> Reports
-                        </a>
-                    </li>  
-
-                <!-- TRAVIS -->
-                @elseif(Auth::user()->role === 10)
+                @elseif(Auth::user()->role > 2)
 
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('tenants.billing.index') }}">
-                        <i class="ni ni-credit-card text-green"></i> Pay Rent
+                    <a class="nav-link" href="#properties" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="properties">
+                        <i class="ni ni-pin-3 text-orange"></i>
+                        <span class="">Properties</span>
                     </a>
+                    <div class="collapse" id="properties">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('property.index') }}">
+                                    View All
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('property.parking') }}">
+                                    Parking
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
                 </li>
                 <li class="nav-item">
-                        <a class="nav-link" href="#properties" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="properties">
-                            <i class="ni ni-pin-3 text-orange"></i>
-                            <span class="">Properties</span>
-                        </a>
-                        <div class="collapse" id="properties">
-                            <ul class="nav nav-sm flex-column">
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('property.index') }}">
-                                        View All
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('property.parking') }}">
-                                        Parking
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>   
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('community.index') }}">
-                            <i class="fas fa-city text-teal"></i> Communites
-                        </a>
-                    </li> 
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('storage-rentals.index') }}">
-                            <i class="fas fa-box-open text-purple"></i> Storage Rentals
-                        </a>
-                    </li> 
-                    <li class="nav-item">
-                        <a class="nav-link" href="#tenants" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="tenants">
-                            <i class="fas fa-users text-info"></i>
-                            <span class="">Tenants</span>
-                        </a>
-                        <div class="collapse" id="tenants">
-                            <ul class="nav nav-sm flex-column">
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('tenants.index') }}">
-                                        View All
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('tenants.archived') }}">
-                                        View Archived
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#users" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="users">
-                            <i class="far fa-user-circle text-pink"></i>
-                            <span>Users</span>
-                        </a>
-                        <div class="collapse" id="users">
-                            <ul class="nav nav-sm flex-column">
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('users.index') }}">
-                                        View All
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('users.archived') }}">
-                                        View Archived
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>
+                    <a class="nav-link" href="#tenants" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="tenants">
+                        <i class="fas fa-users text-info"></i>
+                        <span class="">Tenants</span>
+                    </a>
+                    <div class="collapse" id="tenants">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('tenants.index') }}">
+                                    View All
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('tenants.archived') }}">
+                                    View Archived
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('reports.index') }}">
+                        <i class="ni ni-chart-pie-35 text-success"></i> Reports
+                    </a>
+                </li>  
 
+                <!-- ADMIN -->
+                @elseif(Auth::user()->role > 3)
 
-                    <li class="nav-item">
-                        <a class="nav-link" href="#customer-feedback" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="customer-feedback">
-                            <i class="far fa-comment-dots text-teal"></i>
-                            <span>Customer Feedback</span>
-                        </a>
-                        <div class="collapse" id="customer-feedback">
-                            <ul class="nav nav-sm flex-column">
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('feedback.index') }}">
-                                        View All
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('feedback.archived') }}">
-                                        View Archived
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('reports.index') }}">
-                            <i class="ni ni-chart-pie-35 text-success"></i> Reports
-                        </a>
-                    </li>  
-
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('tickets.view') }}">
-                            <i class="ni ni-support-16 text-green"></i> Customer Tickets
-                        </a>
-                    </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#users" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="users">
+                        <i class="far fa-user-circle text-pink"></i>
+                        <span>Users</span>
+                    </a>
+                    <div class="collapse" id="users">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('users.index') }}">
+                                    View All
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('users.archived') }}">
+                                    View Archived
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('reports.index') }}">
+                        <i class="ni ni-chart-pie-35 text-success"></i> Reports
+                    </a>
+                </li>  
 
                 @endif    
 
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('feedback.create') }}">
-                        <i class="fas fa-comments text-default"></i> Send Feedback
-                    </a>
-                </li>   
-                            
             </ul>
+
+            @if(Auth::user()->role >= 4)
+            <!-- Divider -->
+            <hr class="my-3">
+            <!-- Heading -->
+            <h6 class="navbar-heading text-muted">SenRent Internal Tools</h6>
+            <!-- Navigation -->
+            <ul class="navbar-nav mb-md-3">
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('pricing-wizard.index') }}">
+                        <i class="ni ni-money-coins text-green"></i> Pricing Setup
+                    </a>
+                </li>  
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('tickets.view') }}">
+                        <i class="ni ni-support-16 text-red"></i> Customer Tickets
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#customer-feedback" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="customer-feedback">
+                        <i class="far fa-comment-dots text-teal"></i>
+                        <span>Customer Feedback</span>
+                    </a>
+                    <div class="collapse" id="customer-feedback">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('feedback.index') }}">
+                                    View All
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('feedback.archived') }}">
+                                    View Archived
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#beta" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="beta">
+                        <i class="fas fa-atom text-primary"></i>
+                        <span>Beta Tools</span>
+                    </a>
+                    <div class="collapse" id="beta">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('community.index') }}">
+                                    <!-- <i class="fas fa-city text-teal"></i> --> Communites
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('storage-rentals.index') }}">
+                                    <!-- <i class="fas fa-box-open text-purple"></i> --> Storage Rentals 
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#dev-view" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="dev-view">
+                        <i class="ni ni-single-copy-04"></i>
+                        <span>Development Views</span>
+                    </a>
+                    <div class="collapse" id="dev-view">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('tenants.billing.index') }}">
+                                    Pay Rent
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('settings.billing.index') }}">
+                                    Billing History
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+            </ul>
+            @endif
+
+
             <!-- Divider -->
             <hr class="my-3">
             <!-- Heading -->

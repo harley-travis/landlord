@@ -1,6 +1,7 @@
 <?php
 
 use App\Parking;
+use App\SetupPayment;
 use App\User;
 use App\Company;
 use App\Community;
@@ -23,6 +24,13 @@ class DatabaseSeeder extends Seeder {
         // COMPANIES
         DB::table('companies')->insert([
             'name' => 'SenRent',
+            'created_at' => Carbon::now(),
+            'updated_at' => Carbon::now(),
+        ]);
+
+        // COMPANIES
+        DB::table('setup_payments')->insert([
+            'company_id' => '1',
             'created_at' => Carbon::now(),
             'updated_at' => Carbon::now(),
         ]);

@@ -206,6 +206,23 @@ class BillingController extends Controller {
 
     }
 
+    public function landlordMonthlyCharge() {
+
+        // algorithim
+        // calculatue the stripe fees
+        // times by 50%
+        // verify if the pricing is greater than $200
+        // charge the payment
+
+    }
+
+    public function landlordManualPaymentOverride() {
+
+        // i need to create a gui for this 
+        // maybe we lock in the price for the people rather than updating automatically
+
+    }
+
 
     /**
      * Property owners monthly payment fee to SenRent

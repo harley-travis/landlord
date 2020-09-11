@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\User;
 use App\Company;
+use App\SetupPayment;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -69,6 +70,10 @@ class RegisterController extends Controller
 
         $c = Company::create([
             'name' => $data['company_name'],   
+        ]);
+
+        $setupPayment = SetupPayment::create([
+            'company_id' => $c->id,
         ]);
 
         return User::create([

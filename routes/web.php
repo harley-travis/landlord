@@ -644,6 +644,37 @@ Route::group(['prefix' => 'settings/billing', 'middleware' => ['auth']], functio
 
 });
 
+// PRICING WIZARD
+Route::group(['prefix' => 'pricing-wizard', 'middleware' => ['auth', 'trial']], function() {
+  $c = 'SetupPaymentController';
+
+  Route::get('', [
+    'uses' => "$c@index",
+    'as' => 'pricing-wizard.index'
+  ]);
+
+  Route::get('create', [
+    'uses' => "$c@create",
+    'as' => 'pricing-wizard.create'
+  ]);
+
+  Route::post('create', [
+    'uses' => "$c@store",
+    'as' => 'pricing-wizard.add'
+  ]);
+
+  Route::get('edit/{id}', [
+    'uses'	=> "$c@edit",
+    'as'	=> 'pricing-wizard.edit'
+  ]);
+
+  Route::post('edit', [
+    'uses'	=> "$c@update",
+    'as'	=> 'pricing-wizard.update'
+  ]);
+  
+});
+
 Route::post(
   'stripe/webhook',
   '\App\Http\Controllers\WebhookController@handleWebhook'

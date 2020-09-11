@@ -3,12 +3,14 @@
 namespace App\Http\Controllers;
 
 use Auth;
+use DB;
 use App\User;
 use App\Property;
 use App\Rent;
 use App\Tenant;
 use App\Company;
 use App\Community;
+use App\SetupPayment;
 use Illuminate\Http\Request;
 use Illuminate\Session\Store;
 
@@ -119,9 +121,45 @@ class PropertyController extends Controller {
         ]);
         $rent->save();
 
+        // update the setup payment table
+        $this->updatePricing( $request->input('rent_amount'));
+        
         return redirect()
                 ->route('property.index')
                 ->with('info', 'Good job! Your property was saved successfully! Head over to the Tenants page to assign the property to a tenant');
+
+    }
+
+    public function updatePricing($a) {
+
+        $rentAmount = $a;
+
+        // find the number of properties and add one
+        $numberOfProperties = SetupPayment::where('company_id', '=', Auth::user()->company_id)->first();
+        $numberOfProperties->numberOfProperties++;
+
+        if($rentAmount > $numberOfProperties->highestRentAmount) {
+            $numberOfProperties->highestRentAmount = $rentAmount;
+        } 
+
+        // Stripe fee calculations 
+        $totalMonthlyRentAmount = $numberOfProperties->highestRentAmount * ($numberOfProperties->numberOfProperties);
+        $payoutFee = $totalMonthlyRentAmount * 0.0025; // 0.0025 is the payout fee
+        $totalFees = $payoutFee + 3; // 2 is the number of active user dollars | adding an extra dollar for rounds. 
+
+        // pricing total
+        $pricing = ($totalFees *.5) + $totalFees; 
+        $priceAmount = '';
+
+        if($pricing > 200) {
+            $priceAmount = $pricing;
+        } else {
+            $priceAmount = 200; 
+        }
+
+        $numberOfProperties->payoutFee = $totalFees;
+        $numberOfProperties->pricingAmount = $priceAmount;
+        $numberOfProperties->save();
 
     }
 
