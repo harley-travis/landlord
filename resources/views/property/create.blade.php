@@ -32,7 +32,7 @@
 
                     <div class="alert alert-default" role="alert">
                         <h2 class="alert-heading">Heads up!</h2>
-                        <p>Your pricing depends on the number of properties you have and the amount of money you charge for rent. We'll let you know if you are approaching the minimum amount of $200. If you're curious how many properties you can use, check out our calculator <a href="#">here.</a></p>
+                        <p>Your pricing depends on the number of properties you have and the amount of money you charge for rent. We'll let you know if you are approaching the minimum amount of $200. If you're curious how many properties you can use, check out our calculator <a href="{{ route('pricing-wizard.index') }}">here.</a></p>
                         <p class="mb-0">If you have questions about pricing, please contact us at Support@SenRent.com</p>
                     </div>
 

@@ -15,21 +15,21 @@ class SetupPaymentController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index() {
-        $users = SetupPayment::join('users', 'setup_payments.user_id', '=', 'users.id')
-                ->paginate(20);
+        // $users = SetupPayment::join('users', 'setup_payments.user_id', '=', 'users.id')
+        //         ->paginate(20);
 
-        $singleUser = SetupPayment::join('users', 'setup_payments.user_id', '=', 'users.id')
-                ->where('users.id', '=', Auth::user()->id)
-                ->paginate(20);
+        // $singleUser = SetupPayment::join('users', 'setup_payments.user_id', '=', 'users.id')
+        //         ->where('users.id', '=', Auth::user()->id)
+        //         ->paginate(20);
         
-        $check = SetupPayment::get();
+        // $check = SetupPayment::get();
 
                 /**
                  * need to figure out a way to display the add payment option if there is no pricing setup for both admins and for users.
                  * how to check that
                  */
 
-        return view('pricing-wizard.index', ['users' => $users, 'check' => $check, 'singleUser' => $singleUser]);
+        return view('pricing-wizard.index');
     }
 
     /**
