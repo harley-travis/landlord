@@ -57,6 +57,7 @@ class RegisterController extends Controller
             'role' => [],
             'product' => ['required'],
             'company_id' => [],
+            'phone_number' => ['size:0']
         ]);
     }
 

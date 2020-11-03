@@ -114,6 +114,10 @@
                                     </div>
                                 </div>
                             </div>
+
+                            <!-- bot blocker validator -->
+                            <input name="phone_number" id="phone_number" style="display:none">
+
                             <div class="text-center">
                                 <button type="submit" class="btn btn-primary mt-4">{{ __('Create account') }}</button>
                             </div>
