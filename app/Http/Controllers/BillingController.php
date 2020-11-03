@@ -376,7 +376,7 @@ class BillingController extends Controller {
         );
 
 
-// old method
+        // old method
         // $bank_account = \Stripe\Customer::createSource(
         //     $user->stripe_id,
         //   [
