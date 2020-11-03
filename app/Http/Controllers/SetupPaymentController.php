@@ -7,28 +7,14 @@ use App\User;
 use App\SetupPayment;
 use Illuminate\Http\Request;
 
-class SetupPaymentController extends Controller
-{
+class SetupPaymentController extends Controller {
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
     public function index() {
-        // $users = SetupPayment::join('users', 'setup_payments.user_id', '=', 'users.id')
-        //         ->paginate(20);
-
-        // $singleUser = SetupPayment::join('users', 'setup_payments.user_id', '=', 'users.id')
-        //         ->where('users.id', '=', Auth::user()->id)
-        //         ->paginate(20);
-        
-        // $check = SetupPayment::get();
-
-                /**
-                 * need to figure out a way to display the add payment option if there is no pricing setup for both admins and for users.
-                 * how to check that
-                 */
-
         return view('pricing-wizard.index');
     }
 
@@ -38,6 +24,7 @@ class SetupPaymentController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create() {
+
         $users = User::where('role', '====', '3')->get();
         //$users = SetupPayment::join('users', 'setup_payments.user_id', '=', 'users.id')
                             ///->where('users.role', '!=', '3')->get();
@@ -208,8 +195,6 @@ class SetupPaymentController extends Controller
         /**
          * NEED TO CALL THE OTHER FUNCTIONS TO CALCULATE THE PRICING HERRE
          */
-
-        
 
         $payment = SetupPayment::find($request->input('id'));
         $payment->numberOfProperties = $request->input('numberOfProperties');

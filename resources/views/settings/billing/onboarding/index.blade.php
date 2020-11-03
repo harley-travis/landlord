@@ -154,8 +154,8 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="id_number">Social Security Number</label>
-                            <input type="text" class="form-control inp-account-id-number" aria-describedby="id_number">
+                            <label for="ssn_last_4">Social Security Number</label>
+                            <input type="text" class="form-control inp-account-id-number" aria-describedby="ssn_last_4">
                         </div>
 
                         <h4 class="mt-5 mb-3">Date of Birth</h4>
