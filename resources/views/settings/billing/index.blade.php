@@ -351,7 +351,7 @@
 
 @section('otherJs')
 
-    <!-- <script>
+    <script>
         window.addEventListener('load', function() {
             const stripe = Stripe('{{config('services.stripe.key')}}');
             const elements = stripe.elements();
@@ -411,6 +411,6 @@
             });
         })
 
-    </script> -->
+    </script> 
 
 @endsection
