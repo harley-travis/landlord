@@ -898,7 +898,7 @@ class BillingController extends Controller {
         $user->stripe_account = $response->stripe_user_id;
         $user->save();
 
-        //dd($user->stripe_account);
+        dd($user->stripe_account);
 
         // change the payout to once a month
         $account = \Stripe\Account::update([
