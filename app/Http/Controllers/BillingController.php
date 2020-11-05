@@ -12,6 +12,7 @@ use App\Property;
 use App\Company;
 use App\Transaction;
 use Carbon\Carbon;
+use App\SetupPayment;
 use Stripe_Error;
 use Illuminate\Http\Request;
 use App\Mail\UserCreated;
@@ -43,6 +44,17 @@ class BillingController extends Controller {
         $tenant = Tenant::where('user_id', '=', Auth::user()->id)->first();
         
         return $tenant;
+    }
+
+    public function getPaymentSetup() {
+
+        $company_id = Company::where('id', '=', Auth::user()->company_id)->pluck('id');
+        $paymentSetup = SetupPayment::where('company_id', '=', $company_id)->first();
+
+        //dd($paymentSetup);
+
+        return $paymentSetup;
+
     }
 
     public function getInvoices() {
@@ -92,6 +104,7 @@ class BillingController extends Controller {
                 'customer' => $this->getCustomer(), 
                 'intent' => $user->createSetupIntent(),
                 'connect_accounts' => $this->getStripeAccount(),
+                'bill' => $this->getPaymentSetup(),
             ]);
 
         } else {
@@ -699,10 +712,6 @@ class BillingController extends Controller {
          * so the user isn't charged mulitple times
          */
 
-        /**
-         * DO I NEED TO CREATE A SINGLE PRODUCT AND ATTACH PLANS TO THAT?
-         * NAME THE PLAN'S AFTER THE CUSTOMERS NAME
-         */
 
         /**
          * need to figure out how metered works. does it check every pay period? and then 
@@ -710,14 +719,6 @@ class BillingController extends Controller {
          * does it charge based on unit price?
          */
         
-        /**
-         * Does the trial period work, and does it apply every month?
-         */
-
-         /**
-          * NEED TO MAKE SURE THAT IT'S SUBSCRIBING TO THE DEFAULT PAYMENT.
-          * IF THEY ADD A NEW PAYMENT, NEED TO MAKE SURE THEY'RE USING THIS PAYMENT
-          */
 
           /**
            * when you verify and athorize, it charges immedialty. Which it should
@@ -745,120 +746,170 @@ class BillingController extends Controller {
             ]
         );
 
-        $base = 1500; // $15
-        $additionalProperties = 200; // $2
-        $freeUnits = 5;
-        $usage = $this->calculateUsage();
-        $amount = null;
+        // $base = 1500; // $15
+        // $additionalProperties = 200; // $2
+        // $freeUnits = 5;
+        // $usage = $this->calculateUsage();
+        // $amount = null;
 
-        if( $usage <= $freeUnits ) {
-            $amount = $base;
-        } else if($usage === 1) {
-            $amount = 0;
-        } else {
-            $amount = ( $usage - $freeUnits ) * $additionalProperties + $base;
-        }
+        // if( $usage <= $freeUnits ) {
+        //     $amount = $base;
+        // } else if($usage === 1) {
+        //     $amount = 0;
+        // } else {
+        //     $amount = ( $usage - $freeUnits ) * $additionalProperties + $base;
+        // }
 
-        try {
+        $amount = $this->calculateUsage();
 
-            $plan = \Stripe\Plan::create([
-                "nickname" => $user->name ." Home Owner Metered Monthly",
-                "product" => "prod_GVRCMzXFI6A2wS", // hard coded. i think i just need one of these
-                "amount" => $amount,
-                "billing_scheme" => "per_unit",
-                "currency" => "usd",
-                "interval" => "month",
-                "interval_count" => 1,
-                "trial_period_days" => 14,
-            ]);
+        //try {
 
-            $subscription = \Stripe\Subscription::create([
-                "customer" => $user->stripe_id,
-                "items" => [
-                    [
-                        "plan" => $plan->id,
+        // I AM GETTING NO ERRORS IF THIS RETURNS BAD
+
+        $plan = \Stripe\Plan::create([
+            "nickname" => $user->name ." Home Owner Metered Monthly",
+            "product" => "prod_GVRCMzXFI6A2wS", // hard coded. i think i just need one of these
+            "amount" => $amount,
+            "billing_scheme" => "per_unit",
+            "currency" => "usd",
+            "interval" => "month",
+            "interval_count" => 1,
+            "trial_period_days" => 14,
+        ]);
+
+        $priceObj = \Stripe\Prices::create([
+            "unit_amount" => $amount,
+            'currency' => 'usd',
+            'recurring' => ['interval' => 'month'],
+            "product" => "prod_GVRCMzXFI6A2wS", // hard coded. i think i just need one of these
+        ]);
+
+        $subscription = \Stripe\Subscriptions::create([
+            "customer" => $user->stripe_id,
+            "items" => [
+                [
+                    "price" => $priceObj->id,
+                    "price_data" => [
+                        "currency" => 'usd',
+                        "product" => 'prod_GVRCMzXFI6A2wS',
+                        "recurring" => [
+                            "interval" => 'month'
+                        ],
+
                     ],
                 ],
-            ]);
+            ],
+        ]);
 
-            return redirect()
-                ->route('settings.billing.index', [
-                    'bank_accounts' => $bank_accounts, 
-                    'customer' => $customer, 
-                    'invoices' => $invoices,
-                ])->with('info', 'You have successfully authorized this account. SenRent will bill you automatically each month. Check back here to see your billing history.');
+        return redirect()
+            ->route('settings.billing.index', [
+                'bank_accounts' => $bank_accounts, 
+                'customer' => $customer, 
+                'invoices' => $invoices,
+            ])->with('info', 'You have successfully authorized this account. SenRent will bill you automatically each month. Check back here to see your billing history.');
 
-          } catch(\Stripe\Exception\CardException $e) {
+        //   } catch(\Stripe\Exception\CardException $e) {
             
-            return redirect()
-                ->route('settings.billing.index', [
-                    'bank_accounts' => $bank_accounts, 
-                    'customer' => $customer, 
-                    'invoices' => $invoices,
-                ])->with('danger',  $e->getError()->message);
+        //     return redirect()
+        //         ->route('settings.billing.index', [
+        //             'bank_accounts' => $bank_accounts, 
+        //             'customer' => $customer, 
+        //             'invoices' => $invoices,
+        //         ])->with('danger',  $e->getError()->message);
 
-          } catch (\Stripe\Exception\RateLimitException $e) {
+        //   } catch (\Stripe\Exception\RateLimitException $e) {
             
-            return redirect()
-                ->route('settings.billing.index', [
-                    'bank_accounts' => $bank_accounts, 
-                    'customer' => $customer, 
-                    'invoices' => $invoices,
-                ])->with('danger',  $e->getError()->message);
+        //     return redirect()
+        //         ->route('settings.billing.index', [
+        //             'bank_accounts' => $bank_accounts, 
+        //             'customer' => $customer, 
+        //             'invoices' => $invoices,
+        //         ])->with('danger',  $e->getError()->message);
 
-          } catch (\Stripe\Exception\InvalidRequestException $e) {
+        //   } catch (\Stripe\Exception\InvalidRequestException $e) {
             
-            return redirect()
-                ->route('settings.billing.index', [
-                    'bank_accounts' => $bank_accounts, 
-                    'customer' => $customer, 
-                    'invoices' => $invoices,
-                ])->with('danger',  $e->getError()->message);
+        //     return redirect()
+        //         ->route('settings.billing.index', [
+        //             'bank_accounts' => $bank_accounts, 
+        //             'customer' => $customer, 
+        //             'invoices' => $invoices,
+        //         ])->with('danger',  $e->getError()->message);
 
-          } catch (\Stripe\Exception\AuthenticationException $e) {
+        //   } catch (\Stripe\Exception\AuthenticationException $e) {
             
-            return redirect()
-                ->route('settings.billing.index', [
-                    'bank_accounts' => $bank_accounts, 
-                    'customer' => $customer, 
-                    'invoices' => $invoices,
-                ])->with('danger',  $e->getError()->message);
+        //     return redirect()
+        //         ->route('settings.billing.index', [
+        //             'bank_accounts' => $bank_accounts, 
+        //             'customer' => $customer, 
+        //             'invoices' => $invoices,
+        //         ])->with('danger',  $e->getError()->message);
 
-          } catch (\Stripe\Exception\ApiConnectionException $e) {
+        //   } catch (\Stripe\Exception\ApiConnectionException $e) {
             
-            return redirect()
-                ->route('settings.billing.index', [
-                    'bank_accounts' => $bank_accounts, 
-                    'customer' => $customer, 
-                    'invoices' => $invoices,
-                ])->with('danger',  $e->getError()->message);
+        //     return redirect()
+        //         ->route('settings.billing.index', [
+        //             'bank_accounts' => $bank_accounts, 
+        //             'customer' => $customer, 
+        //             'invoices' => $invoices,
+        //         ])->with('danger',  $e->getError()->message);
 
-          } catch (\Stripe\Exception\ApiErrorException $e) {
+        //   } catch (\Stripe\Exception\ApiErrorException $e) {
             
-            return redirect()
-                ->route('settings.billing.index', [
-                    'bank_accounts' => $bank_accounts, 
-                    'customer' => $customer, 
-                    'invoices' => $invoices,
-                ])->with('danger',  $e->getError()->message);
+        //     return redirect()
+        //         ->route('settings.billing.index', [
+        //             'bank_accounts' => $bank_accounts, 
+        //             'customer' => $customer, 
+        //             'invoices' => $invoices,
+        //         ])->with('danger',  $e->getError()->message);
 
-          } catch (Exception $e) {
+        //   } catch (Exception $e) {
             
-            return redirect()
-                ->route('settings.billing.index', [
-                    'bank_accounts' => $bank_accounts, 
-                    'customer' => $customer, 
-                    'invoices' => $invoices,
-                ])->with('danger',  $e->getError()->message);
+        //     return redirect()
+        //         ->route('settings.billing.index', [
+        //             'bank_accounts' => $bank_accounts, 
+        //             'customer' => $customer, 
+        //             'invoices' => $invoices,
+        //         ])->with('danger',  $e->getError()->message);
 
-          }
+        //   }
     }
 
     public function calculateUsage() {
 
-        $amount = DB::table('company_tenant')->where('company_id', '=', $this->getUser()->company_id)->count();
+        /**
+         * I NEED TO SEE IF THE PRICINGAMOUNT IN THE DB IS UPDATED OR IF I HAVE TO ENTER 
+         * THE RECORD IN THIS FUNCTION
+         */
 
-        return $amount;
+        $company_id = Company::where('id', '=', Auth::user()->company_id)->pluck('id');
+        $paymentSetup = SetupPayment::where('company_id', '=', $company_id)->first();
+
+        $numberOfProperties = $paymentSetup->numberOfProperties;
+        $highestRentAmount = $paymentSetup->highestRentAmount; 
+
+        // Stripe fee calculations 
+        $totalMonthlyRentAmount = $highestRentAmount * $numberOfProperties;
+        $payoutFee = number_format($totalMonthlyRentAmount * 0.0025,2); // 0.0025 is the payout fee
+        $totalFees = $payoutFee + 2; // 2 is the number of active user dollars
+
+        /**
+         * NEED TO ROUND UP!!! WE COULD STILL LOSE MONEY IF IT IS IN CENTS
+         * when filtering names, we need to remove the ones that have pricing setup
+         */
+        $pricing = ($totalFees *.5) + $totalFees; 
+        $priceAmount = '';
+
+        if($pricing > 100) {
+
+            $priceAmount = $pricing;
+            return $priceAmount;
+
+        } else {
+
+            $priceAmount = 200; 
+            return $priceAmount;
+
+        }
 
     }
 

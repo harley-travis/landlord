@@ -93,14 +93,14 @@
 
     @if( $user->role === 3 )
     <div class="row">
-        <div class="col">
+        <div class="col-sm">
             <div class="card shadow">
                 <div class="card-header border-0">
                     <div class="row align-items-center">
-                        <div class="col-8">
+                        <div class="col">
                             <h3 class="mb-0">ACH Accounts</h3>
                         </div>
-                        <div class="col-4 text-right">
+                        <div class="col text-right">
                             <a href="{{ route('settings.billing.ach.create') }}" class="btn btn-success"><i class="fas fa-plus-circle pr-2"></i>Add ACH Account</a>
                         </div>
                     </div>
@@ -136,6 +136,26 @@
      
                 @endif
 
+                </div>
+            </div> <!-- card -->
+        </div> <!-- col -->
+        <div class="col-sm">
+            <div class="card bg-gradient-default text-white shadow">
+                <div class="card-header bg-transparent border-0">
+                    <div class="row align-items-center">
+                        <div class="col-8">
+                            <h3 class="mb-0 text-white">Next Bill</h3>
+                        </div>
+                        <div class="col-4 text-right">
+                           
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        <li class="bg-transparent list-group-item">Bill Amount: ${{ $bill->pricingAmount }}</li>
+                        <li class="bg-transparent list-group-item">Due Date: {{ \Carbon\Carbon::now()->addMonth()->monthName }} 1</li>
+                    </ul>
                 </div>
             </div> <!-- card -->
         </div> <!-- col -->

@@ -18,7 +18,7 @@ class CreateSetupPaymentsTable extends Migration
             $table->unsignedBigInteger('company_id')->nullable();
             $table->integer('numberOfProperties')->default(0);
             $table->integer('minimumPricing')->default('200');
-            $table->integer('highestRentAmount')->nullable();
+            $table->integer('highestRentAmount')->default(0);
             $table->integer('payoutFee')->nullable();
             $table->integer('percentAmount')->default('.50');
             $table->integer('fixedPricing')->nullable();
