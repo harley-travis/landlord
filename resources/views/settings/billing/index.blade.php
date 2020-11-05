@@ -52,7 +52,8 @@
                 <div class="card-body">
                     <p>In order to start accepting rent from your tenants, we will have to onboard you accept payment from your tenants. Click the link below to get started.</p>
                     <a href="https://dashboard.stripe.com/express/oauth/authorize?response_type=code&client_id={{ env('STRIPE_CLIENT_ID') }}&scope=read_write" class="btn btn-primary">Start Onboarding</a>
-                    <a href="{{ route('settings.billing.onboarding') }}" class="btn btn-success">New Onboarding</a>
+                    <!-- EVENTUALLY WE WILL NEED THIS CUSTOM CONNECT TO WORK -->
+                    <!-- <a href="{{ route('settings.billing.onboarding') }}" class="btn btn-success">New Onboarding</a> -->
                 </div>
             </div> <!-- card -->
         </div> <!-- col -->
