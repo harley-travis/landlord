@@ -898,10 +898,8 @@ class BillingController extends Controller {
         $user->stripe_account = $response->stripe_user_id;
         $user->save();
 
-        dd($user->stripe_account);
-
         // change the payout to once a month
-        $account = \Stripe\Account::update([
+        $account = \Stripe\Account::update(
             $user->stripe_account,
             [
                 'settings' => [
@@ -913,7 +911,7 @@ class BillingController extends Controller {
                     ],
                 ],
             ]
-        ]);
+        );
 
         return redirect()
             ->route('settings.billing.index', [
