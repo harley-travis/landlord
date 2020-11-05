@@ -901,14 +901,14 @@ class BillingController extends Controller {
         // change the payout to once a month
         $account = \Stripe\Account::update([
             Auth::user()->stripe_id,
-            ['settings' => [
+            'settings' => [
                 'payouts' => [
                     'schedule' => [
                         'interval' => 'monthly',
                         'monthly_anchor' => 20
                     ],
                 ],
-            ],]
+            ],
         ]);
 
         return redirect()
