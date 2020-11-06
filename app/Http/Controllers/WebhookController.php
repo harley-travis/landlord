@@ -118,21 +118,27 @@ class WebhookController extends CashierController {
     // get the data for upcoming subscriptions
     public function handleInvoiceUpcoming($payload) {
 
-        // \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
+        \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
 
-        // $customer = $payload['data']['object']['customer'];
-        // $user = User::where('stripe_id', '=', $stripe_id)->first();
-        // $paymentSetup = SetupPayment::where('company_id', '=', $user->company_id)->first();
-        // $amount = $paymentSetup->pricingAmount;
+        $customer = $payload['data']['object']['customer'];
+        $user = User::where('stripe_id', '=', $stripe_id)->first();
+        $paymentSetup = SetupPayment::where('company_id', '=', $user->company_id)->first();
+        $amount = $paymentSetup->pricingAmount;
 
         // // set the subscurition amount this month with the stripe method
-        // \Stripe\Invoices::upcoming([
-        //     'customer' => 'cus_IKt8UPXrRcD9uv',
-        //     'total' => $amount,
-        // ]);
+        \Stripe\Invoices::upcoming([
+            'customer' => $user->stripe_id,
+            'total' => $amount,
+        ]);
+
+        \Stripe\Customers::update([
+            'customer' => $user->stripe_id,
+            'email' => "farts@gmail.com",
+        ]);
 
         // return response($payload, 200);
-        return response('hey bob', 200);
+        // return response('hey bob', 200);
+        return new Response('received', 200);
 
     }
 
