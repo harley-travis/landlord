@@ -51,8 +51,6 @@ class BillingController extends Controller {
         $company_id = Company::where('id', '=', Auth::user()->company_id)->pluck('id');
         $paymentSetup = SetupPayment::where('company_id', '=', $company_id)->first();
 
-        //dd($paymentSetup);
-
         return $paymentSetup;
 
     }
@@ -161,193 +159,10 @@ class BillingController extends Controller {
 
     }
 
-    public function store(Request $request) {
-
-        $user = auth()->user();
-
-        $paymentMethod = $request->payment_method;
-
-        // monthly $15/mon $2 property
-        $planId = 'plan_GFq5J9sIXkOyh4';
-
-        // plan based on the user product
-        //$plan = $user->product;
-
-        /**
-         * NEED TO CREATE/GRAB ALL THE PLAN IDS FOR THIS 
-         */
-        // if($plan === 1) {
-        //     $planId = 'plan_GFq5J9sIXkOyh4';
-        // } else if ($plan === 2 ) {
-        //     $planId = 'plan_GFq5J9sIXkOyh4';
-        // } else if ($plan === 3) {
-        //     $planId = 'plan_GFq5J9sIXkOyh4';
-        // } else if ($plan === 4) {
-        //     $planId = 'plan_GFq5J9sIXkOyh4';
-        // }
-
-        // if we want to grab it from the form
-        //$planId = $request->plan;
-
-        if( Auth::user()->role != 0 ) {
-
-            $subscription = \Stripe\Subscription::create([
-                'customer' => $user->stripe_id,
-                'items' => [
-                    [
-                        'plan' => $planId,
-                    // 'quantity' => 100,
-                    ],
-                ],
-            ]);
-
-        } else {
-
-            $customer = \Stripe\Customer::update([
-                Auth::user()->stripe_id,
-                'source' => $request->input('stripeToken'),
-            ]);
-
-        }
-
-        //$user->newSubscription('default', $planId)->create($paymentMethod);
-
-        // /$user->subscription('default')->incrementQuantity(100);
-
-        //return response(['status' => 'success']);
-        return view('settings.billing.subscription.index');     
-
-    }
-
-    public function landlordMonthlyCharge() {
-
-        // algorithim
-        // calculatue the stripe fees
-        // times by 50%
-        // verify if the pricing is greater than $200
-        // charge the payment
-
-    }
-
     public function landlordManualPaymentOverride() {
 
         // i need to create a gui for this 
         // maybe we lock in the price for the people rather than updating automatically
-
-    }
-
-
-    /**
-     * Property owners monthly payment fee to SenRent
-     */
-    public function singleOwnerCharge() {
-
-        /**
-         * before I charge the card i must figure out how to work the intent. 
-         * you only need to get the intet once???
-         * 
-         * NEED TO DECLARE THEY PAYMENT METHOD!
-         */
-
-        $user = User::find(Auth::user()->id);
-
-        $paymentMethod = $user->paymentMethod();
-        
-        $numberOfProperties = DB::table('company_tenant')->where('company_id', '=', $user->company_id)->count();
-
-        if( $user->product === 1 ) {
-
-            $base = 1500; // $15
-            $freeProperties = 5; // 5 free properties
-            $amountPerProperty = 200; // $2
-            $sum = ( $numberOfProperties - $freeProperties * $amountPerProperty ) + $base * 100;
-            $taxAmount = .12; // 12% NEED TO TALK TO MOORE ABOUT THIS. I THINK I NEED AN ARRAY TO PULL FROM TO CHARGE
-            $total = ( $sum * $taxAmount ) + $sum;
-
-            try {
-
-                $payment = $user->charge($total, $paymentMethod, [
-                    'custom_option' => $total,
-                ]);
-
-                return redirect()
-                        ->route('billing.index')
-                        ->with('info', 'We have successfully charged your account. The payment will take 3-5 business days to process.');
-            
-            } catch (Exception $e) {
-                
-                return redirect()
-                        ->route('billing.index')
-                        ->with('danger', 'There was an error processing your payment. Please try again, or contact customer support');
-    
-            }
-            
-        } else if( $user->product === 2 ) {
-
-            $base = 1500; // $15
-            $freeProperties = 5; // 5 free properties
-            $amountPerProperty = 200; // $2
-            $sum = ( $numberOfProperties - $freeProperties * $amountPerProperty ) + $base * 100;
-            $taxAmount = .12; // 12% NEED TO TALK TO MOORE ABOUT THIS. I THINK I NEED AN ARRAY TO PULL FROM TO CHARGE
-            $total = ( $sum * $taxAmount ) + $sum;
-
-            try {
-
-                $payment = $user->charge($total, $paymentMethod, [
-                    'custom_option' => $total,
-                ]);
-
-                return redirect()
-                        ->route('billing.index')
-                        ->with('info', 'We have successfully charged your account. The payment will take 3-5 business days to process.');
-    
-            } catch (Exception $e) {
-                
-                return redirect()
-                        ->route('billing.index')
-                        ->with('danger', 'There was an error processing your payment. Please try again, or contact customer support');
-    
-            }
-
-        } else if( $user->product === 3 ) {
-
-            $base = 1500; // $15
-            $freeProperties = 5; // 5 free properties
-            $amountPerProperty = 200; // $2
-            $sum = ( $numberOfProperties - $freeProperties * $amountPerProperty ) + $base * 100;
-            $taxAmount = .12; // 12% NEED TO TALK TO MOORE ABOUT THIS. I THINK I NEED AN ARRAY TO PULL FROM TO CHARGE
-            $total = ( $sum * $taxAmount ) + $sum;
-
-            try {
-
-                $payment = $user->charge($total, $paymentMethod, [
-                    'custom_option' => $total,
-                ]);
-
-                return redirect()
-                        ->route('billing.index')
-                        ->with('info', 'We have successfully charged your account. The payment will take 3-5 business days to process.');
-    
-            } catch (Exception $e) {
-                
-                return redirect()
-                        ->route('billing.index')
-                        ->with('danger', 'There was an error processing your payment. Please try again, or contact customer support');
-    
-            }
-
-        }
-
-    }
-
-    public function singleTenantCharge() {
-
-    }
-
-    /**
-     * allow the tenant to enroll in autopay
-     */
-    public function createTenantSubscription() {
 
     }
 
@@ -671,20 +486,39 @@ class BillingController extends Controller {
 
     public function activateTrial() {
         
+        // create stripe account for new user
         $user = User::find(Auth::user()->id);
         $user->createAsStripeCustomer();
         $user->trial_ends_at = now()->addDays(14);
         $user->save();
 
-        $plan = \Stripe\Plan::create([
-            "nickname" => $user->name ." Home Owner Metered Monthly",
+        // calculate monthly cost
+        $amount = $this->calculateUsage();
+
+        // create a price object for the subscription
+        $priceObj = \Stripe\Price::create([
+            "unit_amount" => $amount * 100,
+            'currency' => 'usd',
+            'recurring' => [
+                'interval' => 'month',
+                'usage_type' => 'metered',
+            ],
             "product" => "prod_GVRCMzXFI6A2wS", // hard coded. i think i just need one of these
-            "amount" => 0,
-            "currency" => "usd",
-            "interval" => "month",
-            "usage_type" => "licensed",
-           // "trial_end" => carbon()->now()->days(14),
         ]);
+
+        // create and assign the subscription to the user
+        $subscription = \Stripe\Subscription::create([
+            "customer" => $user->stripe_id,
+            "trial_period_days" => 14,
+            "billing_thresholds" => null,
+            "billing_cycle_anchor" => Carbon::now()->day(27)->timestamp,
+            "items" => [
+                ["price" => $priceObj->id],
+            ],
+            
+        ]);
+
+        // update the pricingAmount in the setup_table 
 
         // testing email
         // $e = 'travis.harley@senrent.com';
@@ -696,182 +530,6 @@ class BillingController extends Controller {
         return redirect()
             ->route('dashboard')
             ->with('info', 'Your account was successfully created.');
-    }
-
-    /**
-     * allow the home owner to enroll in autopay
-     * be sure to clairfy that the payment will auto increase
-     * if they add a new proprty
-     */
-    public function createOwnerSubscription($id) {
-
-        /**
-         * every time i delete or add a new account
-         * it creates another subscription for me. 
-         * need to figure out how to prevent adding more subscriptions 
-         * so the user isn't charged mulitple times
-         */
-
-
-        /**
-         * need to figure out how metered works. does it check every pay period? and then 
-         * charge? 
-         * does it charge based on unit price?
-         */
-        
-
-          /**
-           * when you verify and athorize, it charges immedialty. Which it should
-           * unless you're still in your 14 day trial. 
-           * not really a big bug though.
-           * 
-           * it's charge $0. need to see why it's not getting at least the $15 monthly fee
-           */
-
-        $user = User::find(Auth::user()->id);
-        $customer = \Stripe\Customer::retrieve($user->stripe_id);
-
-        $bank_accounts = \Stripe\Customer::allSources(
-            $user->stripe_id,
-            [
-                'limit' => 3,
-                'object' => 'bank_account',
-            ]
-        );
-
-        $invoices = \Stripe\Invoice::all(
-            [
-                 // 'limit' => 12,
-                "customer" => $user->stripe_id,
-            ]
-        );
-
-        // $base = 1500; // $15
-        // $additionalProperties = 200; // $2
-        // $freeUnits = 5;
-        // $usage = $this->calculateUsage();
-        // $amount = null;
-
-        // if( $usage <= $freeUnits ) {
-        //     $amount = $base;
-        // } else if($usage === 1) {
-        //     $amount = 0;
-        // } else {
-        //     $amount = ( $usage - $freeUnits ) * $additionalProperties + $base;
-        // }
-
-        $amount = $this->calculateUsage();
-
-        //try {
-
-        // I AM GETTING NO ERRORS IF THIS RETURNS BAD
-
-        $plan = \Stripe\Plan::create([
-            "nickname" => $user->name ." Home Owner Metered Monthly",
-            "product" => "prod_GVRCMzXFI6A2wS", // hard coded. i think i just need one of these
-            "amount" => $amount,
-            "billing_scheme" => "per_unit",
-            "currency" => "usd",
-            "interval" => "month",
-            "interval_count" => 1,
-            "trial_period_days" => 14,
-        ]);
-
-        $priceObj = \Stripe\Prices::create([
-            "unit_amount" => $amount,
-            'currency' => 'usd',
-            'recurring' => ['interval' => 'month'],
-            "product" => "prod_GVRCMzXFI6A2wS", // hard coded. i think i just need one of these
-        ]);
-
-        $subscription = \Stripe\Subscriptions::create([
-            "customer" => $user->stripe_id,
-            "items" => [
-                [
-                    "price" => $priceObj->id,
-                    "price_data" => [
-                        "currency" => 'usd',
-                        "product" => 'prod_GVRCMzXFI6A2wS',
-                        "recurring" => [
-                            "interval" => 'month'
-                        ],
-
-                    ],
-                ],
-            ],
-        ]);
-
-        return redirect()
-            ->route('settings.billing.index', [
-                'bank_accounts' => $bank_accounts, 
-                'customer' => $customer, 
-                'invoices' => $invoices,
-            ])->with('info', 'You have successfully authorized this account. SenRent will bill you automatically each month. Check back here to see your billing history.');
-
-        //   } catch(\Stripe\Exception\CardException $e) {
-            
-        //     return redirect()
-        //         ->route('settings.billing.index', [
-        //             'bank_accounts' => $bank_accounts, 
-        //             'customer' => $customer, 
-        //             'invoices' => $invoices,
-        //         ])->with('danger',  $e->getError()->message);
-
-        //   } catch (\Stripe\Exception\RateLimitException $e) {
-            
-        //     return redirect()
-        //         ->route('settings.billing.index', [
-        //             'bank_accounts' => $bank_accounts, 
-        //             'customer' => $customer, 
-        //             'invoices' => $invoices,
-        //         ])->with('danger',  $e->getError()->message);
-
-        //   } catch (\Stripe\Exception\InvalidRequestException $e) {
-            
-        //     return redirect()
-        //         ->route('settings.billing.index', [
-        //             'bank_accounts' => $bank_accounts, 
-        //             'customer' => $customer, 
-        //             'invoices' => $invoices,
-        //         ])->with('danger',  $e->getError()->message);
-
-        //   } catch (\Stripe\Exception\AuthenticationException $e) {
-            
-        //     return redirect()
-        //         ->route('settings.billing.index', [
-        //             'bank_accounts' => $bank_accounts, 
-        //             'customer' => $customer, 
-        //             'invoices' => $invoices,
-        //         ])->with('danger',  $e->getError()->message);
-
-        //   } catch (\Stripe\Exception\ApiConnectionException $e) {
-            
-        //     return redirect()
-        //         ->route('settings.billing.index', [
-        //             'bank_accounts' => $bank_accounts, 
-        //             'customer' => $customer, 
-        //             'invoices' => $invoices,
-        //         ])->with('danger',  $e->getError()->message);
-
-        //   } catch (\Stripe\Exception\ApiErrorException $e) {
-            
-        //     return redirect()
-        //         ->route('settings.billing.index', [
-        //             'bank_accounts' => $bank_accounts, 
-        //             'customer' => $customer, 
-        //             'invoices' => $invoices,
-        //         ])->with('danger',  $e->getError()->message);
-
-        //   } catch (Exception $e) {
-            
-        //     return redirect()
-        //         ->route('settings.billing.index', [
-        //             'bank_accounts' => $bank_accounts, 
-        //             'customer' => $customer, 
-        //             'invoices' => $invoices,
-        //         ])->with('danger',  $e->getError()->message);
-
-        //   }
     }
 
     public function calculateUsage() {
@@ -1249,6 +907,7 @@ class BillingController extends Controller {
 
     /**
      * ONBOARDING - Collect the following information
+     * currently in development not working
      */
     public function CustomAccountOnboarding(Request $request) {
 
@@ -1351,23 +1010,6 @@ class BillingController extends Controller {
          * 
          * https://stripe.com/docs/connect/account-tokens#file-upload
          */
-
-    }
-
-    /**
-     * THIS IS CRITICAL
-     * if this is not setup properly, I will loose money based on the daily payouts
-     * Each payout costs $0.25. 
-     * 
-     * Restrict payout to happen once a month! 
-     *
-     */
-    public function setPayoutSchedule() {
-
-        // this is set when creating an account
-
-        // need to find out if i need to set when i want my payout. i think that is done in
-        // the stripe dashboard
 
     }
 

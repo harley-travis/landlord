@@ -48,5 +48,7 @@ class everyMonth extends Command
         $isPaid = DB::table('rents')->where('paid', 1)->update(['paid' => 0]);
         echo "we updated the paid values";
 
+        // calculate the usage amount
+
     }
 }
