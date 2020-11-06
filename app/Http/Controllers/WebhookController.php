@@ -131,7 +131,7 @@ class WebhookController extends CashierController {
             'total' => $amount,
         ]);
 
-        return new Response('webhook successfully received'.$amount, 200);
+        return new Response('webhook successfully received', 200);
 
     }
 
