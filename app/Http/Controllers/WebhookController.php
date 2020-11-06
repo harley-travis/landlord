@@ -120,7 +120,7 @@ class WebhookController extends CashierController {
 
         // \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
 
-        print_r($payload);
+        
 
         // $customer = $payload['data']['object']['customer'];
         // $user = User::where('stripe_id', '=', $stripe_id)->first();
@@ -133,7 +133,9 @@ class WebhookController extends CashierController {
         //     'total' => $amount,
         // ]);
 
-        return new Response($payload, 200);
+       // return new Response($payload, 200);
+
+       return $payload;
 
     }
 
