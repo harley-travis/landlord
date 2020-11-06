@@ -118,18 +118,18 @@ class WebhookController extends CashierController {
     // get the data for upcoming subscriptions
     public function handleInvoiceUpcoming($payload) {
 
-        \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
+        // \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
 
-        $customer = $payload['data']['object']['customer'];
-        $user = User::where('stripe_id', '=', $stripe_id)->first();
-        $paymentSetup = SetupPayment::where('company_id', '=', $user->company_id)->first();
-        $amount = $paymentSetup->pricingAmount;
+        // $customer = $payload['data']['object']['customer'];
+        // $user = User::where('stripe_id', '=', $stripe_id)->first();
+        // $paymentSetup = SetupPayment::where('company_id', '=', $user->company_id)->first();
+        // $amount = $paymentSetup->pricingAmount;
 
-        // set the subscurition amount this month with the stripe method
-        \Stripe\Invoices::upcoming([
-            'customer' => 'cus_IKt8UPXrRcD9uv',
-            'total' => $amount,
-        ]);
+        // // set the subscurition amount this month with the stripe method
+        // \Stripe\Invoices::upcoming([
+        //     'customer' => 'cus_IKt8UPXrRcD9uv',
+        //     'total' => $amount,
+        // ]);
 
         return new Response('webhook successfully received', 200);
 
