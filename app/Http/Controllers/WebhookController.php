@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use Mail;
 use App\User;
+use App\Company;
 use App\Rent;
 use App\Tenant;
 use App\Transaction;
+use App\SetupPayment;
 use Carbon\Carbon;
 use App\Mail\PaymentConfirmation;
 use App\Mail\PaymentFailed;
@@ -99,6 +101,35 @@ class WebhookController extends CashierController {
         Mail::to($email)->send(new PaymentConfirmation($user, $total, $transaction->created_at, $confirmationNumber));
 
         return new Response('received', 200);
+
+    }
+
+    // calculate usage for landlord subscription
+    public function calculateUsage($user) {
+        
+        /**
+         * I DON'T NEED THIS BECUASE IF IM UPDATING EACH TABLE AFTER A NEW PROPERTY IS ADDED, 
+         * OR IF RENT IS CHANGED, THEN IT SHOULD BE UPDATED ON THE PAYMENT TABLE.
+         */
+
+        
+    }
+
+    // get the data for upcoming subscriptions
+    public function handleInvoiceUpcoming($payload) {
+
+        \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
+
+        $customer = $payload['data']['object']['customer'];
+        $user = User::where('stripe_id', '=', $stripe_id)->first();
+        $paymentSetup = SetupPayment::where('company_id', '=', $user->company_id)->first();
+        $amount = $paymentSetup->pricingAmount;
+
+        // set the subscurition amount this month with the stripe method
+        \Stripe\Invoices::upcoming([
+            'customer' => 'cus_IKt8UPXrRcD9uv',
+            'total' => $amount,
+        ]);
 
     }
 
