@@ -120,6 +120,8 @@ class WebhookController extends CashierController {
 
         // \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
 
+        dd($payload);
+
         // $customer = $payload['data']['object']['customer'];
         // $user = User::where('stripe_id', '=', $stripe_id)->first();
         // $paymentSetup = SetupPayment::where('company_id', '=', $user->company_id)->first();
