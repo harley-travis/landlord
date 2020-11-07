@@ -27,25 +27,25 @@ class TenantController extends Controller {
     public function index() {
 
         $assigned = User::join('tenants', 'users.id', '=', 'tenants.user_id')
-                            ->join('properties', 'tenants.property_id', '=', 'properties.id')
-                            ->where('properties.company_id', '=', Auth::user()->company_id)
-                            ->where('users.company_id', '=', Auth::user()->company_id)
-                            ->where('tenants.active', '=', '1')
-                            ->paginate(15);
+            ->join('properties', 'tenants.property_id', '=', 'properties.id')
+            ->where('properties.company_id', '=', Auth::user()->company_id)
+            ->where('users.company_id', '=', Auth::user()->company_id)
+            ->where('tenants.active', '=', '1')
+            ->paginate(15);
 
         $unassigned = User::join('tenants', 'users.id', '=', 'tenants.user_id')
-                            ->where('users.company_id', '=', Auth::user()->company_id)
-                            ->where('tenants.assigned', '=', '0')
-                            ->paginate(15);           
+            ->where('users.company_id', '=', Auth::user()->company_id)
+            ->where('tenants.assigned', '=', '0')
+            ->paginate(15);           
 
         $tenants = User::join('tenants', 'users.id', '=', 'tenants.user_id')
-                            ->where('users.company_id', '=', Auth::user()->company_id)
-                            ->where('tenants.active', '=', '1')
-                            ->paginate(15);
+            ->where('users.company_id', '=', Auth::user()->company_id)
+            ->where('tenants.active', '=', '1')
+            ->paginate(15);
 
         $properties = User::join('properties', 'users.id', '=', 'properties.company_id')
-                            ->where('properties.company_id', '=', Auth::user()->company_id)
-                            ->get();
+            ->where('properties.company_id', '=', Auth::user()->company_id)
+            ->get();
         
         return view('tenants.index', 
             [

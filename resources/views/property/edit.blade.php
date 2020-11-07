@@ -325,7 +325,7 @@
                         <input type="hidden" name="property_id" value="{{ $property_id }}">
                         <input type="hidden" name="rent_id" value="{{ $rent->id }}">
 
-                        @if( $tenant->property_id === null || $tenant->property_id === '' ) 
+                        @if( $tenant === null || $tenant->property_id === null || $tenant->property_id === '' ) 
                         <button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#deleteModal">Delete Property</button>
                         @else
                         <button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#tenantRemoveModal">Delete Property</button>
@@ -355,6 +355,7 @@
                         </div>
                     </div>
 
+                    @if( $tenant != null ) 
                     <!-- Modal -->
                     <div class="modal fade" id="tenantRemoveModal" tabindex="-1" role="dialog" aria-labelledby="tenantRemoveModalLabel" aria-hidden="true">
                         <div class="modal-dialog" role="document">
@@ -375,6 +376,7 @@
                             </div>
                         </div>
                     </div>
+                    @endif
 
                 </div>
             </div>

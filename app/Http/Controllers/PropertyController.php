@@ -121,8 +121,13 @@ class PropertyController extends Controller {
         ]);
         $rent->save();
 
+        // update the total number of properties
+        $numberOfProperties = SetupPayment::where('company_id', '=', Auth::user()->company_id)->first();
+        $numberOfProperties->numberOfProperties++;
+        $numberOfProperties->save();
+
         // update the setup payment table
-        $this->updatePricing( $request->input('rent_amount'));
+        $this->updatePricing( $request->input('rent_amount') );
         
         return redirect()
                 ->route('property.index')
@@ -134,10 +139,10 @@ class PropertyController extends Controller {
 
         $rentAmount = $a;
 
-        // find the number of properties and add one
+        // find the pricing table
         $numberOfProperties = SetupPayment::where('company_id', '=', Auth::user()->company_id)->first();
-        $numberOfProperties->numberOfProperties++;
 
+        // if the price that is passed through is higher than set in the db, update it
         if($rentAmount > $numberOfProperties->highestRentAmount) {
             $numberOfProperties->highestRentAmount = $rentAmount;
         } 
@@ -157,7 +162,6 @@ class PropertyController extends Controller {
             $priceAmount = 200; 
         }
 
-        $numberOfProperties->payoutFee = $totalFees;
         $numberOfProperties->pricingAmount = $priceAmount;
         $numberOfProperties->save();
 
@@ -255,9 +259,29 @@ class PropertyController extends Controller {
      */
     public function destroy($id) {
 
-        $property = Property::find($id);
-        $property->delete();
+        // $property = Property::find($id);
+        // $property->delete();
 
+        // // update the total number of properties
+        // $numberOfProperties = SetupPayment::where('company_id', '=', Auth::user()->company_id)->first();
+        // $numberOfProperties->numberOfProperties--;
+        // $numberOfProperties->save();
+        
+        // update the stripe subscription cost
+        // only if the billing amount changes
+        $subscriptionCost = \Stripe\Subscription::retrieve([
+            "customer" => Auth::user()->stripe_id,
+        ]);
+
+        dd($subscriptionCost);
+
+        // if($numberOfProperties->pricingAmount > $subscriptionCost) {
+
+        // }
+
+        // how can we tell what teh subscription cost is without pulling stripe data and updating?
+
+        
         return redirect()
             ->route('property.index')
             ->with('info', 'Your property was successfully deleted');
