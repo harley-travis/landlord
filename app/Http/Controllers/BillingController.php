@@ -509,9 +509,10 @@ class BillingController extends Controller {
         // create and assign the subscription to the user
         $subscription = \Stripe\Subscription::create([
             "customer" => $user->stripe_id,
-            "trial_period_days" => 14,
+            "trial_period_days" => 1,
             "billing_thresholds" => null,
             "billing_cycle_anchor" => Carbon::now()->day(27)->timestamp,
+          //  "billing_cycle_anchor" => Carbon::now()->timestamp,
             "items" => [
                 ["price" => $priceObj->id],
             ],
