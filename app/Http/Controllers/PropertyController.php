@@ -269,6 +269,7 @@ class PropertyController extends Controller {
         
         // update the stripe subscription cost
         // only if the billing amount changes
+        // pull from the subsscriptions table
         $subscriptionCost = \Stripe\Subscription::retrieve([
             "customer" => Auth::user()->stripe_id,
         ]);
