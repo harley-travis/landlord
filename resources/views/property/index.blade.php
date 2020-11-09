@@ -67,7 +67,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($avaliable as $property)
+                                @foreach($rents as $property)
                                 <tr>
                                     <td>{{ $property->address_1 }} {{ $property->address_2 }} {{ $property->address_3 }}</td>
                                     <td>

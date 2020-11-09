@@ -496,29 +496,22 @@ class BillingController extends Controller {
         $amount = $this->calculateUsage();
 
         // create a price object for the subscription
-        // $priceObj = \Stripe\Price::create([
-        //     "unit_amount" => $amount * 100,
-        //     'currency' => 'usd',
-        //     'recurring' => [
-        //         'interval' => 'month',
-        //         'usage_type' => 'metered',
-        //     ],
-        //     "product" => "prod_GVRCMzXFI6A2wS", // hard coded. i think i just need one of these
-        // ]);
+        $priceObj = \Stripe\Price::create([
+            "unit_amount" => $amount * 100,
+            'currency' => 'usd',
+            'recurring' => [
+                'interval' => 'month',
+                'usage_type' => 'metered',
+            ],
+            "product" => "prod_GVRCMzXFI6A2wS", // hard coded. i think i just need one of these
+        ]);
 
         // // create and assign the subscription to the user
-        // $subscription = \Stripe\Subscription::create([
-        //     "customer" => $user->stripe_id,
-        //     "trial_period_days" => 14,
-        //     "billing_thresholds" => null,
-        //     "billing_cycle_anchor" => Carbon::now()->day(27)->timestamp,
-        //     "items" => [
-        //         ["price" => $priceObj->id],
-        //     ],
-            
-        // ]);
-
-        $user->newSubscription('default', 'price_premium')->create();
+        $user->newSubscription('Home Owners', $priceObj->id)
+            ->anchorBillingCycleOn(Carbon::now()->day(27)->timestamp)
+            ->trialDays(14)
+            ->quantity(0)
+            ->create();
 
 
 

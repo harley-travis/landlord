@@ -349,7 +349,7 @@
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                    <a class="btn btn-danger shadow" href="{{ route('property.delete', ['id' => $property->id ]) }}">Yes, Delete Property</a>
+                                    <a class="btn btn-danger shadow" href="{{ route('property.delete', ['id' => $rent->id ]) }}">Yes, Delete Property</a>
                                 </div>
                             </div>
                         </div>

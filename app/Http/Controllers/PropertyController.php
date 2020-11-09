@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Auth;
 use DB;
 use App\User;
+use Carbon\Carbon;
 use App\Property;
 use App\Rent;
 use App\Tenant;
@@ -23,26 +24,32 @@ class PropertyController extends Controller {
      */
     public function index() {
 
-        $properties = Property::join('rents', 'rents.property_id', '=', 'properties.id')
-                            ->where('company_id', '=', Auth::user()->company_id)
-                            ->paginate(15);
+        $properties = Property::where('company_id', '=', Auth::user()->company_id)
+            ->paginate(15);
+
+        // $rents = Rent::where('company_id', '=', Auth::user()->company_id)
+        //     ->paginate(15);
+
+        $rents = Rent::join('properties', 'rents.property_id', '=', 'properties.id')
+            ->where('properties.company_id', '=', Auth::user()->company_id)
+            ->paginate(15);
 
         $communities = Community::join('properties', 'communities.id', '=', 'properties.community_id')
-                            ->where('communities.company_id', '=', Auth::user()->company_id)
-                            ->paginate(15);
+            ->where('communities.company_id', '=', Auth::user()->company_id)
+            ->paginate(15);
 
 
         $avaliable = Property::join('rents', 'rents.property_id', '=', 'properties.id')
-                            ->where('properties.company_id', '=', Auth::user()->company_id)
-                            ->where('properties.occupied', '=', 0)
-                            ->paginate(15);
+            ->where('properties.company_id', '=', Auth::user()->company_id)
+            ->where('properties.occupied', '=', 0)
+            ->paginate(15);
 
         $occupied = User::join('tenants', 'users.id', '=', 'tenants.user_id')
-                            ->join('properties', 'tenants.property_id', '=', 'properties.id')
-                            ->where('properties.company_id', '=', Auth::user()->company_id)
-                            ->where('users.company_id', '=', Auth::user()->company_id)
-                            ->where('tenants.active', '=', 1)
-                            ->paginate(15);
+            ->join('properties', 'tenants.property_id', '=', 'properties.id')
+            ->where('properties.company_id', '=', Auth::user()->company_id)
+            ->where('users.company_id', '=', Auth::user()->company_id)
+            ->where('tenants.active', '=', 1)
+            ->paginate(15);
 
         $company = Company::where('id', '=', Auth::user()->company_id)->first();
         
@@ -52,6 +59,7 @@ class PropertyController extends Controller {
             'company' => $company,
             'occupied' => $occupied,
             'avaliable' => $avaliable,
+            'rents' => $rents
         ]);
 
     }
@@ -117,6 +125,7 @@ class PropertyController extends Controller {
             'account_number' => $request->input('account_number'),
             'hoa_amount' => $request->input('hoa_amount'),
             'property_id' => $property->id,
+            'company_id' => Auth::user()->company_id,
             'paid' => 0,
         ]);
         $rent->save();
@@ -124,6 +133,8 @@ class PropertyController extends Controller {
         // update the total number of properties
         $numberOfProperties = SetupPayment::where('company_id', '=', Auth::user()->company_id)->first();
         $numberOfProperties->numberOfProperties++;
+        $newPrice = $this->calculateUsage();
+        $numberOfProperties->pricingAmount = $newPrice;
         $numberOfProperties->save();
 
         // update the setup payment table
@@ -259,33 +270,117 @@ class PropertyController extends Controller {
      */
     public function destroy($id) {
 
-        // $property = Property::find($id);
-        // $property->delete();
+        \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
+
+        $property = Property::find($id);
+        $property->delete();
 
         // // update the total number of properties
-        // $numberOfProperties = SetupPayment::where('company_id', '=', Auth::user()->company_id)->first();
-        // $numberOfProperties->numberOfProperties--;
-        // $numberOfProperties->save();
+        $numberOfProperties = SetupPayment::where('company_id', '=', Auth::user()->company_id)->first();
+        $numberOfProperties->numberOfProperties--;
+
+        // recalucate the monthly price
+        $newPrice = $this->calculateUsage();
         
-        // update the stripe subscription cost
-        // only if the billing amount changes
-        // pull from the subsscriptions table
-        $subscriptionCost = \Stripe\Subscription::retrieve([
-            "customer" => Auth::user()->stripe_id,
-        ]);
+        if($numberOfProperties->numberOfProperties < 1) {
+            $numberOfProperties->numberOfProperties = 0;
+            $numberOfProperties->highestRentAmount = 0;
+        } else {
+            $numberOfProperties->pricingAmount = $newPrice;
+        }
 
-        dd($subscriptionCost);
+        $numberOfProperties->save();
 
-        // if($numberOfProperties->pricingAmount > $subscriptionCost) {
-
-        // }
-
-        // how can we tell what teh subscription cost is without pulling stripe data and updating?
-
+        // update the pricing
+        $this->updateSubscription($numberOfProperties);
         
         return redirect()
             ->route('property.index')
             ->with('info', 'Your property was successfully deleted');
+
+    }
+
+    public function updateSubscription($numberOfProperties) {
+
+        // retreive the subscription data
+        $subscriptionCost = DB::table('subscriptions')->where('user_id', '=', Auth::user()->id)->first();
+        $subscription = \Stripe\Subscription::retrieve(
+            $subscriptionCost->stripe_id
+        );
+
+        $priceId = $subscription->items->data[0]->price->id; // dont think i need this anymore
+        $subscriptionAmount = $subscription->plan->amount_decimal / 100; // remove the cents
+
+        // if the pricing does not match then update it
+        if($numberOfProperties->pricingAmount != $subscriptionAmount) {
+
+            // create a new pricing plan
+            $priceObj = \Stripe\Price::create([
+                "unit_amount" => $numberOfProperties->pricingAmount * 100,
+                'currency' => 'usd',
+                'recurring' => [
+                    'interval' => 'month',
+                    'usage_type' => 'metered',
+                ],
+                "product" => "prod_ILc0F0EpyIThhF", // hard coded. i think i just need one of these
+            ]);
+
+            // update the subscription to the new price
+            \Stripe\Subscription::update($subscriptionCost->stripe_id, [
+            'items' => [
+                    [
+                        'id' => $subscription->items->data[0]->id,
+                        'price' => $priceObj->id,
+                    ],
+                ],
+            "billing_cycle_anchor" => "unchanged",
+            ]);
+
+        }
+        
+    }
+
+    public function calculateUsage() {
+
+        $company_id = Company::where('id', '=', Auth::user()->company_id)->pluck('id');
+        $paymentSetup = SetupPayment::where('company_id', '=', Auth::user()->company_id)->first();
+
+        $numberOfProperties = $paymentSetup->numberOfProperties;
+        $highestRentAmount = DB::table('rents')
+                ->where('company_id', '=', Auth::user()->company_id)
+                ->max('rent_amount');
+        
+
+        if($highestRentAmount === null ) {
+            $highestRentAmount = 0;
+        }
+
+        // Stripe fee calculations 
+        $totalMonthlyRentAmount = $highestRentAmount * $numberOfProperties;
+        $payoutFee = number_format($totalMonthlyRentAmount * 0.0025,2); // 0.0025 is the payout fee
+        $totalFees = round($payoutFee + 3); // 2 is the number of active user dollars
+
+        $pricing = ($totalFees *.5) + $totalFees; 
+        $priceAmount = '';
+
+        if($pricing > 100) {
+
+            $priceAmount = $pricing;
+            $paymentSetup->highestRentAmount = $highestRentAmount;
+            $paymentSetup->pricingAmount = $priceAmount;
+            $paymentSetup->save();
+
+            return $priceAmount;
+
+        } else {
+
+            $priceAmount = 200; 
+            $paymentSetup->highestRentAmount = $highestRentAmount;
+            $paymentSetup->pricingAmount = $priceAmount;
+            $paymentSetup->save();
+
+            return $priceAmount;
+        }
 
     }
 }

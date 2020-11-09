@@ -20,7 +20,7 @@ class CreateSetupPaymentsTable extends Migration
             $table->integer('highestRentAmount')->default(0);
             $table->integer('percentAmount')->default('.50');
             $table->integer('fixedPricing')->nullable();
-            $table->integer('pricingAmount')->nullable();
+            $table->integer('pricingAmount')->default(0);
             $table->timestamps();
 
             $table->foreign('company_id')->references('id')->on('companies');

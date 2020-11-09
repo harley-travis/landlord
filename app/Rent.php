@@ -20,6 +20,7 @@ class Rent extends Model {
         'account_number',
         'hoa_amount',
         'property_id',
+        'company_id',
     ];
 
     public function property() {

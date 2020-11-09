@@ -22,6 +22,7 @@ class CreateRentsTable extends Migration
 
             $table->bigIncrements('id');
             $table->unsignedBigInteger('property_id');
+            $table->unsignedBigInteger('company_id');
             $table->date('last_date_paid')->nullable();
             $table->date('next_due_date')->nullable();
             $table->integer('rent_amount')->nullable();
@@ -37,6 +38,7 @@ class CreateRentsTable extends Migration
             $table->timestamps();
 
             $table->foreign('property_id')->references('id')->on('properties')->onDelete('cascade');
+            $table->foreign('company_id')->references('id')->on('companies');
         });
     }
 
