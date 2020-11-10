@@ -242,6 +242,7 @@ class BillingController extends Controller {
                 'bank_accounts' => $this->getBankAccounts(), 
                 'customer' => $this->getCustomer(), 
                 'invoices' => $this->getInvoices(),
+                'bill' => $this->getPaymentSetup(),
             ])->with('info', 'Your account was successfully added. Check your account in 1-2 business days to see 2 small deposits. Verify you account by entering in those deposit amounts. Deposits take 1-3 business days.');
 
     }
@@ -299,6 +300,7 @@ class BillingController extends Controller {
                     'bank_accounts' => $bank_accounts, 
                     'customer' => $customer, 
                     'invoices' => $invoices,
+                    'bill' => $this->getPaymentSetup(),
                 ])->with('info', 'Your account was successfully verified.');
 
         } 
@@ -464,6 +466,7 @@ class BillingController extends Controller {
             ->route('settings.billing.index', [
                 'bank_accounts' => $this->getBankAccounts(), 
                 'customer' => $this->getCustomer(), 
+                'bill' => $this->getPaymentSetup(),
             ])->with('danger', 'You are not able to remove an ACH account if there is no other account on file. Please add an ACH account then remove this account after. If you have any problems, please contact support for help');
 
         } else {
@@ -478,6 +481,7 @@ class BillingController extends Controller {
                 'bank_accounts' => $this->getBankAccounts(), 
                 'customer' => $this->getCustomer(), 
                 'invoices' => $this->getInvoices(),
+                'bill' => $this->getPaymentSetup(),
             ])->with('info', 'Your account was successfully deleted.');
 
         }
@@ -582,6 +586,7 @@ class BillingController extends Controller {
             'bank_accounts' => $this->getBankAccounts(), 
             'customer' => $this->getCustomer(), 
             'invoices' => $this->getInvoices(),
+            'bill' => $this->getPaymentSetup(),
         ])->with('info', 'Your default payment has be set successfully!');
 
     }
@@ -604,6 +609,11 @@ class BillingController extends Controller {
         $user->stripe_account = $response->stripe_user_id;
         $user->save();
 
+        // complete onboarding
+        $onboarding = SetupPayment::where('company_id', '=', Auth::user()->company_id)->first();
+        $onboarding->onboarding = 1;
+        $onboarding->save();
+
         // change the payout to once a month
         $account = \Stripe\Account::update(
             $user->stripe_account,
@@ -624,6 +634,7 @@ class BillingController extends Controller {
             'bank_accounts' => $this->getBankAccounts(), 
             'customer' => $this->getCustomer(), 
             'invoices' => $this->getInvoices(),
+            'bill' => $this->getPaymentSetup(),
         ])->with('info', 'You have successfully completed the onboarding process! Have fun!');
 
     }
@@ -773,6 +784,7 @@ class BillingController extends Controller {
                     'customer' => $this->getCustomer(), 
                     'intent' => $this->getUser(),
                     'connect_accounts' => $this->getStripeAccount(),
+                    'bill' => $this->getPaymentSetup(),
                 ])->with('danger',  $e);
 
         } 

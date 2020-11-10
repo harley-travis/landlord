@@ -21,6 +21,7 @@ class CreateSetupPaymentsTable extends Migration
             $table->integer('percentAmount')->default('.50');
             $table->integer('fixedPricing')->nullable();
             $table->integer('pricingAmount')->default(0);
+            $table->integer('onboarding')->default(0)->comment('0=no yes=1');
             $table->timestamps();
 
             $table->foreign('company_id')->references('id')->on('companies');

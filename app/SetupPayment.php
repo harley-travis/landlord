@@ -19,6 +19,7 @@ class SetupPayment extends Model {
         'percentAmount',
         'fixedPricing',
         'pricingAmount',
+        'onboarding',
         'user_id',
         'company_id', 
     ];

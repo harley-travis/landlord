@@ -35,7 +35,7 @@
         </div>
     </div>
 
-    @if($user->stripe_account === null && $user->role >= 1)
+    @if($bill->onboarding = 0)
     <div class="row mb-3">
         <div class="col">
             <div class="card shadow">
