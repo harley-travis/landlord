@@ -849,15 +849,20 @@ class BillingController extends Controller {
     public function findRentBalance($tenant_id) {
 
         $findPropertyId = Tenant::where('id', '=', $tenant_id)->first(); 
-        $property_id =  $findPropertyId->property_id;
+        $property_id = $findPropertyId->property_id;
 
-        $balanceAmount = Rent::where('property_id', '=', $property_id)->first();
-        $balance = $balanceAmount->balance;
-
-        if( $balanceAmount === null || $balanceAmount === 0 ) {
+        if( $property_id === null ) {
             return 0;
         } else {
-            return $balance;
+
+            $balanceAmount = Rent::where('property_id', '=', $property_id)->first();
+            $balance = $balanceAmount->balance;
+    
+            if( $balanceAmount === null || $balanceAmount === 0 ) {
+                return 0;
+            } else {
+                return $balance;
+            }
         }
 
     }
