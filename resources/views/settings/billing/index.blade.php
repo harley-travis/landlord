@@ -35,7 +35,7 @@
         </div>
     </div>
 
-    @if($bill->onboarding = 0)
+    @if($bill->onboarding === 0)
     <div class="row mb-3">
         <div class="col">
             <div class="card shadow">
