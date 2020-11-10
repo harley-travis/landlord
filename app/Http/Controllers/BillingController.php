@@ -666,7 +666,7 @@ class BillingController extends Controller {
                             ->where('properties.id', '=', $this->getTenant()->property_id)
                             ->first();
 
-        $findPropertyId = Tenant::where('id', '=', $tenant_id)->first(); 
+        $findPropertyId = Tenant::where('user_id', '=', Auth::user()->user_id)->first(); 
         $property_id = $findPropertyId->property_id;
 
         $balance = '';
