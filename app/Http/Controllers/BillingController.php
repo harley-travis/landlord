@@ -667,15 +667,17 @@ class BillingController extends Controller {
                             ->first();
 
         $findPropertyId = Tenant::where('user_id', '=', Auth::user()->user_id)->first(); 
-        $property_id = $findPropertyId->property_id;
 
+        $property_id = '';
         $balance = '';
         $betweenDates = '';
 
-        if( $property_id === null ) {
-            $balance = 0;
+        if($property_id === null) {
+            $property_id = 0;
+            $balance = 0;          
         
         } else {
+            $property_id = $findPropertyId->property_id;
             $balance = $this->findRentBalance($this->getTenant()->id) + $property->rent_amount;
             $betweenDates = $this->calculateRentDueDate();
         }
