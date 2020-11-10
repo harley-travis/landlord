@@ -91,7 +91,7 @@
     </div>  -->
     @endif
 
-    @if( $user->role === 3 && $bill->onboarding !=0 )
+    @if( $user->role === 3 && $bill->onboarding != 0 )
     <div class="row">
         <div class="col-sm">
             <div class="card shadow">
@@ -271,7 +271,7 @@
     </div> <!-- row -->
     @endif
 
-    @if(&& $bill->onboarding !=0)
+    @if( $user->role >= 2 && $bill->onboarding != 0 || $user->role === 0 )
     <div class="row mt-3">
         <div class="col">
             <div class="card shadow">
