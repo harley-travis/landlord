@@ -665,9 +665,20 @@ class BillingController extends Controller {
         $property = Property::join('rents', 'rents.property_id', '=', 'properties.id')
                             ->where('properties.id', '=', $this->getTenant()->property_id)
                             ->first();
+
+        $findPropertyId = Tenant::where('id', '=', $tenant_id)->first(); 
+        $property_id = $findPropertyId->property_id;
+
+        $balance = '';
+        $betweenDates = '';
+
+        if( $property_id === null ) {
+            $balance = 0;
         
-        $balance = $this->findRentBalance($this->getTenant()->id) + $property->rent_amount;
-        $betweenDates = $this->calculateRentDueDate();
+        } else {
+            $balance = $this->findRentBalance($this->getTenant()->id) + $property->rent_amount;
+            $betweenDates = $this->calculateRentDueDate();
+        }
        
         return view('tenants.billing.index', [
                     'tenant' => $this->getTenant(),
