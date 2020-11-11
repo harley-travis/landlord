@@ -507,7 +507,7 @@ class BillingController extends Controller {
                 'interval' => 'month',
                 'usage_type' => 'metered',
             ],
-            "product" => "prod_GVRCMzXFI6A2wS", // hard coded. i think i just need one of these
+            "product" => env('MONTHY_SUBSCRIPTION_PRODUCT'), // hard coded. i think i just need one of these
         ]);
 
         // // create and assign the subscription to the user
