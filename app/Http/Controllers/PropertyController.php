@@ -132,13 +132,12 @@ class PropertyController extends Controller {
 
         // update the total number of properties
         $numberOfProperties = SetupPayment::where('company_id', '=', Auth::user()->company_id)->first();
-        $numberOfProperties->numberOfProperties++;
-        $newPrice = $this->calculateUsage();
-        $numberOfProperties->pricingAmount = $newPrice;
+        $propertyCount = $numberOfProperties->numberOfProperties++;
+        $newPrice = $this->calculateUsage($propertyCount + 1);
         $numberOfProperties->save();
 
-        // update the setup payment table
-        $this->updatePricing( $request->input('rent_amount') );
+        // update the subscription
+        $this->updateSubscription($newPrice);
         
         return redirect()
                 ->route('property.index')
@@ -146,47 +145,6 @@ class PropertyController extends Controller {
 
     }
 
-    public function updatePricing($a) {
-
-        $rentAmount = $a;
-
-        // find the pricing table
-        $numberOfProperties = SetupPayment::where('company_id', '=', Auth::user()->company_id)->first();
-
-        // if the price that is passed through is higher than set in the db, update it
-        if($rentAmount > $numberOfProperties->highestRentAmount) {
-            $numberOfProperties->highestRentAmount = $rentAmount;
-        } 
-
-        // Stripe fee calculations 
-        $totalMonthlyRentAmount = $numberOfProperties->highestRentAmount * ($numberOfProperties->numberOfProperties);
-        $payoutFee = $totalMonthlyRentAmount * 0.0025; // 0.0025 is the payout fee
-        $totalFees = $payoutFee + 3; // 2 is the number of active user dollars | adding an extra dollar for rounds. 
-
-        // pricing total
-        $pricing = ($totalFees *.5) + $totalFees; 
-        $priceAmount = '';
-
-        if($pricing > 200) {
-            $priceAmount = $pricing;
-        } else {
-            $priceAmount = 200; 
-        }
-
-        $numberOfProperties->pricingAmount = $priceAmount;
-        $numberOfProperties->save();
-
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Property  $property
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id) {
-       
-    }
 
     /**
      * Show the form for editing the specified resource.
@@ -275,12 +233,12 @@ class PropertyController extends Controller {
         $property = Property::find($id);
         $property->delete();
 
-        // // update the total number of properties
+        // update the total number of properties
         $numberOfProperties = SetupPayment::where('company_id', '=', Auth::user()->company_id)->first();
-        $numberOfProperties->numberOfProperties--;
+        $propertyCount = $numberOfProperties->numberOfProperties--;
 
         // recalucate the monthly price
-        $newPrice = $this->calculateUsage();
+        $newPrice = $this->calculateUsage($propertyCount - 1);
         
         if($numberOfProperties->numberOfProperties < 1) {
             $numberOfProperties->numberOfProperties = 0;
@@ -291,8 +249,8 @@ class PropertyController extends Controller {
 
         $numberOfProperties->save();
 
-        // update the pricing
-        $this->updateSubscription($numberOfProperties);
+        // update the subscription
+        $this->updateSubscription($newPrice);
         
         return redirect()
             ->route('property.index')
@@ -300,7 +258,9 @@ class PropertyController extends Controller {
 
     }
 
-    public function updateSubscription($numberOfProperties) {
+    public function updateSubscription($newPrice) {
+
+        \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
 
         // retreive the subscription data
         $subscriptionCost = DB::table('subscriptions')->where('user_id', '=', Auth::user()->id)->first();
@@ -308,15 +268,14 @@ class PropertyController extends Controller {
             $subscriptionCost->stripe_id
         );
 
-        $priceId = $subscription->items->data[0]->price->id; // dont think i need this anymore
         $subscriptionAmount = $subscription->plan->amount_decimal / 100; // remove the cents
 
         // if the pricing does not match then update it
-        if($numberOfProperties->pricingAmount != $subscriptionAmount) {
+        if($newPrice != $subscriptionAmount) {
 
             // create a new pricing plan
             $priceObj = \Stripe\Price::create([
-                "unit_amount" => $numberOfProperties->pricingAmount * 100,
+                "unit_amount" => $newPrice * 100,
                 'currency' => 'usd',
                 'recurring' => [
                     'interval' => 'month',
@@ -340,30 +299,31 @@ class PropertyController extends Controller {
         
     }
 
-    public function calculateUsage() {
+    public function calculateUsage($propertyCount) {
 
         $company_id = Company::where('id', '=', Auth::user()->company_id)->pluck('id');
         $paymentSetup = SetupPayment::where('company_id', '=', Auth::user()->company_id)->first();
 
-        $numberOfProperties = $paymentSetup->numberOfProperties;
+        $numberOfProperties = $propertyCount;
+
         $highestRentAmount = DB::table('rents')
                 ->where('company_id', '=', Auth::user()->company_id)
                 ->max('rent_amount');
         
 
-        if($highestRentAmount === null ) {
+        if( $highestRentAmount === null ) {
             $highestRentAmount = 0;
         }
 
         // Stripe fee calculations 
         $totalMonthlyRentAmount = $highestRentAmount * $numberOfProperties;
-        $payoutFee = number_format($totalMonthlyRentAmount * 0.0025,2); // 0.0025 is the payout fee
-        $totalFees = round($payoutFee + 3); // 2 is the number of active user dollars
+        $payoutFee = $totalMonthlyRentAmount * 0.0025; // 0.0025 is the payout fee
+        $totalFees = $payoutFee + 3; // 2 is the number of active user dollars
 
         $pricing = ($totalFees *.5) + $totalFees; 
         $priceAmount = '';
 
-        if($pricing > 100) {
+        if($pricing > 200) {
 
             $priceAmount = $pricing;
             $paymentSetup->highestRentAmount = $highestRentAmount;
@@ -383,4 +343,5 @@ class PropertyController extends Controller {
         }
 
     }
+
 }
