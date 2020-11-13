@@ -196,8 +196,14 @@ class BillingController extends Controller {
                 'account_number' => $request->input('account_number'),
             ],
         ]);
+        dd($token);
 
         /// i need to see if this is working. i haven't tested just the token
+        // $bank_account = \Stripe\Customer::createSource(
+        //     $user->stripe_id,
+        //   [$token]
+        // );
+
         $bank_account = \Stripe\Customer::createSource(
             $user->stripe_id,
           [$token]
