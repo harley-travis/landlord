@@ -71,7 +71,7 @@
                     <div class="card-header bg-transparent">
                         <div class="row align-items-center">
                             <div class="col">
-                                <h6 class="text-uppercase text-muted ls-1 mb-1">Help and Documentation</h6>
+                                <h6 class="text-uppercase text-success ls-1 mb-1">Help and Documentation</h6>
                                 <h2 class="mb-0">Getting Started</h2>
                             </div>
                         </div>

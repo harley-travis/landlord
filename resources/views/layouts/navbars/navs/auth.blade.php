@@ -42,7 +42,7 @@
 
                     <a href="{{ route('feedback.create') }}" class="dropdown-item">
                         <i class="ni ni-calendar-grid-58"></i>
-                        <span>Send Feedback</span>
+                        <span>Suggest a Feature</span>
                     </a>
                     <a href="{{ route('tickets.index') }}" class="dropdown-item">
                         <i class="ni ni-support-16"></i>
