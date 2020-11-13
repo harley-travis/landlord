@@ -639,18 +639,24 @@ class BillingController extends Controller {
 
     }
 
+    /**
+     * Determine when the rent is due for the tenant
+     * Calculate the late date, and due periods
+     */
     public function calculateRentDueDate() {
 
         $property = Property::join('rents', 'rents.property_id', '=', 'properties.id')
                             ->where('properties.id', '=', $this->getTenant()->property_id)
                             ->first();
 
+        // set the late date
         if( !isset($property->late_date) || $property->late_date === null || $property->late_date === 0 ) {
             $late_date = 17;
         } else {
             $late_date = $property->late_date;
         }
 
+        // set the between dates rent is due
         $begin = Carbon::create(Carbon::now()->year, Carbon::now()->month, $late_date);
         $end = Carbon::create(Carbon::now()->year, Carbon::now()->month, Carbon::now()->daysInMonth);
 
@@ -660,6 +666,10 @@ class BillingController extends Controller {
 
     }
 
+    /**
+     * Tenant dashboard view
+     * Shows the rent amount and when rent is due
+     */
     public function showPayIndex() {
 
         $property = Property::join('rents', 'rents.property_id', '=', 'properties.id')
@@ -689,12 +699,19 @@ class BillingController extends Controller {
         ]);
     }
 
+    /**
+     * Take the tenant through the checkout process
+     */
     public function showPay(Request $request) {
        
         $property = Property::join('rents', 'rents.property_id', '=', 'properties.id')
                             ->where('properties.id', '=', $this->getTenant()->property_id)
                             ->first();
 
+        /**
+         * here we need to pull the balance amount and then calculate
+         * any fees.
+         */
         $amount = $request->input('amount');
         $late_fee = $request->input('late_fee');
 
@@ -709,6 +726,9 @@ class BillingController extends Controller {
         
     }
 
+    /**
+     * Show the tenant the totals due
+     */
     public function storePayReview(Request $request) {
 
         $date = $request->input('date');
@@ -729,6 +749,10 @@ class BillingController extends Controller {
         ]);
     }
 
+    /**
+     * Allow the tenant to pay their rent
+     * Collect the money and send to the landlord
+     */
     public function payRent(Request $request) {
 
         $user = Auth::user();
@@ -801,53 +825,56 @@ class BillingController extends Controller {
 
         } 
 
-            // calculate the new balance
-            // $currentBalance = $this->calculateRentBalance();
-            // $newBalance = ( $request->input('rent') + $currentBalance ) - $currentBalance;
+        // calculate the new balance
+        // $currentBalance = $this->calculateRentBalance();
+        // $newBalance = ( $request->input('rent') + $currentBalance ) - $currentBalance;
 
-            $amount_paid = $amount / 100;
-            //dd($total, $amount_paid);
-            $currentBalance  = $this->findRentBalance($tenant->id);
-            $newBalance = $this->calculateNewBalance($currentBalance, $amount_paid, $property->rent_amount); 
+        $amount_paid = $amount / 100;
+        $currentBalance  = $this->findRentBalance($tenant->id);
+        $newBalance = $this->calculateNewBalance($currentBalance, $amount_paid, $property->rent_amount); 
 
-            // i don't think i add this here. i'm not charging the late fee
-            // need to read more about this 
-            $lateFee = 0;
-            if( $amount > $setAmount ) {
-                $lateFee = $findLateFeeAmount;
-            }
+        // i don't think i add this here. i'm not charging the late fee
+        // need to read more about this 
+        $lateFee = 0;
+        if( $amount > $setAmount ) {
+            $lateFee = $findLateFeeAmount;
+        }
 
-            $transaction = new Transaction([
-                'tenant_id' => $tenant->id,
-                'landlord_id' => $proprietor->id,
-                'property_id' => $property->id,
-                'amount_paid' => $amount_paid,
-                'balance' => $newBalance,
-                'payment_method' => $charge->payment_method_details->type,
-                'paid_in_full' => 0,
-                'late_fee_amount' => $lateFee,
-                'confirmation' => $confirmationNumber,
-            ]);
-            $transaction->save();
+        $transaction = new Transaction([
+            'tenant_id' => $tenant->id,
+            'landlord_id' => $proprietor->id,
+            'property_id' => $property->id,
+            'amount_paid' => $amount_paid,
+            'balance' => $newBalance,
+            'payment_method' => $charge->payment_method_details->type,
+            'paid_in_full' => 0,
+            'late_fee_amount' => $lateFee,
+            'confirmation' => $confirmationNumber,
+        ]);
+        $transaction->save();
 
-            // find the next due date 
-            $numberOfMonths = $amount_paid / $property->rent_amount; 
-            $roundMonth = floor($numberOfMonths); // always round down
+        // find the next due date 
+        $numberOfMonths = $amount_paid / $property->rent_amount; 
+        $roundMonth = floor($numberOfMonths); // always round down
+        
+        // save balance to rents table 
+        $rents = Rent::where('property_id', '=', $property->id)->first();
+        $rents->balance = $newBalance;
+        $rents->next_due_date = Carbon::now()->addMonths($roundMonth);
+        $rents->save();
             
-            // save balance to rents table 
-            $rents = Rent::where('property_id', '=', $property->id)->first();
-            $rents->balance = $newBalance;
-            $rents->next_due_date = Carbon::now()->addMonths($roundMonth);
-            $rents->save();
-                
-            return view('tenants.billing.confirmation', [
-                'confirmation_number' => $confirmationNumber,
-                'amount' => $charge->amount,
-                'payment_method' => $charge->payment_method_details->type,
-                'date' => $transaction->created_at,
-            ]);
+        return view('tenants.billing.confirmation', [
+            'confirmation_number' => $confirmationNumber,
+            'amount' => $charge->amount,
+            'payment_method' => $charge->payment_method_details->type,
+            'date' => $transaction->created_at,
+        ]);
+
     }
 
+    /**
+     * Check to see if there are late fees
+     */
     public function calculateLateFee($latefee) {
 
         if( $latefee === null || $latefee <= 0) {
@@ -858,6 +885,9 @@ class BillingController extends Controller {
 
     }
 
+    /**
+     * Find the rent balance for the tenant
+     */
     public function findRentBalance($tenant_id) {
 
         $findPropertyId = Tenant::where('id', '=', $tenant_id)->first(); 
@@ -879,6 +909,9 @@ class BillingController extends Controller {
 
     }
 
+    /**
+     * Calculate the new balance after rent has been paid
+     */
     public function calculateNewBalance($currentBalance, $amount_paid, $rent_amount) {
         
         $newBalance = 0;
@@ -896,6 +929,9 @@ class BillingController extends Controller {
 
     }
 
+    /**
+     * Calculate the new balance after rent has been paid
+     */
     public function calculateRentBalance() {
 
         $id = User::join('tenants', 'tenants.user_id', '=', 'users.id')
@@ -918,6 +954,9 @@ class BillingController extends Controller {
         return $b;
     }
 
+    /**
+     * Show the payment confirmation after rent has been paid
+     */
     public function showPaymentConfirmation() {
         return view('tenants.billing.confirmation');
     }
@@ -927,6 +966,9 @@ class BillingController extends Controller {
     // DON'T FORGET TO ADD THE STRIPE TERMS OF USE ACCEPT FORM
     // https://stripe.com/docs/connect/updating-accounts#referencing-the-agreement
 
+    /**
+     * Show the onboarding view
+     */
     public function viewOnboarding() {
         return view('settings.billing.onboarding.index');
     }
