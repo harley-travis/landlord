@@ -206,7 +206,7 @@ class BillingController extends Controller {
 
         $bank_account = \Stripe\Customer::createSource(
             $user->stripe_id,
-          [$token]
+          ['source' => $token]
         );
 
 
