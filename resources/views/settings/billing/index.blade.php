@@ -158,23 +158,10 @@
                             @foreach( $bank_accounts as $bank_account )
                             <li class="list-group-item">
 
-                            <div class="row pb-2">
-                                <div class="col">
-                                    @if($bank_account->id == $customer->default_source)
-                                        <span class="badge badge-primary">Default</span>
-                                    @endif
-                                </div>
-                            </div>
                             <div class="row">
-                                <span class="col-10 pt-2"> 
-                                    <i class="fas fa-university mr-2"></i> {{ $bank_account->bank_name }} 
-                                    <span class="pl-3">********{{ $bank_account->last4 }}</span>
-                                </span>
-
-                                <span class="col-2">
-
+                                <div class="col pb-2">
                                     @if( $bank_account->id != $customer->default_source )
-                                    <a href="#" class="btn btn-link" data-toggle="modal" data-target="#setDefault-{{ $bank_account->last4 }}">Set Default</a>
+                                    <a href="#" class="btn btn-link p-0" data-toggle="modal" data-target="#setDefault-{{ $bank_account->last4 }}">Set Default</a>
 
                                     <!-- Authorize ACH Modal -->
                                     <div class="modal fade" id="setDefault-{{ $bank_account->last4 }}" tabindex="-1" role="dialog" aria-labelledby="-{{ $bank_account->last4 }}" aria-hidden="true">
@@ -200,8 +187,24 @@
                                         </div>
                                     </div>
                                     @endif
+                                </div>
+                            </div>
+                            <div class="row pb-2">
+                                <div class="col">
+                                    @if($bank_account->id == $customer->default_source)
+                                        <span class="badge badge-primary">Default</span>
+                                    @endif
+                                </div>
+                            </div>
+                            <div class="row">
+                                <span class="col-10 pt-2"> 
+                                    <i class="fas fa-university mr-2"></i> {{ $bank_account->bank_name }} 
+                                    <span class="pl-3">********{{ $bank_account->last4 }}</span>
+                                </span>
 
-                                    <a href="#" class="btn text-danger" data-toggle="modal" data-target="#deleteACH-{{ $bank_account->last4 }}"><i class="far fa-trash-alt pr-2"></i></a>
+                                <span class="col-2">
+
+                                    <a href="#" class="btn btn-link text-danger" data-toggle="modal" data-target="#deleteACH-{{ $bank_account->last4 }}"><i class="far fa-trash-alt"></i></a>
 
                                     <!-- Delete ACH Modal -->
                                     <div class="modal fade" id="deleteACH-{{ $bank_account->last4 }}" tabindex="-1" role="dialog" aria-labelledby="deleteACH-{{ $bank_account->last4 }}Label" aria-hidden="true">
