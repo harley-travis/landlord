@@ -271,7 +271,6 @@
             </div> <!-- card -->
         </div> <!-- col -->
     </div> <!-- row -->
-    @endif
 
     @if( $user->role >= 2 && $bill->onboarding != 0 || $user->role === 0 )
     <div class="row mt-3">
