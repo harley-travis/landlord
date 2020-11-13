@@ -139,6 +139,117 @@
                 </div>
             </div> <!-- card -->
         </div> <!-- col -->
+    @endif
+
+        @if($user->role != 3 || $user->role === 3 && $bill->onboarding != 1 )
+        <div class="row">
+            <div class="col">
+                <div class="card shadow">
+                    <div class="card-header border-0">
+                        <div class="row align-items-center">
+                            <div class="col-8">
+                                <h3 class="mb-0">ACH Accounts</h3>
+                            </div>
+                            <div class="col-4 text-right">
+                                <i class="fas fa-question-circle color-purple mr-3" data-toggle="tooltip" data-placement="left" title="Currently we do not support credit cards"></i>
+                                <!-- <a href="{{ route('settings.billing.subscription.create') }}" class="btn btn-primary"><i class="fas fa-plus-circle pr-2"></i>Add Subscription</a> -->
+                                <a href="{{ route('settings.billing.ach.create') }}" class="btn btn-success"><i class="fas fa-plus-circle pr-2"></i>Add ACH Account</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-body">
+
+                        <ul class="list-group">
+                            @foreach( $bank_accounts as $bank_account )
+                            <li class="list-group-item">
+                                <span class="col-6"> 
+                                    <i class="fas fa-university mr-2"></i> {{ $bank_account->bank_name }} 
+                                    <span class="pl-3">********{{ $bank_account->last4 }}</span>
+                                
+                                    @if($bank_account->id == $customer->default_source)
+                                        <span class="badge badge-primary">Default</span>
+                                    @endif
+                                </span>
+
+                                <span class="col-6">
+                                    <div class="float-right">
+
+                                        @if( $bank_account->id != $customer->default_source )
+                                        <a href="#" class="btn btn-link" data-toggle="modal" data-target="#setDefault-{{ $bank_account->last4 }}">Set Default</a>
+
+                                        <!-- Authorize ACH Modal -->
+                                        <div class="modal fade" id="setDefault-{{ $bank_account->last4 }}" tabindex="-1" role="dialog" aria-labelledby="-{{ $bank_account->last4 }}" aria-hidden="true">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="setDefaultLabel-{{ $bank_account->last4 }}">Are you sure you want to authorize this ACH account?</h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <p>In order to process your payment, you need to authorize SenRent to charge this account on file. Authorizing payment will auto enroll into our monthly payment program of $15/month for 5 properties and an additional $2 charge per additional property.</p>
+                                                        <p>Each month may vary the cost, depending on how many properties you added this month.</p>
+                                                        <p>By clicking, 'Authorize Payment', you agree to our Terms and Conditions and authorize SenRent to charge the account on file.
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Cancel</button>
+                                                        <a href="{{ route('settings.billing.setDefault', ['id' => $bank_account->id ]) }}" class="btn btn-success shadow">Set Default and Authorize</a> 
+                                        
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        
+                                        @endif
+
+                                        <a href="#" class="btn btn-outline-danger" data-toggle="modal" data-target="#deleteACH-{{ $bank_account->last4 }}"><i class="far fa-trash-alt pr-2"></i> Delete Account</a>
+
+                                        <!-- Delete ACH Modal -->
+                                        <div class="modal fade" id="deleteACH-{{ $bank_account->last4 }}" tabindex="-1" role="dialog" aria-labelledby="deleteACH-{{ $bank_account->last4 }}Label" aria-hidden="true">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="deleteACHLabel">Are you sure you want to delete this ACH account?</h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        If you delete your ACH account, it will remove all information regarding this account. If you would like to continue using this account, click cancel.
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-success" data-dismiss="modal">Go Back</button>
+                                                        <a href="{{ route('settings.billing.ach.delete', ['id' => $bank_account->id ]) }}" class="btn btn-outline-danger"><i class="far fa-trash-alt pr-2"></i> YES, DELETE ACCOUNT</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        @if($bank_account->status != "verified")
+                                        <a href="{{ route('settings.billing.ach.verify', ['id' => $bank_account->id ]) }}" class="btn btn-success"><i class="fas fa-user-check pr-2"></i> Verify ACH Account</a>
+                                        @endif
+
+                                        @if( $invoices->isEmpty() && $bank_account->status === "verified" && $user->role != 0)
+                                        <!-- NEED TO LOCK THE APP IF THEY DON'T AUTHORIZE THIS PAYMENT AFTER TRIAL PERID. PULL THE TRIAL PERID FROM THE DB -->
+                                        <!-- NEED TO PULL UP A MODEL TO TELL THEM THAT WE ARE GOING TO CHARGE THEIR CARD -->
+                                        <a href="{{ route('settings.billing.ach.authorize', ['id' => $bank_account->id ]) }}" class="btn btn-success text-white"><i class="fas fa-user-check pr-2"></i> Authorize ACH Account</a>
+                                        @endif
+
+                                    </div>
+                                </span>
+                            </li>
+                            @endforeach 
+                        </ul>
+        
+                    </div>
+                </div> <!-- card -->
+            </div> <!-- col -->
+        </div> <!-- row -->
+        @endif
+
         <div class="col-sm">
             <div class="card bg-gradient-default text-white shadow">
                 <div class="card-header bg-transparent border-0">
@@ -156,115 +267,6 @@
                         <li class="bg-transparent list-group-item">Bill Amount: ${{ $bill->pricingAmount }}</li>
                         <li class="bg-transparent list-group-item">Due Date: {{ \Carbon\Carbon::now()->addMonth()->monthName }} 1</li>
                     </ul>
-                </div>
-            </div> <!-- card -->
-        </div> <!-- col -->
-    </div> <!-- row -->
-    @endif
-
-    @if($user->role != 3 )
-    <div class="row">
-        <div class="col">
-            <div class="card shadow">
-                <div class="card-header border-0">
-                    <div class="row align-items-center">
-                        <div class="col-8">
-                            <h3 class="mb-0">ACH Accounts</h3>
-                        </div>
-                        <div class="col-4 text-right">
-                            <i class="fas fa-question-circle color-purple mr-3" data-toggle="tooltip" data-placement="left" title="Currently we do not support credit cards"></i>
-                            <!-- <a href="{{ route('settings.billing.subscription.create') }}" class="btn btn-primary"><i class="fas fa-plus-circle pr-2"></i>Add Subscription</a> -->
-                            <a href="{{ route('settings.billing.ach.create') }}" class="btn btn-success"><i class="fas fa-plus-circle pr-2"></i>Add ACH Account</a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card-body">
-
-                    <ul class="list-group">
-					    @foreach( $bank_accounts as $bank_account )
-						<li class="list-group-item">
-							<span class="col-6"> 
-                                <i class="fas fa-university mr-2"></i> {{ $bank_account->bank_name }} 
-                                <span class="pl-3">********{{ $bank_account->last4 }}</span>
-                            
-                                @if($bank_account->id == $customer->default_source)
-                                    <span class="badge badge-primary">Default</span>
-                                @endif
-                            </span>
-
-							<span class="col-6">
-                                <div class="float-right">
-
-                                    @if( $bank_account->id != $customer->default_source )
-                                    <a href="#" class="btn btn-link" data-toggle="modal" data-target="#setDefault-{{ $bank_account->last4 }}">Set Default</a>
-
-                                    <!-- Authorize ACH Modal -->
-                                    <div class="modal fade" id="setDefault-{{ $bank_account->last4 }}" tabindex="-1" role="dialog" aria-labelledby="-{{ $bank_account->last4 }}" aria-hidden="true">
-                                        <div class="modal-dialog" role="document">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title" id="setDefaultLabel-{{ $bank_account->last4 }}">Are you sure you want to authorize this ACH account?</h5>
-                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                    <span aria-hidden="true">&times;</span>
-                                                    </button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <p>In order to process your payment, you need to authorize SenRent to charge this account on file. Authorizing payment will auto enroll into our monthly payment program of $15/month for 5 properties and an additional $2 charge per additional property.</p>
-                                                    <p>Each month may vary the cost, depending on how many properties you added this month.</p>
-                                                    <p>By clicking, 'Authorize Payment', you agree to our Terms and Conditions and authorize SenRent to charge the account on file.
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Cancel</button>
-                                                    <a href="{{ route('settings.billing.setDefault', ['id' => $bank_account->id ]) }}" class="btn btn-success shadow">Set Default and Authorize</a> 
-                                    
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
-                                    
-                                    @endif
-
-                                    <a href="#" class="btn btn-outline-danger" data-toggle="modal" data-target="#deleteACH-{{ $bank_account->last4 }}"><i class="far fa-trash-alt pr-2"></i> Delete Account</a>
-
-                                    <!-- Delete ACH Modal -->
-                                    <div class="modal fade" id="deleteACH-{{ $bank_account->last4 }}" tabindex="-1" role="dialog" aria-labelledby="deleteACH-{{ $bank_account->last4 }}Label" aria-hidden="true">
-                                        <div class="modal-dialog" role="document">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title" id="deleteACHLabel">Are you sure you want to delete this ACH account?</h5>
-                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                    <span aria-hidden="true">&times;</span>
-                                                    </button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    If you delete your ACH account, it will remove all information regarding this account. If you would like to continue using this account, click cancel.
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-success" data-dismiss="modal">Go Back</button>
-                                                    <a href="{{ route('settings.billing.ach.delete', ['id' => $bank_account->id ]) }}" class="btn btn-outline-danger"><i class="far fa-trash-alt pr-2"></i> YES, DELETE ACCOUNT</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    @if($bank_account->status != "verified")
-                                    <a href="{{ route('settings.billing.ach.verify', ['id' => $bank_account->id ]) }}" class="btn btn-success"><i class="fas fa-user-check pr-2"></i> Verify ACH Account</a>
-                                    @endif
-
-                                    @if( $invoices->isEmpty() && $bank_account->status === "verified" && $user->role != 0)
-                                    <!-- NEED TO LOCK THE APP IF THEY DON'T AUTHORIZE THIS PAYMENT AFTER TRIAL PERID. PULL THE TRIAL PERID FROM THE DB -->
-                                    <!-- NEED TO PULL UP A MODEL TO TELL THEM THAT WE ARE GOING TO CHARGE THEIR CARD -->
-                                     <a href="{{ route('settings.billing.ach.authorize', ['id' => $bank_account->id ]) }}" class="btn btn-success text-white"><i class="fas fa-user-check pr-2"></i> Authorize ACH Account</a>
-                                    @endif
-
-                                </div>
-							</span>
-						</li>
-						@endforeach 
-					</ul>
-     
                 </div>
             </div> <!-- card -->
         </div> <!-- col -->
