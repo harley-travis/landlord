@@ -184,7 +184,7 @@ class BillingController extends Controller {
     public function storeACH(Request $request) {
  
         $user = User::find(Auth::user()->id);
-
+       
         // handle this with a token \
         $token = \Stripe\Token::create([
             'bank_account' => [
@@ -197,11 +197,14 @@ class BillingController extends Controller {
             ],
         ]);
 
+        // create the tenant as a stripe customer
+        $user->addPaymentMethod($token );
+
         /// i need to see if this is working. i haven't tested just the token
-        $bank_account = \Stripe\Customer::createSource(
-            $user->stripe_id,
-          [$token]
-        );
+        // $bank_account = \Stripe\Customer::createSource(
+        //     $user->stripe_id,
+        //   [$token]
+        // );
 
 
         // old method
