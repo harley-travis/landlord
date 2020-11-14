@@ -136,7 +136,7 @@
         </div> <!-- col -->
     @endif
 
-        @if($user->role != 3 || $user->role === 3 && $bill->onboarding != 1 )
+        @if( $user->role != 3 || $user->role === 3 && $bill->onboarding != 1 )
             <div class="col-sm">
                 <div class="card shadow">
                     <div class="card-header border-0">
@@ -250,6 +250,7 @@
             </div> <!-- col -->
         @endif
 
+        @if( $user->role === 3 && $bill->onboarding != 1 )
         <div class="col-sm">
             <div class="card bg-gradient-default text-white shadow">
                 <div class="card-header bg-transparent border-0">
@@ -270,6 +271,7 @@
                 </div>
             </div> <!-- card -->
         </div> <!-- col -->
+        @endif
     </div> <!-- row -->
 
     @if( $user->role >= 2 && $bill->onboarding != 0 || $user->role === 0 )
