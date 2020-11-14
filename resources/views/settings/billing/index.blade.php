@@ -142,7 +142,7 @@
                     <div class="card-header border-0">
                         <div class="row align-items-center">
                             <div class="col">
-                                <h3 class="mb-0">ACH Accounts</h3>
+                                <h3 class="mb-0">ACH Accounts first</h3>
                             </div>
                             <div class="col text-right">
                                 <i class="fas fa-question-circle color-purple mr-3" data-toggle="tooltip" data-placement="left" title="Currently we do not support credit cards"></i>
