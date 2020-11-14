@@ -136,7 +136,7 @@
         </div> <!-- col -->
     @endif
 
-        @if( $user->role != 3 || $user->role === 3 && $bill->onboarding != 1 )
+        @if( $user->role != 3 || $user->role === 3 && $bill->onboarding != 0 )
             <div class="col-sm">
                 <div class="card shadow">
                     <div class="card-header border-0">
