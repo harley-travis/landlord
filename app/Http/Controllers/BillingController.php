@@ -512,19 +512,17 @@ class BillingController extends Controller {
                 'interval' => 'month',
                 'usage_type' => 'metered',
             ],
-            "product" => env('MONTHY_SUBSCRIPTION_PRODUCT'), // hard coded. i think i just need one of these
+            "product" => env('MONTHY_SUBSCRIPTION_PRODUCT'), 
         ]);
 
+        $anchor = Carbon::parse('first day of next month');
+
         // // create and assign the subscription to the user
-        $user->newSubscription('Home Owners', $priceObj->id)
-            ->anchorBillingCycleOn(Carbon::now()->day(27)->timestamp)
+        $user->newSubscription('MONTHY_SUBSCRIPTION_PRODUCT', $priceObj->id)
+            ->anchorBillingCycleOn($anchor->startOfDay())
             ->trialDays(14)
             ->quantity(0)
             ->create();
-
-
-
-        // update the pricingAmount in the setup_table 
 
         // testing email
         // $e = 'travis.harley@senrent.com';
