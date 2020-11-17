@@ -35,7 +35,7 @@
         </div>
     </div>
 
-    @if($user->role != 0 && $bill->onboarding === 0)
+
     <div class="row mb-3">
         <div class="col">
             <div class="card shadow">
@@ -58,7 +58,7 @@
             </div> <!-- card -->
         </div> <!-- col -->
     </div> <!-- row -->
-    @endif
+
 
     @if($user->role != 0 )
     <!-- <div class="row mb-3">
@@ -92,7 +92,7 @@
     @endif
 
     <div class="row">
-    @if( $user->role === 3 && $bill->onboarding != 0 )
+
         <div class="col-sm">
             <div class="card shadow">
                 <div class="card-header border-0">
@@ -134,9 +134,9 @@
                 </div>
             </div> <!-- card -->
         </div> <!-- col -->
-    @endif
 
-        @if( $user->role != 3 || $user->role === 3 && $bill->onboarding != 0 )
+
+
             <div class="col-sm">
                 <div class="card shadow">
                     <div class="card-header border-0">
@@ -248,9 +248,9 @@
                     </div>
                 </div> <!-- card -->
             </div> <!-- col -->
-        @endif
 
-        @if( $user->role >= 2 && $bill->onboarding != 0 )
+
+
         <div class="col-sm">
             <div class="card bg-gradient-default text-white shadow">
                 <div class="card-header bg-transparent border-0">
@@ -271,10 +271,10 @@
                 </div>
             </div> <!-- card -->
         </div> <!-- col -->
-        @endif
+ 
     </div> <!-- row -->
 
-    @if( $user->role >= 2 && $bill->onboarding != 0 || $user->role === 0 )
+
     <div class="row mt-3">
         <div class="col">
             <div class="card shadow">
@@ -367,7 +367,7 @@
             </div><!-- card -->
         </div><!-- col -->
     </div> <!-- row -->
-    @endif
+
 
     @include('layouts.footers.auth')
 

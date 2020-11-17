@@ -501,29 +501,6 @@ class BillingController extends Controller {
         $user->trial_ends_at = now()->addDays(14);
         $user->save();
 
-        // calculate monthly cost
-        $amount = $this->calculateUsage();
-
-        // create a price object for the subscription
-        $priceObj = \Stripe\Price::create([
-            "unit_amount" => $amount * 100,
-            'currency' => 'usd',
-            'recurring' => [
-                'interval' => 'month',
-                'usage_type' => 'metered',
-            ],
-            "product" => env('MONTHY_SUBSCRIPTION_PRODUCT'), 
-        ]);
-
-        $anchor = Carbon::parse('first day of next month');
-
-        // // create and assign the subscription to the user
-        $user->newSubscription('MONTHY_SUBSCRIPTION_PRODUCT', $priceObj->id)
-            ->anchorBillingCycleOn($anchor->startOfDay())
-            ->trialDays(14)
-            ->quantity(0)
-            ->create();
-
         // testing email
         // $e = 'travis.harley@senrent.com';
         // Mail::to($e)->send(new UserCreated($user));
@@ -632,6 +609,8 @@ class BillingController extends Controller {
             ]
         );
 
+        $this->createSubscription();
+
         return redirect()
             ->route('settings.billing.index', [
             'bank_accounts' => $this->getBankAccounts(), 
@@ -641,6 +620,61 @@ class BillingController extends Controller {
         ])->with('info', 'You have successfully completed the onboarding process! Have fun!');
 
     }
+
+    public function createSubscription() {
+
+        $user = User::find(Auth::user()->id);
+
+        // calculate monthly cost
+        $amount = $this->calculateUsage();
+
+        // create a price object for the subscription
+        $priceObj = \Stripe\Price::create([
+            "unit_amount" => $amount * 100,
+            'currency' => 'usd',
+            'recurring' => [
+                'interval' => 'month',
+                'usage_type' => 'metered',
+            ],
+            "product" => env('MONTHY_SUBSCRIPTION_PRODUCT'), 
+         ]);
+ 
+        $anchor = Carbon::parse('first day of next month');
+ 
+        // create and assign the subscription to the user
+        // $user->newSubscription('MONTHY_SUBSCRIPTION_PRODUCT', $priceObj->id)
+        //     ->anchorBillingCycleOn($anchor->startOfDay())
+        //     // ->trialDays(14) // need to attach this somewhere else
+        //     ->quantity(0)
+        //     ->create();
+
+        $user->newSubscription('MONTHY_SUBSCRIPTION_PRODUCT', $priceObj->id)
+            ->anchorBillingCycleOn($anchor->startOfDay())
+            ->create([
+                "items" => [
+                    ["price" => "price_H1y51TElsOZjG"],
+                ],
+                ], 
+                [
+                    "stripe_account" => $user->stripe_account
+            ]);
+ 
+        // $subscription = \Stripe\Subscription::create([
+        //    // "customer" => $user->stripe_id,
+
+        //     "items" => [
+        //         ["price" => "price_H1y51TElsOZjG"],
+        //     ],
+
+        //     "expand" => ["latest_invoice.payment_intent"],
+        //     ], 
+
+        //     [
+        //         "stripe_account" => $user->stripe_account
+        //     ]);
+
+    }
+
 
     /**
      * Determine when the rent is due for the tenant
